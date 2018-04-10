@@ -1,4 +1,15 @@
-Student_Travel_App-Android
+<<<<<<< HEAD
+Student Travel App - Android
 =============================
 
-This repo contains the code for the android client of the student app.
+The code for the android version of Student Travel App.
+
+Course Project for COL 740 - Software Engineering
+=======
+Student Travel App - Android
+=============================
+
+The code for the android version of Student Travel App.
+
+Course Project for COL 740 - Software Engineering, 2018
+>>>>>>> 1ede795... Initial Android Commit
