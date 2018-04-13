@@ -1,0 +1,15 @@
+Executable : E:\Software\Android\Sdk\cmake\3.6.4111459\bin\cmake.exe
+arguments : 
+-HC:\Python27\COL 740 - Java\Student Travel App - Android\App\app
+-BC:\Python27\COL 740 - Java\Student Travel App - Android\App\app\.externalNativeBuild\cmake\release\x86_64
+-DANDROID_ABI=x86_64
+-DANDROID_PLATFORM=android-21
+-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=C:\Python27\COL 740 - Java\Student Travel App - Android\App\app\build\intermediates\cmake\release\obj\x86_64
+-DCMAKE_BUILD_TYPE=Release
+-DANDROID_NDK=E:\Software\Android\Sdk\ndk-bundle
+-DCMAKE_CXX_FLAGS=-std=c++11 -fexceptions
+-DCMAKE_TOOLCHAIN_FILE=E:\Software\Android\Sdk\ndk-bundle\build\cmake\android.toolchain.cmake
+-DCMAKE_MAKE_PROGRAM=E:\Software\Android\Sdk\cmake\3.6.4111459\bin\ninja.exe
+-GAndroid Gradle - Ninja
+jvmArgs : 
+
