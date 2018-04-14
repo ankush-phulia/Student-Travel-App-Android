@@ -1,3 +1,9 @@
+<<<<<<< HEAD
 D:/Documents/Semester 8/COL 740/Student_Travel_App-Android/App/app/.externalNativeBuild/cmake/debug/x86_64/CMakeFiles/native-lib.dir
 D:/Documents/Semester 8/COL 740/Student_Travel_App-Android/App/app/.externalNativeBuild/cmake/debug/x86_64/CMakeFiles/edit_cache.dir
 D:/Documents/Semester 8/COL 740/Student_Travel_App-Android/App/app/.externalNativeBuild/cmake/debug/x86_64/CMakeFiles/rebuild_cache.dir
+=======
+C:/Python27/COL 740 - Java/Student Travel App - Android/App/app/.externalNativeBuild/cmake/debug/x86_64/CMakeFiles/native-lib.dir
+C:/Python27/COL 740 - Java/Student Travel App - Android/App/app/.externalNativeBuild/cmake/debug/x86_64/CMakeFiles/edit_cache.dir
+C:/Python27/COL 740 - Java/Student Travel App - Android/App/app/.externalNativeBuild/cmake/debug/x86_64/CMakeFiles/rebuild_cache.dir
+>>>>>>> ad6d269c9bf2650af9c019257eb94a3cc49bdb38

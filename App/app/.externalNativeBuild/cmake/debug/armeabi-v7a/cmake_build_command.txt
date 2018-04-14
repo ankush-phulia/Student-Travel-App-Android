@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Executable : D:\Android-Stuff\Android-Development\sdk\cmake\3.6.4111459\bin\cmake.exe
 arguments : 
 -HD:\Documents\Semester 8\COL 740\Student_Travel_App-Android\App\app
@@ -10,6 +11,20 @@ arguments :
 -DCMAKE_CXX_FLAGS=-std=c++11 -fexceptions
 -DCMAKE_TOOLCHAIN_FILE=D:\Android-Stuff\Android-Development\sdk\ndk-bundle\build\cmake\android.toolchain.cmake
 -DCMAKE_MAKE_PROGRAM=D:\Android-Stuff\Android-Development\sdk\cmake\3.6.4111459\bin\ninja.exe
+=======
+Executable : E:\Software\Android\Sdk\cmake\3.6.4111459\bin\cmake.exe
+arguments : 
+-HC:\Python27\COL 740 - Java\Student Travel App - Android\App\app
+-BC:\Python27\COL 740 - Java\Student Travel App - Android\App\app\.externalNativeBuild\cmake\debug\armeabi-v7a
+-DANDROID_ABI=armeabi-v7a
+-DANDROID_PLATFORM=android-19
+-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=C:\Python27\COL 740 - Java\Student Travel App - Android\App\app\build\intermediates\cmake\debug\obj\armeabi-v7a
+-DCMAKE_BUILD_TYPE=Debug
+-DANDROID_NDK=E:\Software\Android\Sdk\ndk-bundle
+-DCMAKE_CXX_FLAGS=-std=c++11 -fexceptions
+-DCMAKE_TOOLCHAIN_FILE=E:\Software\Android\Sdk\ndk-bundle\build\cmake\android.toolchain.cmake
+-DCMAKE_MAKE_PROGRAM=E:\Software\Android\Sdk\cmake\3.6.4111459\bin\ninja.exe
+>>>>>>> ad6d269c9bf2650af9c019257eb94a3cc49bdb38
 -GAndroid Gradle - Ninja
 jvmArgs : 
 
