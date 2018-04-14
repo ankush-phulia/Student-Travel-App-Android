@@ -1,0 +1,3 @@
+D:/Documents/Semester 8/COL 740/Student_Travel_App-Android/App/app/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/native-lib.dir
+D:/Documents/Semester 8/COL 740/Student_Travel_App-Android/App/app/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/edit_cache.dir
+D:/Documents/Semester 8/COL 740/Student_Travel_App-Android/App/app/.externalNativeBuild/cmake/debug/armeabi-v7a/CMakeFiles/rebuild_cache.dir
