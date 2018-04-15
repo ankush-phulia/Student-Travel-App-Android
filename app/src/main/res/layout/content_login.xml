@@ -17,7 +17,7 @@
         android:layout_centerHorizontal="true"
         android:adjustViewBounds="false"
         android:scaleType="centerCrop"
-        android:src="@drawable/bg_chalkboard"/>
+        android:src="@drawable/bg_train"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,7 +26,7 @@
         android:layout_alignTop="@+id/login_screen_imageView"
         android:layout_alignRight="@+id/login_screen_imageView"
         android:gravity="center"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="0dp"
         android:orientation="vertical">
 
         <TextView
