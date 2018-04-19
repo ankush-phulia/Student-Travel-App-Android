@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.LoginOTPFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center|bottom"
+        android:layout_marginBottom="80dp"
+        android:orientation="vertical"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+        <EditText
+            android:id="@+id/OTP_EditText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:background="@drawable/login_edittext"
+            android:gravity="center"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:layout_marginBottom ="10dp"
+            android:hint="Enter OTP"
+            android:textSize="25sp"
+            android:textColor="@android:color/black"
+            android:textColorHint="@color/colorPrimaryDark"
+            android:inputType="numberPassword"
+            android:imeOptions="actionDone|actionGo"
+            android:singleLine="true"
+            />
+
+        <Button
+            android:id="@+id/button_go_otp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/common_google_signin_btn_icon_dark_normal_background"
+            android:text="Go"
+            android:textColor="@color/common_google_signin_btn_text_light"
+            android:popupTheme="@style/AppTheme.PopupOverlay"/>
+
+        <TextView
+            android:id="@+id/login_screen_or_otp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginBottom="0dp"
+            android:text="or"
+            android:textSize="25dp"
+            android:textColor="@android:color/white"
+            />
+
+    </LinearLayout>
+
+</FrameLayout>

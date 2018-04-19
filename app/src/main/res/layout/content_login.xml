@@ -2,57 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/RelativeLayout"
+    android:id="@+id/login_relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".LoginActivity"
     tools:showIn="@layout/activity_login">
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/login_screen_imageView"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:adjustViewBounds="false"
-        android:scaleType="centerCrop"
-        android:src="@drawable/bg_train"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/login_screen_imageView"
-        android:layout_alignTop="@+id/login_screen_imageView"
-        android:layout_alignRight="@+id/login_screen_imageView"
-        android:gravity="center"
-        android:layout_marginTop="0dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/login_screen_Text1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/login_screen_imageView"
-            android:layout_alignRight="@+id/login_screen_imageView"
-            android:gravity="center"
-            android:text="Student"
-            android:textSize="70dp"
-            android:textColor="@android:color/white"
-            />
-
-        <TextView
-            android:id="@+id/login_screen_Text2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/login_screen_imageView"
-            android:layout_alignRight="@+id/login_screen_imageView"
-            android:gravity="center"
-            android:text="Travel App"
-            android:textSize="60dp"
-            android:textColor="@android:color/white"
-            />
-
-    </LinearLayout>
 
 </RelativeLayout>
