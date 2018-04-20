@@ -8,5 +8,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_home">Home</string>
+    <string name="nav_header_title">Student Travel App</string>
+    <string name="nav_header_subtitle">group9-col740@googlegroups.com</string>
+    <string name="nav_header_desc">Navigation header</string>
 
 </resources>
