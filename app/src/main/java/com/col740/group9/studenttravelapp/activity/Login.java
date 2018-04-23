@@ -1,4 +1,4 @@
-package com.col740.group9.studenttravelapp;
+package com.col740.group9.studenttravelapp.activity;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.col740.group9.studenttravelapp.R;
 import com.col740.group9.studenttravelapp.fragment.LoginEmailFragment;
 import com.col740.group9.studenttravelapp.fragment.LoginOTPFragment;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -29,10 +30,10 @@ import com.google.android.gms.tasks.Task;
  * Activity to demonstrate basic retrieval of the Google user's ID, email address, and basic
  * profile.
  */
-public class LoginActivity extends AppCompatActivity implements
+public class Login extends AppCompatActivity implements
         View.OnClickListener,LoginEmailFragment.OnLoginEmailFragmentInteractionListener,LoginOTPFragment.OnLoginOTPFragmentInteractionListener {
 
-    private static final String TAG = "LoginActivity";
+    private static final String TAG = "Login";
     private static final int RC_SIGN_IN = 9001;
     public static final int EMAIL = 0;
     public static final int OTP = 1;
@@ -152,17 +153,20 @@ public class LoginActivity extends AppCompatActivity implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.sign_in_button:
-                signIn();
+//                signIn();
+                Intent gotoHome = new Intent(Login.this, Home.class);
+                startActivity(gotoHome);
+                finish();
                 break;
         }
     }
 
     @Override
     public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() > 0 ){
+        if (getSupportFragmentManager().getBackStackEntryCount() > 1 ){
             getSupportFragmentManager().popBackStack();
         } else {
-            super.onBackPressed();
+//            super.onBackPressed();
         }
     }
 

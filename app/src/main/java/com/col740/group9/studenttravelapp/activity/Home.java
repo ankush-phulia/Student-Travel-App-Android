@@ -1,8 +1,15 @@
 package com.col740.group9.studenttravelapp.activity;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.FragmentTransaction;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.view.Gravity;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,9 +19,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.WindowManager;
+
+import com.col740.group9.studenttravelapp.R;
+import com.col740.group9.studenttravelapp.fragment.CreateTravelFragment;
+import com.col740.group9.studenttravelapp.fragment.DashboardFragment;
+import com.col740.group9.studenttravelapp.fragment.NotificationsFragment;
+import com.col740.group9.studenttravelapp.fragment.UserProfileFragment;
 
 public class Home extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+                    DashboardFragment.OnFragmentInteractionListener,
+                    UserProfileFragment.OnFragmentInteractionListener,
+                    NotificationsFragment.OnFragmentInteractionListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,23 +40,28 @@ public class Home extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+                CreateTravelFragment createTravel = new CreateTravelFragment();
+                createTravel.show(getFragmentManager(), "NEW_TRAVEL");
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.home_fragment_container, DashboardFragment.newInstance("", ""))
+                .addToBackStack("DASHBOARD").commit();
     }
 
     @Override
@@ -47,8 +69,15 @@ public class Home extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
+        }
+        else if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+            getSupportFragmentManager().popBackStack();
+        }
+        else if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
+
+        }
+        else {
+//            super.onBackPressed();
         }
     }
 
@@ -70,6 +99,9 @@ public class Home extends AppCompatActivity
         if (id == R.id.action_settings) {
             return true;
         }
+        else if (id == R.id.action_logout){
+            logout();
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -80,22 +112,43 @@ public class Home extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        Fragment fragment = null;
+        String tag = "";
+        if (id == R.id.nav_dashboard) {
+            tag = "DASHBOARD";
+            fragment = DashboardFragment.newInstance("", "");
+        } else if (id == R.id.nav_user_profile) {
+            tag = "PROFILE";
+            fragment = UserProfileFragment.newInstance("", "");
+        } else if (id == R.id.nav_notifications) {
+            tag = "NOTIFICATIONS";
+            fragment = NotificationsFragment.newInstance("", "");
+        } else if (id == R.id.nav_logout) {
+            logout();
+        }
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (!findFragmentinStack(tag)) {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.home_fragment_container, fragment)
+                    .addToBackStack(tag)
+                    .commit();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public boolean findFragmentinStack(String className) {
+        return getSupportFragmentManager().popBackStackImmediate(className, 0);
+    }
+
+    private void logout() {
+        super.onBackPressed();
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+        return;
     }
 }
