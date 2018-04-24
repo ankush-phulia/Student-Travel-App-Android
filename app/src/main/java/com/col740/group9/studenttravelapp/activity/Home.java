@@ -3,8 +3,14 @@ package com.col740.group9.studenttravelapp.activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -27,11 +33,17 @@ import com.col740.group9.studenttravelapp.fragment.DashboardFragment;
 import com.col740.group9.studenttravelapp.fragment.NotificationsFragment;
 import com.col740.group9.studenttravelapp.fragment.UserProfileFragment;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
                     DashboardFragment.OnFragmentInteractionListener,
                     UserProfileFragment.OnFragmentInteractionListener,
                     NotificationsFragment.OnFragmentInteractionListener{
+
+    final String server = "http://10.0.2.2:8000";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +74,7 @@ public class Home extends AppCompatActivity
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.home_fragment_container, DashboardFragment.newInstance("", ""))
                 .addToBackStack("DASHBOARD").commit();
+        
     }
 
     @Override
@@ -125,6 +138,7 @@ public class Home extends AppCompatActivity
             fragment = NotificationsFragment.newInstance("", "");
         } else if (id == R.id.nav_logout) {
             logout();
+            return true;
         }
 
         if (!findFragmentinStack(tag)) {
@@ -144,7 +158,23 @@ public class Home extends AppCompatActivity
     }
 
     private void logout() {
-        super.onBackPressed();
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Logging out")
+                .setMessage("Are you sure you want to logout?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent gotoHome = new Intent(Home.this, Login.class);
+                        startActivity(gotoHome);
+                        finish();
+                    }
+
+                })
+                .setNegativeButton("No", null)
+                .show();
+
     }
 
     @Override

@@ -27,18 +27,8 @@ public class CreateTravelFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.DialogTheme);
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        builder.setView(inflater.inflate(R.layout.fragment_create_travel, null))
-                .setPositiveButton("Journey", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        // create new journey
-                    }
-                })
-                .setNegativeButton("Trip", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        // create new trip
-                    }
-                });
+        builder.setView(inflater.inflate(R.layout.fragment_create_travel, null));
+
         // Create the AlertDialog object and return it
         Dialog dialog = builder.create();
         return dialog;

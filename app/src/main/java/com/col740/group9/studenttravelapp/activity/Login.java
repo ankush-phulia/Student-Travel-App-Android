@@ -1,17 +1,13 @@
 package com.col740.group9.studenttravelapp.activity;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.col740.group9.studenttravelapp.R;
@@ -23,16 +19,17 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 /**
  * Activity to demonstrate basic retrieval of the Google user's ID, email address, and basic
  * profile.
  */
-public class Login extends AppCompatActivity implements
-        View.OnClickListener,LoginEmailFragment.OnLoginEmailFragmentInteractionListener,LoginOTPFragment.OnLoginOTPFragmentInteractionListener {
+public class Login extends AppCompatActivity implements View.OnClickListener,
+        LoginEmailFragment.OnLoginEmailFragmentInteractionListener,
+        LoginOTPFragment.OnLoginOTPFragmentInteractionListener {
 
+    final String serverURL = "http://127.0.0.1:8000";
     private static final String TAG = "Login";
     private static final int RC_SIGN_IN = 9001;
     public static final int EMAIL = 0;
@@ -153,12 +150,20 @@ public class Login extends AppCompatActivity implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.sign_in_button:
-//                signIn();
-                Intent gotoHome = new Intent(Login.this, Home.class);
-                startActivity(gotoHome);
-                finish();
+                signIn();
+//                dummySignIn();
                 break;
+
+            case R.id.button_go_email:
+                break;
+
         }
+    }
+
+    public void dummySignIn() {
+        Intent gotoHome = new Intent(Login.this, Home.class);
+        startActivity(gotoHome);
+        finish();
     }
 
     @Override
@@ -184,4 +189,9 @@ public class Login extends AppCompatActivity implements
         // TODO : if otp matches the sent OTP then authenticate
         // TODO : Take the authentication detail and call login
     }
+
+    public void onPause() {
+        super.onPause();
+    }
+
 }

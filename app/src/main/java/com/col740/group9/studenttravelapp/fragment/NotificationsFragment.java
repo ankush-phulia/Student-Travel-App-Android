@@ -19,6 +19,9 @@ import com.col740.group9.studenttravelapp.R;
  * create an instance of this fragment.
  */
 public class NotificationsFragment extends Fragment {
+
+    final String serverURL = "http://127.0.0.1:8000";
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
