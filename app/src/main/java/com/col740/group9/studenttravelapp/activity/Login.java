@@ -150,8 +150,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.sign_in_button:
-                signIn();
-//                dummySignIn();
+//                signIn();
+                dummySignIn();
                 break;
 
             case R.id.button_go_email:
