@@ -8,9 +8,18 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.col740.group9.studenttravelapp.R;
+import com.col740.group9.studenttravelapp.classes.GlobalRequestQueue;
 import com.col740.group9.studenttravelapp.fragment.LoginEmailFragment;
 import com.col740.group9.studenttravelapp.fragment.LoginOTPFragment;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -21,15 +30,25 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Activity to demonstrate basic retrieval of the Google user's ID, email address, and basic
  * profile.
  */
 public class Login extends AppCompatActivity implements View.OnClickListener,
         LoginEmailFragment.OnLoginEmailFragmentInteractionListener,
-        LoginOTPFragment.OnLoginOTPFragmentInteractionListener {
+        LoginOTPFragment.OnLoginOTPFragmentInteractionListener,
+        Response.Listener<JSONObject>,
+        Response.ErrorListener{
 
-    final String serverURL = "http://127.0.0.1:8000";
+    final String serverURL = "http://10.0.2.2:8000";
+
     private static final String TAG = "Login";
     private static final int RC_SIGN_IN = 9001;
     public static final int EMAIL = 0;
@@ -89,6 +108,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
             LoginFragment = new LoginEmailFragment();
         else
             LoginFragment = new LoginOTPFragment();
+
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.login_relativeLayout, LoginFragment);
         transaction.addToBackStack(null);
@@ -151,19 +171,28 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
         switch (v.getId()) {
             case R.id.sign_in_button:
 //                signIn();
-                dummySignIn();
+                try {
+                    dummySignIn();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 break;
-
-            case R.id.button_go_email:
-                break;
-
         }
     }
 
-    public void dummySignIn() {
-        Intent gotoHome = new Intent(Login.this, Home.class);
-        startActivity(gotoHome);
-        finish();
+    public void dummySignIn() throws JSONException {
+
+        RequestQueue queue = GlobalRequestQueue.getInstance(this.getApplicationContext()).
+                getRequestQueue();
+
+        final JSONObject jsonBody = new JSONObject();
+        jsonBody.put("username", "ankush").put("password", "ankushphulia");
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                serverURL + "/api-token-auth/",
+                jsonBody, this, this);
+        queue.add(jsonObjectRequest);
     }
 
     @Override
@@ -177,6 +206,31 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
 
     public void onLoginEmailFragmentInteraction(CharSequence emailID){
         // TODO : send a six digit otp to the Email ID
+
+        try {
+            final JSONObject jsonBody = new JSONObject();
+            jsonBody.put("username", emailID);
+            System.out.println(emailID);
+
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                    (Request.Method.POST, serverURL + "/api-token-auth/", jsonBody, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            System.out.println("Received");
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            error.printStackTrace();
+                        }
+                    });
+            GlobalRequestQueue.getInstance(this.getApplicationContext())
+                    .getRequestQueue().add(jsonObjectRequest);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
         Fragment loginOTPFragment = new LoginOTPFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -194,4 +248,22 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
         super.onPause();
     }
 
+    @Override
+    public void onResponse(JSONObject response) {
+        try {
+            String token = (String) response.get("token");
+            Intent gotoHome = new Intent(Login.this, Home.class);
+            gotoHome.putExtra("token", token);
+            startActivity(gotoHome);
+            finish();
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        error.printStackTrace();
+    }
 }
