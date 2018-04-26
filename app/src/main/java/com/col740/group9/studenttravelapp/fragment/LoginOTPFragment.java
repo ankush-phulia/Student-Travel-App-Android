@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.util.Patterns;
 import android.view.LayoutInflater;
@@ -25,7 +26,7 @@ import com.col740.group9.studenttravelapp.R;
  */
 public class LoginOTPFragment extends Fragment {
 
-    private static final int OTP_LENGTH = 6;
+    private static final int OTP_LENGTH = 7;
 
 
     private OnLoginOTPFragmentInteractionListener mListener;
@@ -65,6 +66,10 @@ public class LoginOTPFragment extends Fragment {
                 sendOTPDetails();
             }
         });
+
+        // set limit on otp length
+        EditText otp_field = LoginOTPFragmentView.findViewById(R.id.OTP_EditText);
+        otp_field.setFilters(new InputFilter[] {new InputFilter.LengthFilter(OTP_LENGTH)});
 
         return LoginOTPFragmentView;
     }
