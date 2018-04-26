@@ -9,6 +9,7 @@ import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -22,12 +23,13 @@ import com.col740.group9.studenttravelapp.R;
  * Use the {@link LoginOTPFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LoginOTPFragment extends Fragment implements View.OnClickListener{
+public class LoginOTPFragment extends Fragment {
 
     private static final int OTP_LENGTH = 6;
 
 
     private OnLoginOTPFragmentInteractionListener mListener;
+    private View LoginOTPFragmentView;
 
     public LoginOTPFragment() {
         // Required empty public constructor
@@ -54,7 +56,17 @@ public class LoginOTPFragment extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login_otp, container, false);
+        LoginOTPFragmentView = inflater.inflate(R.layout.fragment_login_otp, container, false);
+
+        Button button_go_otp = LoginOTPFragmentView.findViewById(R.id.button_go_otp);
+        button_go_otp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendOTPDetails();
+            }
+        });
+
+        return LoginOTPFragmentView;
     }
 
     @Override
@@ -82,14 +94,6 @@ public class LoginOTPFragment extends Fragment implements View.OnClickListener{
         }
         else if (mListener != null) {
             mListener.onLoginOTPFragmentInteraction(otp);
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.button_go_otp:  sendOTPDetails();
-                break;
         }
     }
 

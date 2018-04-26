@@ -9,6 +9,7 @@ import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -22,14 +23,10 @@ import com.col740.group9.studenttravelapp.R;
  * Use the {@link LoginEmailFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LoginEmailFragment extends Fragment implements View.OnClickListener{
+public class LoginEmailFragment extends Fragment {
 
     private OnLoginEmailFragmentInteractionListener mListener;
-
-    public LoginEmailFragment() {
-        // Required empty public constructor
-    }
-
+    private View LoginEmailFragmentView;
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -51,7 +48,17 @@ public class LoginEmailFragment extends Fragment implements View.OnClickListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login_email, container, false);
+        LoginEmailFragmentView = inflater.inflate(R.layout.fragment_login_email, container, false);
+
+        Button button_go_email = LoginEmailFragmentView.findViewById(R.id.button_go_email);
+        button_go_email.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendEmailDetails();
+            }
+        });
+
+        return LoginEmailFragmentView;
     }
 
     @Override
@@ -79,14 +86,6 @@ public class LoginEmailFragment extends Fragment implements View.OnClickListener
         }
         else if (mListener != null) {
             mListener.onLoginEmailFragmentInteraction(emailID);
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.button_go_email:  sendEmailDetails();
-                                        break;
         }
     }
 
