@@ -89,10 +89,12 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
             LoginFragment = new LoginEmailFragment();
         else
             LoginFragment = new LoginOTPFragment();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.login_relativeLayout, LoginFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.login_relativeLayout, LoginFragment)
+                .addToBackStack(null)
+                .commit();
+
         super.onResume();
     }
 

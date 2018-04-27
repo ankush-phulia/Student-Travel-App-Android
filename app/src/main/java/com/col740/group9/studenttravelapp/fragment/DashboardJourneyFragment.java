@@ -4,61 +4,36 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.col740.group9.studenttravelapp.R;
+import com.col740.group9.studenttravelapp.classes.Journey;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link DashboardJourneyFragment.OnFragmentInteractionListener} interface
+ * {@link DashboardJourneyFragment.OnDashboardJourneyFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link DashboardJourneyFragment#newInstance} factory method to
- * create an instance of this fragment.
  */
 public class DashboardJourneyFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private OnDashboardJourneyFragmentInteractionListener mListener;
 
-    private OnFragmentInteractionListener mListener;
+    private ArrayList<Journey> journeyList;
+    private JourneyAdapter journeyAdapter;
 
     public DashboardJourneyFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment DashboardJourneyFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static DashboardJourneyFragment newInstance(String param1, String param2) {
-        DashboardJourneyFragment fragment = new DashboardJourneyFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -68,21 +43,21 @@ public class DashboardJourneyFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_dashboard_journey, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+
+        // TODO : populate this list from server
+        journeyList = new ArrayList<Journey>();
+
+        journeyAdapter = new JourneyAdapter(context,journeyList);
+
+        if (context instanceof OnDashboardJourneyFragmentInteractionListener) {
+            mListener = (OnDashboardJourneyFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnDashboardJourneyFragmentInteractionListener");
         }
     }
 
@@ -102,8 +77,50 @@ public class DashboardJourneyFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    public interface OnDashboardJourneyFragmentInteractionListener {
+
+        void onDashboardJourneyFragmentInteraction(Uri uri);
+
+    }
+
+    public class JourneyAdapter extends RecyclerView.Adapter<JourneyAdapter.MyViewHolder> {
+
+        private Context mContext;
+        private ArrayList<Journey> journeyList;
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            // Declare Views objects present inside the card
+
+            public MyViewHolder(View view) {
+                super(view);
+                // Populate View objects from layout
+            }
+        }
+
+
+        public JourneyAdapter(Context mContext, ArrayList<Journey> journeyList) {
+            this.mContext = mContext;
+            this.journeyList = journeyList;
+        }
+
+        @Override
+        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.journey_card, parent, false);
+
+            return new MyViewHolder(itemView);
+        }
+
+        @Override
+        public void onBindViewHolder(final MyViewHolder holder, int position) {
+            Journey journey = journeyList.get(position);
+
+            // Set values of views from Journey object
+        }
+
+        @Override
+        public int getItemCount() {
+            return journeyList.size();
+        }
     }
 }

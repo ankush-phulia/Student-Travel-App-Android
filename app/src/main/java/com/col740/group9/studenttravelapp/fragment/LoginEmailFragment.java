@@ -20,22 +20,13 @@ import com.col740.group9.studenttravelapp.R;
  * Activities that contain this fragment must implement the
  * {@link LoginEmailFragment.OnLoginEmailFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link LoginEmailFragment#newInstance} factory method to
- * create an instance of this fragment.
  */
 public class LoginEmailFragment extends Fragment {
 
     private OnLoginEmailFragmentInteractionListener mListener;
-    private View LoginEmailFragmentView;
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment LoginEmailFragment.
-     */
-    public static LoginEmailFragment newInstance() {
-        LoginEmailFragment fragment = new LoginEmailFragment();
-        return fragment;
+
+    public LoginEmailFragment() {
+        // Required empty public constructor
     }
 
     @Override
@@ -48,7 +39,7 @@ public class LoginEmailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        LoginEmailFragmentView = inflater.inflate(R.layout.fragment_login_email, container, false);
+        View LoginEmailFragmentView = inflater.inflate(R.layout.fragment_login_email, container, false);
 
         Button button_go_email = LoginEmailFragmentView.findViewById(R.id.button_go_email);
         button_go_email.setOnClickListener(new View.OnClickListener() {

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -45,9 +46,9 @@ import java.util.Map;
 
 public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-                    DashboardFragment.OnFragmentInteractionListener,
-                    UserProfileFragment.OnFragmentInteractionListener,
-                    NotificationsFragment.OnFragmentInteractionListener{
+                    DashboardFragment.OnDashboardFragmentInteractionListener,
+                    UserProfileFragment.OnUserProfileFragmentInteractionListener,
+                    NotificationsFragment.OnNotificationsFragmentInteractionListener{
 
     final String server = "http://10.0.2.2:8000";
 
@@ -58,16 +59,6 @@ public class Home extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                CreateTravelFragment createTravel = new CreateTravelFragment();
-                createTravel.show(getFragmentManager(), "NEW_TRAVEL");
-            }
-        });
-
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -76,16 +67,29 @@ public class Home extends AppCompatActivity
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    protected void onResume(){
+        Fragment DefaultFragment = null;
+        String tag = "";
+
+        // TODO if new account is created then UserProfileFragment else DashboardFragment
+        DefaultFragment = new DashboardFragment();
+        tag = "DASHBOARD";
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.home_fragment_container, DashboardFragment.newInstance("", ""))
-                .addToBackStack("DASHBOARD").commit();
+                .replace(R.id.home_fragment_container, DefaultFragment)
+                .addToBackStack(tag)
+                .commit();
 
         try {
             fetchDetails();
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        super.onResume();
     }
 
     public void fetchDetails() throws JSONException {
@@ -201,13 +205,13 @@ public class Home extends AppCompatActivity
         String tag = "";
         if (id == R.id.nav_dashboard) {
             tag = "DASHBOARD";
-            fragment = DashboardFragment.newInstance("", "");
+            fragment = new DashboardFragment();
         } else if (id == R.id.nav_user_profile) {
             tag = "PROFILE";
-            fragment = UserProfileFragment.newInstance("", "");
+            fragment = new UserProfileFragment();
         } else if (id == R.id.nav_notifications) {
             tag = "NOTIFICATIONS";
-            fragment = NotificationsFragment.newInstance("", "");
+            fragment = new NotificationsFragment();
         } else if (id == R.id.nav_logout) {
             logout();
             return true;
@@ -250,7 +254,17 @@ public class Home extends AppCompatActivity
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-        return;
+    public void onDashboardFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onNotificationsFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onUserProfileFragmentInteraction(Uri uri) {
+
     }
 }
