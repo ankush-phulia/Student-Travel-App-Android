@@ -4,11 +4,25 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.col740.group9.studenttravelapp.R;
+import com.col740.group9.studenttravelapp.activity.Home;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -18,15 +32,16 @@ import com.col740.group9.studenttravelapp.R;
  * Use the {@link DashboardFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DashboardFragment extends Fragment {
+public class DashboardFragment extends Fragment
+        implements Response.Listener<JSONArray>, Response.ErrorListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+//    private static final String ARG_PARAM1 = "param1";
+//    private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+//    private String mParam1;
+//    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
@@ -46,8 +61,8 @@ public class DashboardFragment extends Fragment {
     public static DashboardFragment newInstance(String param1, String param2) {
         DashboardFragment fragment = new DashboardFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+//        args.putString(ARG_PARAM1, param1);
+//        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,8 +71,8 @@ public class DashboardFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+//            mParam1 = getArguments().getString(ARG_PARAM1);
+//            mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -90,6 +105,67 @@ public class DashboardFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    public void fetchDatafromServer(String type){
+        // TODO - assumes that the base activity is home
+        final Home baseHomeActivity = (Home) getActivity();
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
+                (Request.Method.GET,
+                        baseHomeActivity.serverURL + "/" + type + "/",
+                        null,
+                        this, this){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", "Token " + baseHomeActivity.mToken);
+                return headers;
+            }
+        };
+        baseHomeActivity.mQueue.add(jsonArrayRequest);
+    }
+
+    @Override
+    public void onResponse(JSONArray response) {
+        try {
+            String type = "";
+            if (response.length() > 0) {
+                JSONObject firstElement = (JSONObject) response.get(0);
+                if (firstElement.has("journey_id")) {
+                    type = "journeys";
+                }
+                else if (firstElement.has("trip_id")) {
+                    type = "trips";
+                }
+            }
+            Log.w("Dashboard", response.toString());
+            updateLayout(type);
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void updateLayout(String type) {
+        // TODO - update the layouts accordingly
+        switch (type) {
+            case "journeys":
+                break;
+            case "trips":
+                break;
+        }
+    }
+
+    public void onResume() {
+        fetchDatafromServer("journeys");
+        fetchDatafromServer("trips");
+        super.onResume();
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        error.printStackTrace();
     }
 
     /**

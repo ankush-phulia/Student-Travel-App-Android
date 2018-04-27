@@ -45,11 +45,11 @@ public class Home extends AppCompatActivity
                     UserProfileFragment.OnFragmentInteractionListener,
                     NotificationsFragment.OnFragmentInteractionListener,
                     Response.Listener<JSONArray>,
-                    Response.ErrorListener{
+                    Response.ErrorListener {
 
-    final String serverURL = "http://10.0.2.2:8000";
-    RequestQueue mQueue;
-    String mToken = "";
+    public final String serverURL = "http://10.0.2.2:8000";
+    public RequestQueue mQueue;
+    public String mToken = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -204,23 +204,35 @@ public class Home extends AppCompatActivity
             String type = "";
             if (response.length() > 0) {
                 JSONObject firstElement = (JSONObject) response.get(0);
-                if (firstElement.has("user_from")) {
+                if (firstElement.has("journey_id")) {
+                    type = "journeys";
+                }
+                else if (firstElement.has("trip_id")) {
+                    type = "trips";
+                }
+                else if (firstElement.has("user_from")) {
                     type = "notifications";
                 }
-                else if (firstElement.has(" ")) {
-                    type = " ";
+                else if (firstElement.has("username")) {
+                    type = "user_info";
                 }
             }
             // customised processing per response
             switch (type) {
+                case "journeys":
+                    Log.w("Journeys", response.toString());
+                    break;
+                case "trips":
+                    Log.w("Trips", response.toString());
+                    break;
                 case "notifications":
                     Log.w("Notifications", response.toString());
                     break;
-                case " ":
-                    Log.w(" ", response.toString());
+                case "user_info":
+                    Log.w("User Info", response.toString());
                     break;
                 default:
-                    Log.w("Home Response", response.toString());
+                    Log.w("Default Home Response", response.toString());
             }
         }
         catch (JSONException e) {
