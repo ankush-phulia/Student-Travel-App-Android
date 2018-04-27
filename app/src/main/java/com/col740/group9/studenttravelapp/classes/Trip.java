@@ -6,27 +6,27 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class Journey {
-    public String journey_id;
+public class Trip {
+    public String trip_id;
     public String start_time;
     public String source;
     public String destination;
     public ArrayList<JourneyPoint> checkpoints = new ArrayList<JourneyPoint>();
     public ArrayList<User> participants = new ArrayList<User>();
 
-    public Journey(JSONObject journey_object) throws JSONException {
-        this.journey_id = journey_object.getString("journey_id");
-        this.start_time = journey_object.getString("start_time");
-        this.source = journey_object.getString("source");
-        this.destination = journey_object.getString("destination");
+    public Trip(JSONObject trip_object) throws JSONException {
+        this.trip_id = trip_object.getString("trip_id");
+        this.start_time = trip_object.getString("start_time");
+        this.source = trip_object.getString("source");
+        this.destination = trip_object.getString("destination");
 
-        JSONArray checkpoints = journey_object.getJSONArray("checkpoints");
+        JSONArray checkpoints = trip_object.getJSONArray("checkpoints");
         for (int i = 0; i < checkpoints.length(); i++) {
             this.checkpoints.add(
                     new JourneyPoint(checkpoints.getJSONObject(i)));
         }
 
-        JSONArray participants = journey_object.getJSONArray("participants");
+        JSONArray participants = trip_object.getJSONArray("participants");
         for (int i = 0; i < participants.length(); i++) {
             this.participants.add(
                     new User(participants.getJSONObject(i)));

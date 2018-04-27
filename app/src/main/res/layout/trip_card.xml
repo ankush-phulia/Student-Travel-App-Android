@@ -8,14 +8,20 @@
     <android.support.v7.widget.CardView
         android:id="@+id/journey_card_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="@dimen/card_margin"
-        android:elevation="3dp">
+        android:elevation="3dp"
+        card_view:cardCornerRadius="@dimen/card_corner_radius">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="Hello Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
 
         </RelativeLayout>

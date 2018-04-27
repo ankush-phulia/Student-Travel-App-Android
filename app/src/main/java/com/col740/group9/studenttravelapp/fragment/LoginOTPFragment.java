@@ -1,12 +1,10 @@
 package com.col740.group9.studenttravelapp.fragment;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.InputFilter;
 import android.text.TextUtils;
-import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +19,6 @@ import com.col740.group9.studenttravelapp.R;
  * Activities that contain this fragment must implement the
  * {@link LoginOTPFragment.OnLoginOTPFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link LoginOTPFragment#newInstance} factory method to
- * create an instance of this fragment.
  */
 public class LoginOTPFragment extends Fragment {
 
@@ -30,22 +26,11 @@ public class LoginOTPFragment extends Fragment {
 
 
     private OnLoginOTPFragmentInteractionListener mListener;
-    private View LoginOTPFragmentView;
 
     public LoginOTPFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment LoginOTPFragment.
-     */
-    public static LoginOTPFragment newInstance() {
-        LoginOTPFragment fragment = new LoginOTPFragment();
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,7 +42,7 @@ public class LoginOTPFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        LoginOTPFragmentView = inflater.inflate(R.layout.fragment_login_otp, container, false);
+        View LoginOTPFragmentView = inflater.inflate(R.layout.fragment_login_otp, container, false);
 
         Button button_go_otp = LoginOTPFragmentView.findViewById(R.id.button_go_otp);
         button_go_otp.setOnClickListener(new View.OnClickListener() {

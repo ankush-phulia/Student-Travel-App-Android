@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
@@ -16,7 +15,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -24,10 +22,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.col740.group9.studenttravelapp.R;
 import com.col740.group9.studenttravelapp.classes.GlobalRequestQueue;
-import com.col740.group9.studenttravelapp.fragment.CreateTravelFragment;
 import com.col740.group9.studenttravelapp.fragment.DashboardFragment;
 import com.col740.group9.studenttravelapp.fragment.NotificationsFragment;
 import com.col740.group9.studenttravelapp.fragment.UserProfileFragment;
@@ -41,11 +37,12 @@ import java.util.Map;
 
 public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-                    DashboardFragment.OnFragmentInteractionListener,
-                    UserProfileFragment.OnFragmentInteractionListener,
-                    NotificationsFragment.OnFragmentInteractionListener,
-                    Response.Listener<JSONArray>,
-                    Response.ErrorListener {
+        DashboardFragment.OnDashboardFragmentInteractionListener,
+        UserProfileFragment.OnUserProfileFragmentInteractionListener,
+        NotificationsFragment.OnNotificationsFragmentInteractionListener,
+        Response.Listener<JSONArray>,
+        Response.ErrorListener{
+
 
     public final String serverURL = "http://10.0.2.2:8000";
     public RequestQueue mQueue;
@@ -66,15 +63,26 @@ public class Home extends AppCompatActivity
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    protected void onResume(){
+        Fragment DefaultFragment = null;
+        String tag = "";
+
+        // TODO set DefaulFragment as UserProfileFragment if new user else DashboardFragment
+        DefaultFragment = new DashboardFragment();
+        tag = "DASHBOARD";
 
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.home_fragment_container, DashboardFragment.newInstance("", ""))
-                .addToBackStack("DASHBOARD").commit();
+                .replace(R.id.home_fragment_container, DefaultFragment)
+                .addToBackStack(tag).commit();
 
         mQueue = GlobalRequestQueue
                 .getInstance(this.getApplicationContext())
                 .getRequestQueue();
         mToken = (String) getIntent().getExtras().get("token");
+        super.onResume();
     }
 
     @Override
@@ -129,13 +137,13 @@ public class Home extends AppCompatActivity
         String tag = "";
         if (id == R.id.nav_dashboard) {
             tag = "DASHBOARD";
-            fragment = DashboardFragment.newInstance("", "");
+            fragment = new DashboardFragment();
         } else if (id == R.id.nav_user_profile) {
             tag = "PROFILE";
-            fragment = UserProfileFragment.newInstance("", "");
+            fragment = new UserProfileFragment();
         } else if (id == R.id.nav_notifications) {
             tag = "NOTIFICATIONS";
-            fragment = NotificationsFragment.newInstance("", "");
+            fragment = new NotificationsFragment();
         } else if (id == R.id.nav_logout) {
             logout();
             return true;
@@ -175,11 +183,6 @@ public class Home extends AppCompatActivity
                 .setNegativeButton("No", null)
                 .show();
 
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-        return;
     }
 
     public void fetchDatafromServer(String type){
@@ -243,5 +246,20 @@ public class Home extends AppCompatActivity
     @Override
     public void onErrorResponse(VolleyError error) {
         error.printStackTrace();
+    }
+
+    @Override
+    public void onDashboardFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onNotificationsFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onUserProfileFragmentInteraction(Uri uri) {
+
     }
 }

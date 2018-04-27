@@ -4,100 +4,80 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.col740.group9.studenttravelapp.R;
-import com.col740.group9.studenttravelapp.activity.Home;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link DashboardFragment.OnFragmentInteractionListener} interface
+ * {@link DashboardFragment.OnDashboardFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link DashboardFragment#newInstance} factory method to
- * create an instance of this fragment.
  */
 public class DashboardFragment extends Fragment
-        implements Response.Listener<JSONArray>, Response.ErrorListener {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-//    private static final String ARG_PARAM1 = "param1";
-//    private static final String ARG_PARAM2 = "param2";
+        implements DashboardJourneyFragment.OnDashboardJourneyFragmentInteractionListener,
+        DashboardTripFragment.OnDashboardTripFragmentInteractionListener{
 
-    // TODO: Rename and change types of parameters
-//    private String mParam1;
-//    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
+    private OnDashboardFragmentInteractionListener mListener;
+    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private ViewPager mViewPager;
+    private View DashboardFragmentView;
+    private FragmentActivity myContext;
+    private Bundle bundle;
 
     public DashboardFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment DashboardFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static DashboardFragment newInstance(String param1, String param2) {
-        DashboardFragment fragment = new DashboardFragment();
-        Bundle args = new Bundle();
-//        args.putString(ARG_PARAM1, param1);
-//        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        bundle = getArguments();
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_dashboard, container, false);
+        DashboardFragmentView = inflater.inflate(R.layout.fragment_dashboard, container, false);
+
+        myContext = getActivity();
+
+//        FloatingActionButton fab_add = (FloatingActionButton) DashboardFragmentView.findViewById(R.id.fab_add_journey_or_trip);
+//        fab_add.setOnClickListener(new View.OnClickListener() { // click listener for start button
+//            @Override
+//            public void onClick(View view) {
+//                // TODO start add new journey or trip class
+//            }
+//        });
+
+        return DashboardFragmentView;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+    @Override
+    public void onResume(){
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
+        mViewPager = (ViewPager) DashboardFragmentView.findViewById(R.id.dashboard_viewpager);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+        super.onResume();
+
     }
 
     @Override
     public void onAttach(Context context) {
+        myContext=(FragmentActivity) context;
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnDashboardFragmentInteractionListener) {
+            mListener = (OnDashboardFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnDashboardFragmentInteractionListener");
         }
     }
 
@@ -107,79 +87,59 @@ public class DashboardFragment extends Fragment
         mListener = null;
     }
 
-    public void fetchDatafromServer(String type){
-        // TODO - assumes that the base activity is home
-        final Home baseHomeActivity = (Home) getActivity();
+    @Override
+    public void onDashboardJourneyFragmentInteraction(Uri uri) {
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
-                (Request.Method.GET,
-                        baseHomeActivity.serverURL + "/" + type + "/",
-                        null,
-                        this, this){
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization", "Token " + baseHomeActivity.mToken);
-                return headers;
-            }
-        };
-        baseHomeActivity.mQueue.add(jsonArrayRequest);
     }
 
     @Override
-    public void onResponse(JSONArray response) {
-        try {
-            String type = "";
-            if (response.length() > 0) {
-                JSONObject firstElement = (JSONObject) response.get(0);
-                if (firstElement.has("journey_id")) {
-                    type = "journeys";
-                }
-                else if (firstElement.has("trip_id")) {
-                    type = "trips";
-                }
+    public void onDashboardTripFragmentInteraction(Uri uri) {
+
+    }
+
+    public interface OnDashboardFragmentInteractionListener {
+        void onDashboardFragmentInteraction(Uri uri);
+    }
+
+    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            // getItem is called to instantiate the fragment for the given page.
+            // Return a DummySectionFragment (defined as a static inner class
+            // below) with the page number as its lone argument.
+            Fragment fragment = null;
+            switch (position) {
+                case 0: fragment = new DashboardJourneyFragment();
+                    break;
+                case 1: fragment = new DashboardTripFragment();
+                    break;
             }
-            Log.w("Dashboard", response.toString());
-            updateLayout(type);
+
+            fragment.setArguments(bundle);
+            return fragment;
         }
-        catch (JSONException e) {
-            e.printStackTrace();
+
+        @Override
+        public int getCount() {
+            // Show 2 total pages.
+            return 2;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            switch (position) {
+                case 0:
+                    return "Journey";
+                case 1:
+                    return "Trip";
+            }
+            return null;
         }
     }
 
-    private void updateLayout(String type) {
-        // TODO - update the layouts accordingly
-        switch (type) {
-            case "journeys":
-                break;
-            case "trips":
-                break;
-        }
-    }
-
-    public void onResume() {
-        fetchDatafromServer("journeys");
-        fetchDatafromServer("trips");
-        super.onResume();
-    }
-
-    @Override
-    public void onErrorResponse(VolleyError error) {
-        error.printStackTrace();
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
 }
