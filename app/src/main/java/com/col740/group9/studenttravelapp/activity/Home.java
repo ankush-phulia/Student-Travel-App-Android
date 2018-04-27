@@ -8,12 +8,12 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,14 +23,9 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.RequestFuture;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.col740.group9.studenttravelapp.R;
-
 import com.col740.group9.studenttravelapp.classes.GlobalRequestQueue;
 import com.col740.group9.studenttravelapp.fragment.CreateTravelFragment;
 import com.col740.group9.studenttravelapp.fragment.DashboardFragment;
@@ -46,11 +41,15 @@ import java.util.Map;
 
 public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-                    DashboardFragment.OnDashboardFragmentInteractionListener,
-                    UserProfileFragment.OnUserProfileFragmentInteractionListener,
-                    NotificationsFragment.OnNotificationsFragmentInteractionListener{
+        DashboardFragment.OnDashboardFragmentInteractionListener,
+        UserProfileFragment.OnUserProfileFragmentInteractionListener,
+        NotificationsFragment.OnNotificationsFragmentInteractionListener,
+        Response.Listener<JSONArray>,
+        Response.ErrorListener{
 
-    final String server = "http://10.0.2.2:8000";
+    final String serverURL = "http://10.0.2.2:8000";
+    RequestQueue mQueue;
+    String mToken = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,83 +73,19 @@ public class Home extends AppCompatActivity
         Fragment DefaultFragment = null;
         String tag = "";
 
-        // TODO if new account is created then UserProfileFragment else DashboardFragment
+        // TODO set DefaulFragment as UserProfileFragment if new user else DashboardFragment
         DefaultFragment = new DashboardFragment();
         tag = "DASHBOARD";
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.home_fragment_container, DefaultFragment)
-                .addToBackStack(tag)
-                .commit();
+                .addToBackStack(tag).commit();
 
-        try {
-            fetchDetails();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
+        mQueue = GlobalRequestQueue
+                .getInstance(this.getApplicationContext())
+                .getRequestQueue();
+        mToken = (String) getIntent().getExtras().get("token");
         super.onResume();
-    }
-
-    public void fetchDetails() throws JSONException {
-        final RequestQueue queue = GlobalRequestQueue.getInstance(this.getApplicationContext()).
-                getRequestQueue();
-
-        final JSONObject jsonBody = new JSONObject();
-        jsonBody.put("username", "ankush");
-        jsonBody.put("password", "ankushphulia");
-
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.POST, server + "/api-token-auth/", jsonBody, new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            final String token = (String) response.get("token");
-                            System.out.println(' ');
-                            System.out.println(token);
-                            final JSONObject jsonBody = new JSONObject();
-
-                            JsonArrayRequest jsonObjectRequest = new JsonArrayRequest
-                                    (Request.Method.GET, server + "/notifications/", null, new Response.Listener<JSONArray>() {
-                                        @Override
-                                        public void onResponse(JSONArray response) {
-                                            try {
-                                                System.out.println("Received" + response.toString());
-                                            }
-                                            catch (Exception e) {
-                                                e.printStackTrace();
-                                            }
-
-                                        }
-                                    }, new Response.ErrorListener() {
-                                        @Override
-                                        public void onErrorResponse(VolleyError error) {
-                                            error.printStackTrace();
-                                        }
-                                    }){
-                                @Override
-                                public Map<String, String> getHeaders() throws AuthFailureError {
-                                    HashMap<String, String> headers = new HashMap<String, String>();
-                                    headers.put("Authorization", "Token " + token);
-                                    return headers;
-                                }
-                            };
-                            queue.add(jsonObjectRequest);
-                        }
-                        catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        error.printStackTrace();
-                    }
-                });
-        queue.add(jsonObjectRequest);
-
-
     }
 
     @Override
@@ -251,6 +186,57 @@ public class Home extends AppCompatActivity
                 .setNegativeButton("No", null)
                 .show();
 
+    }
+
+    public void fetchDatafromServer(String type){
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
+                (Request.Method.GET,
+                        serverURL + "/" + type + "/",
+                        null,
+                        Home.this, Home.this){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", "Token " + mToken);
+                return headers;
+            }
+        };
+        mQueue.add(jsonArrayRequest);
+    }
+
+    @Override
+    public void onResponse(JSONArray response) {
+        try {
+            String type = "";
+            if (response.length() > 0) {
+                JSONObject firstElement = (JSONObject) response.get(0);
+                if (firstElement.has("user_from")) {
+                    type = "notifications";
+                }
+                else if (firstElement.has(" ")) {
+                    type = " ";
+                }
+            }
+            // customised processing per response
+            switch (type) {
+                case "notifications":
+                    Log.w("Notifications", response.toString());
+                    break;
+                case " ":
+                    Log.w(" ", response.toString());
+                    break;
+                default:
+                    Log.w("Home Response", response.toString());
+            }
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        error.printStackTrace();
     }
 
     @Override
