@@ -25,6 +25,8 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.col740.group9.studenttravelapp.R;
 import com.col740.group9.studenttravelapp.classes.GlobalRequestQueue;
 import com.col740.group9.studenttravelapp.fragment.DashboardFragment;
+import com.col740.group9.studenttravelapp.fragment.DashboardJourneyFragment;
+import com.col740.group9.studenttravelapp.fragment.DashboardTripFragment;
 import com.col740.group9.studenttravelapp.fragment.NotificationsFragment;
 import com.col740.group9.studenttravelapp.fragment.UserProfileFragment;
 
@@ -38,6 +40,8 @@ import java.util.Map;
 public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         DashboardFragment.OnDashboardFragmentInteractionListener,
+        DashboardJourneyFragment.OnDashboardJourneyFragmentInteractionListener,
+        DashboardTripFragment.OnDashboardTripFragmentInteractionListener,
         UserProfileFragment.OnUserProfileFragmentInteractionListener,
         NotificationsFragment.OnNotificationsFragmentInteractionListener,
         Response.Listener<JSONArray>,
@@ -260,6 +264,16 @@ public class Home extends AppCompatActivity
 
     @Override
     public void onUserProfileFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onDashboardJourneyFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onDashboardTripFragmentInteraction(Uri uri) {
 
     }
 }
