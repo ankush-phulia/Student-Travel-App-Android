@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,6 +42,10 @@ public class DashboardTripFragment extends Fragment
     private OnDashboardTripFragmentInteractionListener mListener;
     private ArrayList<Trip> tripList;
     private TripAdapter tripAdapter;
+    private View DashboardTripFragmentView;
+    private Context mContext;
+    protected RecyclerView mRecyclerView;
+    protected RecyclerView.LayoutManager mLayoutManager;
 
     public DashboardTripFragment() {
         // Required empty public constructor
@@ -55,19 +60,33 @@ public class DashboardTripFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_dashboard_trip, container, false);
+        DashboardTripFragmentView = inflater.inflate(R.layout.fragment_dashboard_trip, container, false);
+
+        mRecyclerView = (RecyclerView) DashboardTripFragmentView.findViewById(R.id.trip_card_recycler_view);
+        mLayoutManager = new LinearLayoutManager(mContext);
+
+        return DashboardTripFragmentView;
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        mContext = this.getActivity();
+        if(tripAdapter == null)
+            tripAdapter = new TripAdapter(mContext,tripList);
+        tripAdapter.notifyDataSetChanged();
+        mRecyclerView.setAdapter(tripAdapter);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+    }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        mContext = context;
 
         // TODO : populate this list from server
         tripList = new ArrayList<Trip>();
         fetchDatafromServer("trips");
-
-        tripAdapter = new TripAdapter(context,tripList);
 
         if (context instanceof OnDashboardTripFragmentInteractionListener) {
             mListener = (OnDashboardTripFragmentInteractionListener) context;
@@ -116,6 +135,7 @@ public class DashboardTripFragment extends Fragment
             for (int i = 0; i < response.length(); i++) {
                 tripList.add(new Trip(response.getJSONObject(i)));
             }
+            tripAdapter = new TripAdapter(mContext,tripList);
         }
         catch (JSONException e) {
             e.printStackTrace();

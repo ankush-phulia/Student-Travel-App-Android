@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,6 +39,10 @@ public class DashboardJourneyFragment extends Fragment
     private OnDashboardJourneyFragmentInteractionListener mListener;
     private ArrayList<Journey> journeyList;
     private JourneyAdapter journeyAdapter;
+    private View DashboardJourneyFragmentView;
+    private Context mContext;
+    protected RecyclerView mRecyclerView;
+    protected RecyclerView.LayoutManager mLayoutManager;
 
     public DashboardJourneyFragment() {
         // Required empty public constructor
@@ -52,19 +57,32 @@ public class DashboardJourneyFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_dashboard_journey, container, false);
+        DashboardJourneyFragmentView = inflater.inflate(R.layout.fragment_dashboard_journey, container, false);
+
+        mRecyclerView = (RecyclerView) DashboardJourneyFragmentView.findViewById(R.id.journey_card_recycler_view);
+        mLayoutManager = new LinearLayoutManager(mContext);
+
+        return DashboardJourneyFragmentView;
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        mContext = this.getActivity();
+        if(journeyAdapter == null)
+            journeyAdapter = new JourneyAdapter(mContext,journeyList);
+        journeyAdapter.notifyDataSetChanged();
+        mRecyclerView.setAdapter(journeyAdapter);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+    }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
+        mContext = context;
         // TODO : populate this list from server
         journeyList = new ArrayList<Journey>();
         fetchDatafromServer("journeys");
-
-        journeyAdapter = new JourneyAdapter(context, journeyList);
 
         if (context instanceof OnDashboardJourneyFragmentInteractionListener) {
             mListener = (OnDashboardJourneyFragmentInteractionListener) context;
@@ -113,6 +131,7 @@ public class DashboardJourneyFragment extends Fragment
             for (int i = 0; i < response.length(); i++) {
                 journeyList.add(new Journey(response.getJSONObject(i)));
             }
+            journeyAdapter = new JourneyAdapter(mContext, journeyList);
         }
         catch (JSONException e) {
             e.printStackTrace();

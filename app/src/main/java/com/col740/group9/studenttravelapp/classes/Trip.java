@@ -13,6 +13,8 @@ public class Trip {
     public String destination;
     public ArrayList<JourneyPoint> checkpoints = new ArrayList<JourneyPoint>();
     public ArrayList<User> participants = new ArrayList<User>();
+    // TODO divide start time field to start date and time fields
+    // TODO add name, duration and budget
 
     public Trip(JSONObject trip_object) throws JSONException {
         this.trip_id = trip_object.getString("trip_id");

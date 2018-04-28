@@ -13,6 +13,8 @@ public class Journey {
     public String destination;
     public ArrayList<JourneyPoint> checkpoints = new ArrayList<JourneyPoint>();
     public ArrayList<User> participants = new ArrayList<User>();
+    // TODO divide start time field to start date and time fields
+    // TODO add duration
 
     public Journey(JSONObject journey_object) throws JSONException {
         this.journey_id = journey_object.getString("journey_id");
