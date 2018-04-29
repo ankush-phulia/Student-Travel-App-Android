@@ -19,6 +19,7 @@ import com.col740.group9.studenttravelapp.R;
 import com.col740.group9.studenttravelapp.classes.GlobalRequestQueue;
 import com.col740.group9.studenttravelapp.fragment.LoginEmailFragment;
 import com.col740.group9.studenttravelapp.fragment.LoginOTPFragment;
+import static com.col740.group9.studenttravelapp.classes.Constants.*;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -40,7 +41,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
         Response.Listener<JSONObject>,
         Response.ErrorListener{
 
-    final String serverURL = "http://10.0.2.2:8000";
     String mUser;
     String mPass;
 

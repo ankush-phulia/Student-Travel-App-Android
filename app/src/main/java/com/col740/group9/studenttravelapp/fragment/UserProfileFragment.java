@@ -26,6 +26,8 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.col740.group9.studenttravelapp.classes.Constants.*;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -78,7 +80,7 @@ public class UserProfileFragment extends Fragment
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
                 (Request.Method.GET,
-                        baseHomeActivity.serverURL + "/" + type + "/",
+                        serverURL + "/" + type + "/",
                         null,
                         this, this){
             @Override
@@ -97,7 +99,7 @@ public class UserProfileFragment extends Fragment
 
         JsonObjectRequest jsonArrayRequest = new JsonObjectRequest
                 (Request.Method.POST,
-                        baseHomeActivity.serverURL + "/" + type + "/",
+                        serverURL + "/" + type + "/",
                         data,
                         this, this){
             @Override
@@ -120,7 +122,7 @@ public class UserProfileFragment extends Fragment
                     if (firstElement.has("username")) {
                         type = "user_info";
                     }
-                    user.updateUser(firstElement);
+                    user = new User(firstElement);
                 }
             }
             Log.w("User Info", response.toString());

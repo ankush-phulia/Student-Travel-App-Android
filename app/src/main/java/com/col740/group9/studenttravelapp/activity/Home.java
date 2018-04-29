@@ -29,6 +29,7 @@ import com.col740.group9.studenttravelapp.fragment.DashboardJourneyFragment;
 import com.col740.group9.studenttravelapp.fragment.DashboardTripFragment;
 import com.col740.group9.studenttravelapp.fragment.NotificationsFragment;
 import com.col740.group9.studenttravelapp.fragment.UserProfileFragment;
+import static com.col740.group9.studenttravelapp.classes.Constants.*;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,7 +49,6 @@ public class Home extends AppCompatActivity
         Response.ErrorListener{
 
 
-    public final String serverURL = "http://10.0.2.2:8000";
     public RequestQueue mQueue;
     public String mToken = "";
 

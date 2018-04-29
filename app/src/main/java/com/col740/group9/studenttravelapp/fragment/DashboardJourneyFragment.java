@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.col740.group9.studenttravelapp.classes.Constants.*;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -106,7 +108,7 @@ public class DashboardJourneyFragment extends Fragment
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
                 (Request.Method.GET,
-                        baseHomeActivity.serverURL + "/" + type + "/",
+                        serverURL + "/" + type + "/",
                         null,
                         this, this){
             @Override

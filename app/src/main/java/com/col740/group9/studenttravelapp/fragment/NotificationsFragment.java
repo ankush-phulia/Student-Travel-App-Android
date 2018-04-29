@@ -4,10 +4,14 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -17,7 +21,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.col740.group9.studenttravelapp.R;
 import com.col740.group9.studenttravelapp.activity.Home;
 import com.col740.group9.studenttravelapp.classes.Notification;
-
+import static com.col740.group9.studenttravelapp.classes.Constants.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,6 +41,11 @@ public class NotificationsFragment extends Fragment
 
     private OnNotificationsFragmentInteractionListener mListener;
     private ArrayList<Notification> notificationList;
+    private NotificationAdapter notificationAdapter;
+    private View NotificationsFragmentView;
+    private Context mContext;
+    protected RecyclerView mRecyclerView;
+    protected RecyclerView.LayoutManager mLayoutManager;
 
     public NotificationsFragment() {
         // Required empty public constructor
@@ -51,7 +60,23 @@ public class NotificationsFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_notifications, container, false);
+        NotificationsFragmentView = inflater.inflate(R.layout.fragment_notifications, container, false);
+
+        mRecyclerView = (RecyclerView) NotificationsFragmentView.findViewById(R.id.notification_card_recycler_view);
+        mLayoutManager = new LinearLayoutManager(mContext);
+
+        return NotificationsFragmentView;
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        mContext = this.getActivity();
+        if(notificationAdapter == null)
+            notificationAdapter = new NotificationAdapter(mContext,notificationList);
+        notificationAdapter.notifyDataSetChanged();
+        mRecyclerView.setAdapter(notificationAdapter);
+        mRecyclerView.setLayoutManager(mLayoutManager);
     }
 
     @Override
@@ -82,7 +107,7 @@ public class NotificationsFragment extends Fragment
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
                 (Request.Method.GET,
-                        baseHomeActivity.serverURL + "/" + type + "/",
+                        serverURL + "/" + type + "/",
                         null,
                         this, this){
             @Override
@@ -115,11 +140,6 @@ public class NotificationsFragment extends Fragment
         }
     }
 
-    public void onResume() {
-        fetchDatafromServer("notifications");
-        super.onResume();
-    }
-
     @Override
     public void onErrorResponse(VolleyError error) {
         error.printStackTrace();
@@ -137,5 +157,109 @@ public class NotificationsFragment extends Fragment
      */
     public interface OnNotificationsFragmentInteractionListener {
         void onNotificationsFragmentInteraction(Uri uri);
+    }
+
+    public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+        private Context mContext;
+        private ArrayList<Notification> notificationList;
+
+        public class NotificationCardTravelViewHolder extends RecyclerView.ViewHolder {
+            // Declare Views objects present inside the card
+            TextView title,description,date;
+            Button accept_button,reject_button;
+
+            public NotificationCardTravelViewHolder(View view) {
+                super(view);
+                // Populate View objects from layout
+                title = view.findViewById(R.id.notification_card_travel_title);
+                description = view.findViewById(R.id.notification_card_travel_description);
+                date = view.findViewById(R.id.notification_card_travel_date);
+                accept_button = view.findViewById(R.id.notification_card_travel_accept_button);
+                reject_button = view.findViewById(R.id.notification_card_travel_reject_button);
+            }
+        }
+
+        public class NotificationCardLogisticsViewHolder extends RecyclerView.ViewHolder {
+            // Declare Views objects present inside the card
+            TextView title,description,date;
+
+            public NotificationCardLogisticsViewHolder(View view) {
+                super(view);
+                // Populate View objects from layout
+                title = view.findViewById(R.id.notification_card_logistics_title);
+                description = view.findViewById(R.id.notification_card_logistics_description);
+                date = view.findViewById(R.id.notification_card_logistics_date);
+            }
+        }
+
+
+        public NotificationAdapter(Context mContext, ArrayList<Notification> notificationList) {
+            this.mContext = mContext;
+            this.notificationList = notificationList;
+        }
+
+
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = null;
+            RecyclerView.ViewHolder viewHolder = null;
+            switch (viewType) {
+                case 0:
+                    view = View.inflate(parent.getContext(), R.layout.notification_card_travel, null);
+                    viewHolder = new NotificationCardTravelViewHolder(view);
+                    break;
+                case 1:
+                    view = View.inflate(parent.getContext(), R.layout.notification_card_logistics, null);
+                    viewHolder = new NotificationCardLogisticsViewHolder(view);
+                    break;
+            }
+            return viewHolder;
+        }
+
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            int viewType = getItemViewType(position);
+            Notification notification = notificationList.get(position);
+            switch (viewType) {
+                case 0:
+                    NotificationCardTravelViewHolder notificationCardTravelViewHolder = (NotificationCardTravelViewHolder) holder;
+                    notificationCardTravelViewHolder.title.setText(notification.title);
+                    notificationCardTravelViewHolder.date.setText(notification.date);
+                    notificationCardTravelViewHolder.description.setText(notification.detail);
+                    notificationCardTravelViewHolder.accept_button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            // TODO api call to server to accept the request
+                        }
+                    });
+                    notificationCardTravelViewHolder.reject_button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            // TODO api call to server to reject the request
+                        }
+                    });
+                    break;
+                case 1:
+                    NotificationCardLogisticsViewHolder notificationCardLogisticsViewHolder = (NotificationCardLogisticsViewHolder) holder;
+                    notificationCardLogisticsViewHolder.title.setText(notification.title);
+                    notificationCardLogisticsViewHolder.date.setText(notification.date);
+                    notificationCardLogisticsViewHolder.description.setText(notification.detail);
+                    break;
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return notificationList.size();
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            if (notificationList.get(position).type == "Logistics Related")
+                return 1;
+            else
+                return 0;
+        }
     }
 }
