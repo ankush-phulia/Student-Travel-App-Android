@@ -14,6 +14,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.col740.group9.studenttravelapp.R;
 import com.col740.group9.studenttravelapp.activity.Home;
 import com.col740.group9.studenttravelapp.classes.User;
@@ -33,7 +34,7 @@ import java.util.Map;
  */
 
 public class UserProfileFragment extends Fragment
-        implements Response.Listener<JSONArray>, Response.ErrorListener{
+        implements Response.Listener, Response.ErrorListener{
     private OnUserProfileFragmentInteractionListener mListener;
 
     private User user; // To be used between server and app
@@ -72,7 +73,7 @@ public class UserProfileFragment extends Fragment
     }
 
     public void fetchDatafromServer(String type){
-        // TODO - assumes that the base activity is home
+        // assumes that the base activity is home
         final Home baseHomeActivity = (Home) getActivity();
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
@@ -90,28 +91,42 @@ public class UserProfileFragment extends Fragment
         baseHomeActivity.mQueue.add(jsonArrayRequest);
     }
 
+    public void postDatatoServer(String type, JSONObject data){
+        // assumes that the base activity is home
+        final Home baseHomeActivity = (Home) getActivity();
+
+        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest
+                (Request.Method.POST,
+                        baseHomeActivity.serverURL + "/" + type + "/",
+                        data,
+                        this, this){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", "Token " + baseHomeActivity.mToken);
+                return headers;
+            }
+        };
+        baseHomeActivity.mQueue.add(jsonArrayRequest);
+    }
+
     @Override
-    public void onResponse(JSONArray response) {
+    public void onResponse(Object response) {
         try {
-            String type = "";
-            if (response.length() > 0) {
-                JSONObject firstElement = (JSONObject) response.get(0);
-                if (firstElement.has("username")) {
-                    type = "user_info";
+            if (response.getClass() == JSONArray.class) {
+                String type = "";
+                if (((JSONArray)response).length() > 0) {
+                    JSONObject firstElement = (JSONObject) ((JSONArray)response).get(0);
+                    if (firstElement.has("username")) {
+                        type = "user_info";
+                    }
+                    user.updateUser(firstElement);
                 }
             }
             Log.w("User Info", response.toString());
-            updateLayout(type);
         }
         catch (JSONException e) {
             e.printStackTrace();
-        }
-    }
-
-    private void updateLayout(String type) {
-        switch (type) {
-            case "user_info": // TODO update the user object
-                break;
         }
     }
 
@@ -123,7 +138,11 @@ public class UserProfileFragment extends Fragment
     @Override
     public void onPause(){
         // TODO send user object to server to change the data.
-
+        try {
+            postDatatoServer("/accounts/update/", user.toJSON());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         super.onPause();
     }
 

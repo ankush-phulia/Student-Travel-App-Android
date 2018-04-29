@@ -60,6 +60,7 @@ public class NotificationsFragment extends Fragment
 
         // TODO : populate this list from server
         notificationList = new ArrayList<Notification>();
+        fetchDatafromServer("notifications");
 
         if (context instanceof OnNotificationsFragmentInteractionListener) {
             mListener = (OnNotificationsFragmentInteractionListener) context;
@@ -76,7 +77,7 @@ public class NotificationsFragment extends Fragment
     }
 
     public void fetchDatafromServer(String type){
-        // TODO - assumes that the base activity is home
+        // assumes that the base activity is home
         final Home baseHomeActivity = (Home) getActivity();
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
@@ -105,18 +106,12 @@ public class NotificationsFragment extends Fragment
                 }
             }
             Log.w("Notifications", response.toString());
-            updateLayout(type);
+            for (int i = 0; i < response.length(); i++) {
+                notificationList.add(new Notification(response.getJSONObject(i)));
+            }
         }
         catch (JSONException e) {
             e.printStackTrace();
-        }
-    }
-
-    private void updateLayout(String type) {
-        // TODO - update the layouts accordingly
-        switch (type) {
-            case "notifications":
-                break;
         }
     }
 
