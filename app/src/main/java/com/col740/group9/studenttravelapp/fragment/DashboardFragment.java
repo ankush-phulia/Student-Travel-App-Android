@@ -1,6 +1,7 @@
 package com.col740.group9.studenttravelapp.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.col740.group9.studenttravelapp.R;
+import com.col740.group9.studenttravelapp.activity.Create;
+import com.col740.group9.studenttravelapp.activity.Search;
+import com.github.clans.fab.FloatingActionButton;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -49,13 +53,27 @@ public class DashboardFragment extends Fragment
 
         myContext = getActivity();
 
-//        FloatingActionButton fab_add = (FloatingActionButton) DashboardFragmentView.findViewById(R.id.fab_add_journey_or_trip);
-//        fab_add.setOnClickListener(new View.OnClickListener() { // click listener for start button
-//            @Override
-//            public void onClick(View view) {
-//                // TODO start add new journey or trip class
-//            }
-//        });
+        FloatingActionButton fab_create = (FloatingActionButton) DashboardFragmentView.findViewById(R.id.fab_create);
+        fab_create.setOnClickListener(new View.OnClickListener() { // click listener for start button
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(myContext,Create.class);
+                intent.putExtra("type",mViewPager.getCurrentItem());
+                startActivity(intent);
+            }
+        });
+
+        FloatingActionButton fab_search = (FloatingActionButton) DashboardFragmentView.findViewById(R.id.fab_search);
+        fab_search.setOnClickListener(new View.OnClickListener() { // click listener for start button
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(myContext,Search.class);
+                intent.putExtra("type",mViewPager.getCurrentItem());
+                startActivity(intent);
+            }
+        });
+
+
 
         return DashboardFragmentView;
     }
