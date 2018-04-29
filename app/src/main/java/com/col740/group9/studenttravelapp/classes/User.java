@@ -19,9 +19,15 @@ public class User {
         this.first_name = user_info_json.getString("first_name");
         this.last_name = user_info_json.getString("last_name");
         this.email = user_info_json.getString("email");
-        this.password = user_info_json.getString("password");
-        this.sex = user_info_json.getString("sex");
-        this.facebook_link = user_info_json.getString("facebook_link");
+        if (user_info_json.has("password")) {
+            this.password = user_info_json.getString("password");
+        }
+        if (user_info_json.has("sex")) {
+            this.sex = user_info_json.getString("sex");
+        }
+        if (user_info_json.has("facebook_link")) {
+            this.facebook_link = user_info_json.getString("facebook_link");
+        }
     }
 
     public void updateUser(JSONObject user_info_json) throws JSONException {

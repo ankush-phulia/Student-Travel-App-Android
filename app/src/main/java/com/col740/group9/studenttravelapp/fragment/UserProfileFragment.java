@@ -141,7 +141,7 @@ public class UserProfileFragment extends Fragment
     public void onPause(){
         // TODO send user object to server to change the data.
         try {
-            postDatatoServer("/accounts/update/", user.toJSON());
+            postDatatoServer("/user_info_update/", user.toJSON());
         } catch (JSONException e) {
             e.printStackTrace();
         }

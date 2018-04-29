@@ -205,7 +205,7 @@ public class DashboardTripFragment extends Fragment
             // Set values of views from Trip object
             holder.name.setText(trip.destination.toString() + " Trip" );
             holder.src_dest.setText("From " + trip.source + " to " + trip.destination);
-            holder.start_date.setText("Starting on " + trip.start_date);
+            holder.start_date.setText("Starting on " + trip.start_time);
             holder.duration.setText(trip.duration + " days");
             holder.participants.setText(trip.participants + " people going");
         }

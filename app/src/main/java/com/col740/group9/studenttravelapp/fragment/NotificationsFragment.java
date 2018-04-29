@@ -83,7 +83,7 @@ public class NotificationsFragment extends Fragment
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        // TODO : populate this list from server
+        // populates this list from server
         notificationList = new ArrayList<Notification>();
         fetchDatafromServer("notifications");
 
@@ -226,7 +226,7 @@ public class NotificationsFragment extends Fragment
                     NotificationCardTravelViewHolder notificationCardTravelViewHolder = (NotificationCardTravelViewHolder) holder;
                     notificationCardTravelViewHolder.title.setText(notification.title);
                     notificationCardTravelViewHolder.date.setText(notification.date);
-                    notificationCardTravelViewHolder.description.setText(notification.detail);
+                    notificationCardTravelViewHolder.description.setText(notification.description);
                     notificationCardTravelViewHolder.accept_button.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -244,7 +244,7 @@ public class NotificationsFragment extends Fragment
                     NotificationCardLogisticsViewHolder notificationCardLogisticsViewHolder = (NotificationCardLogisticsViewHolder) holder;
                     notificationCardLogisticsViewHolder.title.setText(notification.title);
                     notificationCardLogisticsViewHolder.date.setText(notification.date);
-                    notificationCardLogisticsViewHolder.description.setText(notification.detail);
+                    notificationCardLogisticsViewHolder.description.setText(notification.description);
                     break;
             }
         }

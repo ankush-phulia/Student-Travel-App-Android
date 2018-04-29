@@ -12,8 +12,6 @@ public class Journey extends Travel{
     public Journey(JSONObject journey_object) throws JSONException {
         this.journey_id = journey_object.getString("journey_id");
         this.start_time = journey_object.getString("start_time");
-        this.start_date = journey_object.getString("start_date");
-        this.duration = journey_object.getString("duration");
         this.source = journey_object.getString("source");
         this.destination = journey_object.getString("destination");
 
@@ -28,5 +26,16 @@ public class Journey extends Travel{
             this.participants.add(
                     new User(participants.getJSONObject(i)));
         }
+    }
+
+    public JSONObject toJSON() throws JSONException {
+        JSONObject json = new JSONObject();
+        json.put("journey_id", this.journey_id);
+        json.put("start_time", this.start_time);
+        json.put("source", this.source);
+        json.put("destination", this.destination);
+        json.put("checkpoints", new JSONArray(this.checkpoints));
+        json.put("participants", new JSONArray(this.participants));
+        return json;
     }
 }

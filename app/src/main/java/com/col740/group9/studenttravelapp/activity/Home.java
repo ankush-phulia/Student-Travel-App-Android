@@ -48,7 +48,6 @@ public class Home extends AppCompatActivity
         Response.Listener<JSONArray>,
         Response.ErrorListener{
 
-
     public RequestQueue mQueue;
     public String mToken = "";
 

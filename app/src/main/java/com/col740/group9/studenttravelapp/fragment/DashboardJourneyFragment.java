@@ -84,7 +84,7 @@ public class DashboardJourneyFragment extends Fragment
     public void onAttach(Context context) {
         super.onAttach(context);
         mContext = context;
-        // TODO : populate this list from server
+        // populate this list from server
         journeyList = new ArrayList<Journey>();
         fetchDatafromServer("journeys");
 
@@ -103,7 +103,7 @@ public class DashboardJourneyFragment extends Fragment
     }
 
     public void fetchDatafromServer(String type){
-        // TODO - assumes that the base activity is home
+        // assumes that the base activity is home
         final Home baseHomeActivity = (Home) getActivity();
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
@@ -202,8 +202,7 @@ public class DashboardJourneyFragment extends Fragment
 
             // Set values of views from Journey object
             holder.src_dest.setText("From " + journey.source + " to " + journey.destination);
-            holder.start_date.setText("Starting on " + journey.start_date);
-            holder.duration.setText(journey.duration + " days");
+            holder.start_date.setText("Starting on " + journey.start_time);
             holder.participants.setText(journey.participants + " people going");
         }
 
