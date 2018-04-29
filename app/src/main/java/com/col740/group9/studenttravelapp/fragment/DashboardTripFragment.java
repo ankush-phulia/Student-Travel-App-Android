@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -168,10 +169,16 @@ public class DashboardTripFragment extends Fragment
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             // Declare Views objects present inside the card
+            TextView name,src_dest,start_date,duration,participants;
 
             public MyViewHolder(View view) {
                 super(view);
                 // Populate View objects from layout
+                name = view.findViewById(R.id.trip_card_name);
+                src_dest = view.findViewById(R.id.trip_card_src_dest);
+                start_date = view.findViewById(R.id.trip_card_start_date);
+                duration = view.findViewById(R.id.trip_card_duration);
+                participants = view.findViewById(R.id.trip_card_participants);
             }
         }
 
@@ -194,6 +201,11 @@ public class DashboardTripFragment extends Fragment
             Trip trip = tripList.get(position);
 
             // Set values of views from Trip object
+            holder.name.setText(trip.destination.toString() + " Trip" );
+            holder.src_dest.setText("From " + trip.source + " to " + trip.destination);
+            holder.start_date.setText("Starting on " + trip.start_date);
+            holder.duration.setText(trip.duration + " days");
+            holder.participants.setText(trip.participants + " people going");
         }
 
         @Override

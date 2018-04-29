@@ -16,6 +16,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.col740.group9.studenttravelapp.R;
 import com.col740.group9.studenttravelapp.activity.Home;
+import com.col740.group9.studenttravelapp.classes.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,6 +35,8 @@ import java.util.Map;
 public class UserProfileFragment extends Fragment
         implements Response.Listener<JSONArray>, Response.ErrorListener{
     private OnUserProfileFragmentInteractionListener mListener;
+
+    private User user; // To be used between server and app
 
     public UserProfileFragment() {
         // Required empty public constructor
@@ -106,9 +109,8 @@ public class UserProfileFragment extends Fragment
     }
 
     private void updateLayout(String type) {
-        // TODO - update the layouts accordingly
         switch (type) {
-            case "user_info":
+            case "user_info": // TODO update the user object
                 break;
         }
     }
@@ -116,6 +118,13 @@ public class UserProfileFragment extends Fragment
     public void onResume() {
         fetchDatafromServer("user_info");
         super.onResume();
+    }
+
+    @Override
+    public void onPause(){
+        // TODO send user object to server to change the data.
+
+        super.onPause();
     }
 
     @Override

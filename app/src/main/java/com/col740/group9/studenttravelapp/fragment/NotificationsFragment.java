@@ -16,11 +16,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.col740.group9.studenttravelapp.R;
 import com.col740.group9.studenttravelapp.activity.Home;
+import com.col740.group9.studenttravelapp.classes.Notification;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,6 +36,7 @@ public class NotificationsFragment extends Fragment
         implements Response.Listener<JSONArray>, Response.ErrorListener {
 
     private OnNotificationsFragmentInteractionListener mListener;
+    private ArrayList<Notification> notificationList;
 
     public NotificationsFragment() {
         // Required empty public constructor
@@ -54,6 +57,10 @@ public class NotificationsFragment extends Fragment
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
+        // TODO : populate this list from server
+        notificationList = new ArrayList<Notification>();
+
         if (context instanceof OnNotificationsFragmentInteractionListener) {
             mListener = (OnNotificationsFragmentInteractionListener) context;
         } else {
