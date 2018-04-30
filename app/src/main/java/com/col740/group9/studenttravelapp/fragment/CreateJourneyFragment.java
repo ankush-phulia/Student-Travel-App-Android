@@ -19,6 +19,8 @@ import com.col740.group9.studenttravelapp.R;
 import com.col740.group9.studenttravelapp.activity.Create;
 import com.col740.group9.studenttravelapp.activity.Home;
 import com.col740.group9.studenttravelapp.classes.Journey;
+import com.col740.group9.studenttravelapp.classes.JourneyPoint;
+import com.col740.group9.studenttravelapp.classes.LocationPoint;
 import com.col740.group9.studenttravelapp.classes.Notification;
 
 import org.json.JSONArray;
@@ -26,6 +28,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,7 +37,7 @@ import static com.col740.group9.studenttravelapp.classes.Constants.serverURL;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link CreateJourneyFragment.OnFragmentInteractionListener} interface
+ * {@link CreateJourneyFragment.OnCreateJourneyFragmentInteractionListener} interface
  * to handle interaction events.
  * Use the {@link CreateJourneyFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -42,7 +45,8 @@ import static com.col740.group9.studenttravelapp.classes.Constants.serverURL;
 public class CreateJourneyFragment extends Fragment
     implements Response.Listener, Response.ErrorListener{
 
-    private OnFragmentInteractionListener mListener;
+    private OnCreateJourneyFragmentInteractionListener mListener;
+    private ArrayList<LocationPoint> journeyPointList;
 
     public CreateJourneyFragment() {
         // Required empty public constructor
@@ -62,7 +66,7 @@ public class CreateJourneyFragment extends Fragment
 
         }
     }
-
+    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -70,21 +74,23 @@ public class CreateJourneyFragment extends Fragment
         return inflater.inflate(R.layout.fragment_create_journey, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+    @Override
+    public void onResume() {
+        super.onResume();
+        
+        // populate this list with journey points
+        journeyPointList = new ArrayList<LocationPoint>();
+        fetchDatafromServer("/journey_points/");
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnCreateJourneyFragmentInteractionListener) {
+            mListener = (OnCreateJourneyFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnCreateJourneyFragmentInteractionListener");
         }
     }
 
@@ -128,8 +134,16 @@ public class CreateJourneyFragment extends Fragment
 
     @Override
     public void onResponse(Object response) {
-        if (response.getClass() == JSONArray.class) {
-            Log.w("Create Journey", response.toString());
+        try {
+            if (response.getClass() == JSONArray.class) {
+                Log.w("Create Journey", response.toString());
+                for (int i = 0; i < ((JSONArray) response).length(); i++) {
+                    journeyPointList.add(new LocationPoint(((JSONArray) response).getJSONObject(i)));
+                }
+            }
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
@@ -154,8 +168,8 @@ public class CreateJourneyFragment extends Fragment
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
+    public interface OnCreateJourneyFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void OnCreateJourneyFragmentInteraction(Uri uri);
     }
 }
