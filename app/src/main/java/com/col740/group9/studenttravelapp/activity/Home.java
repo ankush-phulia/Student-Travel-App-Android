@@ -67,10 +67,7 @@ public class Home extends AppCompatActivity
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-    }
 
-    @Override
-    protected void onResume(){
         Fragment DefaultFragment = null;
         String tag = "";
 
@@ -82,6 +79,10 @@ public class Home extends AppCompatActivity
                 .replace(R.id.home_fragment_container, DefaultFragment)
                 .addToBackStack(tag).commit();
         toolbar.setTitle("Dashboard");
+    }
+
+    @Override
+    protected void onResume(){
 
         mQueue = GlobalRequestQueue
                 .getInstance(this.getApplicationContext())

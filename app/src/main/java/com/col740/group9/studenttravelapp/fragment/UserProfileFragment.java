@@ -1,14 +1,19 @@
 package com.col740.group9.studenttravelapp.fragment;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +22,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -36,7 +42,9 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import static android.app.Activity.RESULT_OK;
+import de.hdodenhof.circleimageview.CircleImageView;
+
+import static android.app.Activity.*;
 import static com.col740.group9.studenttravelapp.classes.Constants.*;
 
 /**
@@ -51,14 +59,13 @@ public class UserProfileFragment extends Fragment
 
     private OnUserProfileFragmentInteractionListener mListener;
 
-    private static int RESULT_LOAD_IMAGE = 1;
     private boolean image_changed = false;
 
     private User user; // To be used between server and app
     private View UserProfileFragmentView;
     private TextView user_profile_name,user_profile_email;
     private EditText user_profile_first_name,user_profile_last_name,user_profile_sex,user_profile_facebook_link;
-    private ImageView user_profile_image;
+    private CircleImageView user_profile_image;
 
     public UserProfileFragment() {
         // Required empty public constructor
@@ -83,12 +90,19 @@ public class UserProfileFragment extends Fragment
         user_profile_sex = (EditText) UserProfileFragmentView.findViewById(R.id.user_profile_sex);
         user_profile_facebook_link = (EditText) UserProfileFragmentView.findViewById(R.id.user_profile_facebook_link);
 
-        user_profile_image = (ImageView) UserProfileFragmentView.findViewById(R.id.user_profile_image);
+        user_profile_image = (CircleImageView) UserProfileFragmentView.findViewById(R.id.user_profile_image);
         user_profile_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(i, RESULT_LOAD_IMAGE);
+                if (MY_BUILD_VERSION > Build.VERSION_CODES.LOLLIPOP_MR1) {
+                    if (!checkIfAlreadyhavePermission()) {
+                        ActivityCompat.requestPermissions(getActivity(),new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},1);
+                    } else {
+                        Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(i, RESULT_LOAD_IMAGE);
+                    }
+                }
+
             }
         });
 
@@ -112,27 +126,6 @@ public class UserProfileFragment extends Fragment
         });
 
         return UserProfileFragmentView;
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
-            Uri selectedImage = data.getData();
-            String[] filePathColumn = { MediaStore.Images.Media.DATA };
-
-            Cursor cursor = getActivity().getContentResolver().query(selectedImage,
-                    filePathColumn, null, null, null);
-            cursor.moveToFirst();
-
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
-            cursor.close();
-
-            user_profile_image.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-            image_changed = true;
-        }
     }
 
     @Override
@@ -234,7 +227,49 @@ public class UserProfileFragment extends Fragment
         error.printStackTrace();
     }
 
+    private boolean checkIfAlreadyhavePermission() {
+        int result = ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE);
+        return result == PackageManager.PERMISSION_GRANTED;
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+
+
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+            Cursor cursor = getActivity().getContentResolver().query(selectedImage,
+                    filePathColumn, null, null, null);
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+            cursor.close();
+
+            user_profile_image.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+            image_changed = true;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 1: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(i, RESULT_LOAD_IMAGE);
+                } else {
+                    Toast.makeText(getActivity(), "Please give your permission.", Toast.LENGTH_LONG).show();
+                }
+                break;
+            }
+        }
+    }
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
