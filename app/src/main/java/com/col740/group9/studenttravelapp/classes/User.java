@@ -12,6 +12,8 @@ public class User {
     public String email;
     public String password;
     public String facebook_link;
+    public String phone;
+    public String bio;
 
     public User(JSONObject user_info_json) throws JSONException {
         if (user_info_json.has("user")) {
@@ -35,12 +37,17 @@ public class User {
                 this.password = user_info_json.getString("password");
             }
         }
-
         if (user_info_json.has("sex")) {
             this.sex = user_info_json.getString("sex");
         }
         if (user_info_json.has("facebook_link")) {
             this.facebook_link = user_info_json.getString("facebook_link");
+        }
+        if (user_info_json.has("phone")) {
+            this.phone = user_info_json.getString("phone");
+        }
+        if (user_info_json.has("bio")) {
+            this.bio = user_info_json.getString("bio");
         }
     }
 
@@ -56,6 +63,8 @@ public class User {
         }
         this.sex = user_info_json.getString("sex");
         this.facebook_link = user_info_json.getString("facebook_link");
+        this.phone = user_info_json.getString("phone");
+        this.bio = user_info_json.getString("bio");
     }
 
     public JSONObject toJSON() throws JSONException {
@@ -70,6 +79,8 @@ public class User {
         json.put("user", user);
         json.put("sex", this.sex);
         json.put("facebook_link", this.facebook_link);
+        json.put("phone", this.phone);
+        json.put("bio", this.bio);
         return json;
     }
 }

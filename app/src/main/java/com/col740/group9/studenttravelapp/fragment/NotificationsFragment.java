@@ -18,6 +18,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.col740.group9.studenttravelapp.R;
 import com.col740.group9.studenttravelapp.activity.Home;
 import com.col740.group9.studenttravelapp.classes.Notification;
@@ -38,7 +39,7 @@ import java.util.Map;
  * to handle interaction events.
  */
 public class NotificationsFragment extends Fragment
-        implements Response.Listener<JSONArray>, Response.ErrorListener {
+        implements Response.Listener, Response.ErrorListener {
 
     private OnNotificationsFragmentInteractionListener mListener;
     private ArrayList<Notification> notificationList;
@@ -121,24 +122,45 @@ public class NotificationsFragment extends Fragment
         baseHomeActivity.mQueue.add(jsonArrayRequest);
     }
 
+    public void postDatatoServer(String type, JSONObject data){
+        // assumes that the base activity is home
+        final Home baseHomeActivity = (Home) getActivity();
+
+        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest
+                (Request.Method.POST,
+                        serverURL + "/" + type + "/",
+                        data,
+                        this, this){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", "Token " + baseHomeActivity.mToken);
+                return headers;
+            }
+        };
+        baseHomeActivity.mQueue.add(jsonArrayRequest);
+    }
+
     @Override
-    public void onResponse(JSONArray response) {
+    public void onResponse(Object response) {
         try {
-            String type = "";
-            if (response.length() > 0) {
-                JSONObject firstElement = (JSONObject) response.get(0);
-                if (firstElement.has("user_from")) {
-                    type = "notifications";
+            if (response.getClass() == JSONArray.class) {
+                String type = "";
+                if (((JSONArray)response).length() > 0) {
+                    JSONObject firstElement = (JSONObject) ((JSONArray)response).get(0);
+                    if (firstElement.has("user_from")) {
+                        type = "notifications";
+                    }
                 }
+                Log.w("Notifications", response.toString());
+                for (int i = 0; i < ((JSONArray)response).length(); i++) {
+                    notificationList.add(new Notification(((JSONArray)response).getJSONObject(i)));
+                }
+                notificationAdapter = new NotificationAdapter(mContext, notificationList);
+                notificationAdapter.notifyDataSetChanged();
+                mRecyclerView.setAdapter(notificationAdapter);
+                mRecyclerView.setLayoutManager(mLayoutManager);
             }
-            Log.w("Notifications", response.toString());
-            for (int i = 0; i < response.length(); i++) {
-                notificationList.add(new Notification(response.getJSONObject(i)));
-            }
-            notificationAdapter = new NotificationAdapter(mContext,notificationList);
-            notificationAdapter.notifyDataSetChanged();
-            mRecyclerView.setAdapter(notificationAdapter);
-            mRecyclerView.setLayoutManager(mLayoutManager);
         }
         catch (JSONException e) {
             e.printStackTrace();
@@ -227,23 +249,36 @@ public class NotificationsFragment extends Fragment
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             int viewType = getItemViewType(position);
-            Notification notification = notificationList.get(position);
+            final Notification notification = notificationList.get(position);
             switch (viewType) {
                 case 0:
                     NotificationCardTravelViewHolder notificationCardTravelViewHolder = (NotificationCardTravelViewHolder) holder;
                     notificationCardTravelViewHolder.title.setText(notification.title);
                     notificationCardTravelViewHolder.date.setText(notification.date);
                     notificationCardTravelViewHolder.description.setText(notification.description);
+
                     notificationCardTravelViewHolder.accept_button.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            // TODO api call to server to accept the request
+                            // api call to server to accept the request
+                            try {
+                                postDatatoServer("", notification.toJSON());
+                                fetchDatafromServer("notifications");
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
                     });
                     notificationCardTravelViewHolder.reject_button.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            // TODO api call to server to reject the request
+                            // api call to server to reject the request
+                            try {
+                                postDatatoServer("", notification.toJSON());
+                                fetchDatafromServer("notifications");
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                         }
                     });
                     break;

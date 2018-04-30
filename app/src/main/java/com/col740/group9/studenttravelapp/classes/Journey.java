@@ -12,6 +12,7 @@ import java.util.Date;
 
 public class Journey extends Travel{
     public String journey_id;
+    public int cotrael_number;
 
     public Journey(JSONObject journey_object) throws JSONException,ParseException {
         this.journey_id = journey_object.getString("journey_id");

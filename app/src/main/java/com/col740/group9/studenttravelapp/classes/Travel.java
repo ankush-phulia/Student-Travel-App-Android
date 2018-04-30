@@ -13,7 +13,8 @@ public class Travel {
     public Date date;
     public String source;
     public String destination;
-    public int status;
+    public Boolean posted;
+    public Boolean completed;
     public ArrayList<JourneyPoint> checkpoints = new ArrayList<JourneyPoint>();
     public ArrayList<User> participants = new ArrayList<User>();
 }
