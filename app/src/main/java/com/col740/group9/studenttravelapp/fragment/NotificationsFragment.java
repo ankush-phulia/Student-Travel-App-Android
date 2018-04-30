@@ -124,6 +124,7 @@ public class NotificationsFragment extends Fragment
 
     public void postDatatoServer(String type, JSONObject data){
         // assumes that the base activity is home
+        Log.w("Note", data.toString());
         final Home baseHomeActivity = (Home) getActivity();
 
         JsonObjectRequest jsonArrayRequest = new JsonObjectRequest
@@ -255,7 +256,7 @@ public class NotificationsFragment extends Fragment
                         public void onClick(View v) {
                             // api call to server to accept the request
                             try {
-                                postDatatoServer("", notification.toJSON());
+                                postDatatoServer("accept_request", notification.toJSON());
                                 fetchDatafromServer("notifications");
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -267,7 +268,7 @@ public class NotificationsFragment extends Fragment
                         public void onClick(View v) {
                             // api call to server to reject the request
                             try {
-                                postDatatoServer("", notification.toJSON());
+                                postDatatoServer("reject_request", notification.toJSON());
                                 fetchDatafromServer("notifications");
                             } catch (JSONException e) {
                                 e.printStackTrace();
