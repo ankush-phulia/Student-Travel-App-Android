@@ -145,13 +145,6 @@ public class NotificationsFragment extends Fragment
     public void onResponse(Object response) {
         try {
             if (response.getClass() == JSONArray.class) {
-                String type = "";
-                if (((JSONArray)response).length() > 0) {
-                    JSONObject firstElement = (JSONObject) ((JSONArray)response).get(0);
-                    if (firstElement.has("user_from")) {
-                        type = "notifications";
-                    }
-                }
                 Log.w("Notifications", response.toString());
                 for (int i = 0; i < ((JSONArray)response).length(); i++) {
                     notificationList.add(new Notification(((JSONArray)response).getJSONObject(i)));

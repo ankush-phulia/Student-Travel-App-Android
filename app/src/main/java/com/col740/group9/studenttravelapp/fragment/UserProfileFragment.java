@@ -187,12 +187,8 @@ public class UserProfileFragment extends Fragment
     public void onResponse(Object response) {
         try {
             if (response.getClass() == JSONArray.class) {
-                String type = "";
                 if (((JSONArray)response).length() > 0) {
                     JSONObject firstElement = (JSONObject) ((JSONArray)response).get(0);
-                    if (firstElement.has("username")) {
-                        type = "user_info";
-                    }
                     Log.w("User", response.toString());
                     user = new User(firstElement);
 
