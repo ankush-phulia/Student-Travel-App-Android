@@ -25,7 +25,9 @@ import com.github.clans.fab.FloatingActionButton;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -136,8 +138,13 @@ public class DashboardJourneyFragment extends Fragment
                 journeyList.add(new Journey(response.getJSONObject(i)));
             }
             journeyAdapter = new JourneyAdapter(mContext, journeyList);
+            journeyAdapter.notifyDataSetChanged();
+            mRecyclerView.setAdapter(journeyAdapter);
+            mRecyclerView.setLayoutManager(mLayoutManager);
         }
         catch (JSONException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
             e.printStackTrace();
         }
     }
@@ -170,14 +177,13 @@ public class DashboardJourneyFragment extends Fragment
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             // Declare Views objects present inside the card
-            TextView src_dest,start_date,duration,participants;
+            TextView src_dest,start_date,participants;
 
             public MyViewHolder(View view) {
                 super(view);
                 // Populate View objects from layout
                 src_dest = view.findViewById(R.id.journey_card_src_dest);
                 start_date = view.findViewById(R.id.journey_card_start_date);
-                duration = view.findViewById(R.id.journey_card_duration);
                 participants = view.findViewById(R.id.journey_card_participants);
             }
         }
@@ -202,8 +208,20 @@ public class DashboardJourneyFragment extends Fragment
 
             // Set values of views from Journey object
             holder.src_dest.setText("From " + journey.source + " to " + journey.destination);
-            holder.start_date.setText("Starting on " + journey.start_time);
-            holder.participants.setText(journey.participants + " people going");
+            if(journey.date.compareTo(new Date())<0) {
+                holder.start_date.setText("Started on " + journey.display_time);
+                if(journey.participants.size() == 1)
+                    holder.participants.setText("Only you went");
+                else
+                    holder.participants.setText(journey.participants.size() + " persons went");
+            }
+            else {
+                holder.start_date.setText("Starting on " + journey.display_time);
+                if(journey.participants.size() == 1)
+                    holder.participants.setText("Only you are going");
+                else
+                    holder.participants.setText(journey.participants.size() + " persons going");
+            }
         }
 
         @Override

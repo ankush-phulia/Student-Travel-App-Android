@@ -26,6 +26,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -134,8 +135,14 @@ public class NotificationsFragment extends Fragment
             for (int i = 0; i < response.length(); i++) {
                 notificationList.add(new Notification(response.getJSONObject(i)));
             }
+            notificationAdapter = new NotificationAdapter(mContext,notificationList);
+            notificationAdapter.notifyDataSetChanged();
+            mRecyclerView.setAdapter(notificationAdapter);
+            mRecyclerView.setLayoutManager(mLayoutManager);
         }
         catch (JSONException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
             e.printStackTrace();
         }
     }

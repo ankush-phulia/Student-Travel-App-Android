@@ -50,12 +50,13 @@ public class Home extends AppCompatActivity
 
     public RequestQueue mQueue;
     public String mToken = "";
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -80,6 +81,7 @@ public class Home extends AppCompatActivity
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.home_fragment_container, DefaultFragment)
                 .addToBackStack(tag).commit();
+        toolbar.setTitle("Dashboard");
 
         mQueue = GlobalRequestQueue
                 .getInstance(this.getApplicationContext())
@@ -141,12 +143,15 @@ public class Home extends AppCompatActivity
         if (id == R.id.nav_dashboard) {
             tag = "DASHBOARD";
             fragment = new DashboardFragment();
+            toolbar.setTitle("Dashboard");
         } else if (id == R.id.nav_user_profile) {
             tag = "PROFILE";
             fragment = new UserProfileFragment();
+            toolbar.setTitle("User Profile");
         } else if (id == R.id.nav_notifications) {
             tag = "NOTIFICATIONS";
             fragment = new NotificationsFragment();
+            toolbar.setTitle("Notifications");
         } else if (id == R.id.nav_logout) {
             logout();
             return true;

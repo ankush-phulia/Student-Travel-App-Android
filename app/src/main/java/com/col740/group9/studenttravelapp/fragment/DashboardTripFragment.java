@@ -24,7 +24,9 @@ import com.col740.group9.studenttravelapp.classes.Trip;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -139,8 +141,13 @@ public class DashboardTripFragment extends Fragment
                 tripList.add(new Trip(response.getJSONObject(i)));
             }
             tripAdapter = new TripAdapter(mContext,tripList);
+            tripAdapter.notifyDataSetChanged();
+            mRecyclerView.setAdapter(tripAdapter);
+            mRecyclerView.setLayoutManager(mLayoutManager);
         }
         catch (JSONException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
             e.printStackTrace();
         }
     }
@@ -205,9 +212,22 @@ public class DashboardTripFragment extends Fragment
             // Set values of views from Trip object
             holder.name.setText(trip.destination.toString() + " Trip" );
             holder.src_dest.setText("From " + trip.source + " to " + trip.destination);
-            holder.start_date.setText("Starting on " + trip.start_time);
-            holder.duration.setText(trip.duration + " days");
-            holder.participants.setText(trip.participants + " people going");
+            if(trip.date.compareTo(new Date())<0) {
+                holder.start_date.setText("Started on " + trip.display_time);
+                holder.duration.setText(trip.duration + " days");
+                if(trip.participants.size() == 1)
+                    holder.participants.setText("Only you went");
+                else
+                    holder.participants.setText(trip.participants.size() + " persons went");
+            }
+            else {
+                holder.start_date.setText("Starting on " + trip.display_time);
+                holder.duration.setText(trip.duration + " days");
+                if(trip.participants.size() == 1)
+                    holder.participants.setText("Only you are going");
+                else
+                    holder.participants.setText(trip.participants.size() + " persons going");
+            }
         }
 
         @Override

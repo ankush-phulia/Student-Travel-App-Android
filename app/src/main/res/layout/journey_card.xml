@@ -41,15 +41,6 @@
                     android:textSize="15dp"/>
 
                 <TextView
-                    android:id="@+id/journey_card_duration"
-                    android:text="_ days"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:padding="5dp"
-                    android:textSize="15dp"/>
-
-                <TextView
                     android:id="@+id/journey_card_participants"
                     android:text="_ people going"
                     android:layout_width="wrap_content"

@@ -4,14 +4,22 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Journey extends Travel{
     public String journey_id;
 
-    public Journey(JSONObject journey_object) throws JSONException {
+    public Journey(JSONObject journey_object) throws JSONException,ParseException {
         this.journey_id = journey_object.getString("journey_id");
         this.start_time = journey_object.getString("start_time");
+        String datestring = journey_object.getString("start_time");
+        this.date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").parse(datestring);
+        DateFormat df = new SimpleDateFormat("dd-MM-yyyy 'at' HHmm 'hours'");
+        this.display_time = df.format(date);
         this.source = journey_object.getString("source");
         this.destination = journey_object.getString("destination");
 

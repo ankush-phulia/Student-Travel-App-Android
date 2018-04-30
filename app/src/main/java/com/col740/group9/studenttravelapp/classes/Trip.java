@@ -4,7 +4,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Trip extends Travel{
     public String trip_id;
@@ -12,9 +16,13 @@ public class Trip extends Travel{
     public String budget;
     public String admin;
 
-    public Trip(JSONObject trip_object) throws JSONException {
+    public Trip(JSONObject trip_object) throws JSONException,ParseException {
         this.trip_id = trip_object.getString("trip_id");
         this.start_time = trip_object.getString("start_time");
+        String datestring = trip_object.getString("start_time");
+        this.date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").parse(datestring);
+        DateFormat df = new SimpleDateFormat("dd-MM-yyyy 'at' HHmm 'hours'");
+        this.display_time = df.format(date);
         this.duration = trip_object.getString("duration");
         this.source = trip_object.getString("source");
         this.destination = trip_object.getString("destination");

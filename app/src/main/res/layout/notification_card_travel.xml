@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <android.support.v7.widget.CardView
         android:id="@+id/notification_card_view"
@@ -18,64 +18,60 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:orientation="horizontal" android:layout_width="match_parent"
-                android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/notification_card_travel_title"
-                    android:text="Title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_alignParentLeft="true"
-                    android:padding="5dp"
-                    android:textSize="20dp"/>
+            <TextView
+                android:id="@+id/notification_card_travel_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="5dp"
+                android:padding="5dp"
+                android:text="Title"
+                android:textSize="20dp" />
 
-                <TextView
-                    android:id="@+id/notification_card_travel_date"
-                    android:text="Date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:layout_alignParentRight="true"
-                    android:padding="5dp"
-                    android:textSize="15dp"/>
-
-            </RelativeLayout>
+            <TextView
+                android:id="@+id/notification_card_travel_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="5dp"
+                android:padding="5dp"
+                android:text="Date"
+                android:textSize="15dp" />
 
             <TextView
                 android:id="@+id/notification_card_travel_description"
-                android:text="Description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:padding="5dp"
-                android:textSize="15dp"/>
+                android:text="Description"
+                android:textSize="15dp" />
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:orientation="horizontal" android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/notification_card_travel_accept_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorPrimary"
-                    android:text="Accept"
-                    android:padding="5dp"
+                    android:background="@null"
                     android:elevation="2dp"
-                    android:background="@null"/>
+                    android:padding="5dp"
+                    android:text="Accept"
+                    android:textColor="@color/colorPrimary" />
 
                 <Button
                     android:id="@+id/notification_card_travel_reject_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorAccent"
-                    android:text="Reject"
-                    android:padding="5dp"
+                    android:background="@null"
                     android:elevation="2dp"
-                    android:background="@null"/>
+                    android:padding="5dp"
+                    android:text="Reject"
+                    android:textColor="@color/colorAccent" />
 
             </LinearLayout>
 

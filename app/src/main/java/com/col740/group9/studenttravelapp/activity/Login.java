@@ -165,7 +165,11 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.sign_in_button:
-                signIn();
+                try {
+                    dummySignIn();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 break;
         }
     }
@@ -176,7 +180,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
                 getRequestQueue();
 
         final JSONObject jsonBody = new JSONObject();
-        jsonBody.put("username", "ankush").put("password", "ankushphulia");
+        jsonBody.put("username", "ankush@gmail.com").put("password", "a1234567");
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
                 Request.Method.POST,
