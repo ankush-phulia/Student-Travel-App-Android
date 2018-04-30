@@ -59,17 +59,17 @@
                     android:padding="5dp"
                     android:textSize="15dp"/>
 
-                <TextView
-                    android:id="@+id/trip_card_participants"
-                    android:text="_ people going"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:padding="5dp"
-                    android:textSize="15dp"/>
-
 
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/trip_card_participants"
+                android:text="_ people going"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:padding="5dp"
+                android:textSize="15dp"/>
 
 
         </LinearLayout>

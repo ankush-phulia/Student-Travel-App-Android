@@ -214,7 +214,7 @@ public class DashboardTripFragment extends Fragment
             holder.src_dest.setText("From " + trip.source + " to " + trip.destination);
             if(trip.date.compareTo(new Date())<0) {
                 holder.start_date.setText("Started on " + trip.display_time);
-                holder.duration.setText(trip.duration + " days");
+                holder.duration.setText("for " + trip.duration + " days");
                 if(trip.participants.size() == 1)
                     holder.participants.setText("Only you went");
                 else
@@ -222,7 +222,7 @@ public class DashboardTripFragment extends Fragment
             }
             else {
                 holder.start_date.setText("Starting on " + trip.display_time);
-                holder.duration.setText(trip.duration + " days");
+                holder.duration.setText("for " + trip.duration + " days");
                 if(trip.participants.size() == 1)
                     holder.participants.setText("Only you are going");
                 else

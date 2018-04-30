@@ -200,6 +200,7 @@ public class UserProfileFragment extends Fragment
                     if (firstElement.has("username")) {
                         type = "user_info";
                     }
+                    Log.w("User", response.toString());
                     user = new User(firstElement);
 
                     user_profile_name.setText(user.username);
