@@ -117,7 +117,7 @@ public class UserProfileFragment extends Fragment
 
                 // TODO upload image from user_profile_image if image_changed == true
                 try {
-                    postDatatoServer("/user_info_update/", user.toJSON());
+                    postDatatoServer("/update_user_info/", user.toJSON());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
