@@ -210,7 +210,7 @@ public class DashboardTripFragment extends Fragment
             Trip trip = tripList.get(position);
 
             // Set values of views from Trip object
-            holder.name.setText(trip.destination.toString() + " Trip" );
+            holder.name.setText(trip.trip_id);
             holder.src_dest.setText("From " + trip.source + " to " + trip.destination);
             if(trip.date.compareTo(new Date())<0) {
                 holder.start_date.setText("Started on " + trip.display_time);

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.CreateJourneyFragment">
+
+
+
+    <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/create_journey_source_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+
+    <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/fab_create_journey_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="bottom|end"
+        android:padding="8dp"
+        fab:menu_animationDelayPerItem="0"
+        fab:menu_backgroundColor="#ccffffff"
+        fab:menu_colorNormal="@color/colorAccent"
+        fab:menu_colorPressed="@color/colorPrimary"
+        fab:menu_colorRipple="@color/colorPrimaryDark"
+        fab:menu_fab_hide_animation="@anim/fab_scale_down"
+        fab:menu_fab_label="Cancel"
+        fab:menu_fab_show_animation="@anim/fab_scale_up"
+        fab:menu_labels_ellipsize="end"
+        fab:menu_labels_hideAnimation="@anim/fab_slide_out_to_right"
+        fab:menu_labels_showAnimation="@anim/fab_slide_in_from_right"
+        fab:menu_labels_singleLine="true">
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_create_journey_post"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/send"
+            fab:fab_colorNormal="@color/colorPrimary"
+            fab:fab_label="Create New"
+            fab:fab_size="mini" />
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab_create_journey_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/search"
+            fab:fab_colorNormal="@color/colorPrimaryDark"
+            fab:fab_label="Search Existing"
+            fab:fab_size="mini" />
+
+    </com.github.clans.fab.FloatingActionMenu>
+
+</RelativeLayout>

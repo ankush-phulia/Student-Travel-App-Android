@@ -63,18 +63,6 @@ public class DashboardFragment extends Fragment
             }
         });
 
-        FloatingActionButton fab_search = (FloatingActionButton) DashboardFragmentView.findViewById(R.id.fab_search);
-        fab_search.setOnClickListener(new View.OnClickListener() { // click listener for start button
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(myContext,Search.class);
-                intent.putExtra("type",mViewPager.getCurrentItem());
-                startActivity(intent);
-            }
-        });
-
-
-
         return DashboardFragmentView;
     }
 

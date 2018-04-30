@@ -12,7 +12,9 @@ public class Create extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        traveltype = getIntent().getIntExtra("type", 0);
         setContentView(R.layout.activity_create);
-        traveltype = getIntent().getIntExtra("type",0);
     }
+
+
 }

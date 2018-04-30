@@ -177,11 +177,12 @@ public class DashboardJourneyFragment extends Fragment
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             // Declare Views objects present inside the card
-            TextView src_dest,start_date,participants;
+            TextView name,src_dest,start_date,participants;
 
             public MyViewHolder(View view) {
                 super(view);
                 // Populate View objects from layout
+                name = view.findViewById(R.id.jouney_card_name);
                 src_dest = view.findViewById(R.id.journey_card_src_dest);
                 start_date = view.findViewById(R.id.journey_card_start_date);
                 participants = view.findViewById(R.id.journey_card_participants);
@@ -207,6 +208,7 @@ public class DashboardJourneyFragment extends Fragment
             Journey journey = journeyList.get(position);
 
             // Set values of views from Journey object
+            holder.name.setText(journey.journey_id);
             holder.src_dest.setText("From " + journey.source + " to " + journey.destination);
             if(journey.date.compareTo(new Date())<0) {
                 holder.start_date.setText("Started on " + journey.display_time);

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Travel {
-    public String travel_id;
     public String start_time;
     public String display_time;
     public Date date;

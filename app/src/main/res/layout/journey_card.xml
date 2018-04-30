@@ -19,6 +19,15 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/jouney_card_name"
+                android:text="Journey Name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:padding="5dp"
+                android:textSize="20dp"/>
+
+            <TextView
                 android:id="@+id/journey_card_src_dest"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
