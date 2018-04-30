@@ -8,10 +8,12 @@
 
 
 
-    <android.support.v7.widget.AppCompatSpinner
-        android:id="@+id/create_journey_source_spinner"
+    <Spinner
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content">
+
+    </Spinner>
+
 
 
     <com.github.clans.fab.FloatingActionMenu
