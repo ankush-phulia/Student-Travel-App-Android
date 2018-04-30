@@ -182,7 +182,7 @@ public class DashboardJourneyFragment extends Fragment
             public MyViewHolder(View view) {
                 super(view);
                 // Populate View objects from layout
-                name = view.findViewById(R.id.jouney_card_name);
+                name = view.findViewById(R.id.journey_card_name);
                 src_dest = view.findViewById(R.id.journey_card_src_dest);
                 start_date = view.findViewById(R.id.journey_card_start_date);
                 participants = view.findViewById(R.id.journey_card_participants);
