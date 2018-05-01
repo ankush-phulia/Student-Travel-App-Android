@@ -63,8 +63,8 @@ public class UserProfileFragment extends Fragment
 
     private User user; // To be used between server and app
     private View UserProfileFragmentView;
-    private TextView user_profile_name,user_profile_email;
-    private EditText user_profile_first_name,user_profile_last_name,user_profile_sex,user_profile_facebook_link;
+    private TextView user_profile_name;
+    private EditText user_profile_bio,user_profile_first_name,user_profile_last_name,user_profile_sex,user_profile_phone,user_profile_facebook_link;
     private CircleImageView user_profile_image;
 
     public UserProfileFragment() {
@@ -84,10 +84,11 @@ public class UserProfileFragment extends Fragment
         UserProfileFragmentView = inflater.inflate(R.layout.fragment_user_profile, container, false);
 
         user_profile_name = (TextView) UserProfileFragmentView.findViewById(R.id.user_profile_name);
-        user_profile_email = (TextView) UserProfileFragmentView.findViewById(R.id.user_profile_email);
+        user_profile_bio = (EditText) UserProfileFragmentView.findViewById(R.id.user_profile_bio);
         user_profile_first_name = (EditText) UserProfileFragmentView.findViewById(R.id.user_profile_first_name);
         user_profile_last_name = (EditText) UserProfileFragmentView.findViewById(R.id.user_profile_last_name);
         user_profile_sex = (EditText) UserProfileFragmentView.findViewById(R.id.user_profile_sex);
+        user_profile_phone = (EditText) UserProfileFragmentView.findViewById(R.id.user_profile_phone);
         user_profile_facebook_link = (EditText) UserProfileFragmentView.findViewById(R.id.user_profile_facebook_link);
 
         user_profile_image = (CircleImageView) UserProfileFragmentView.findViewById(R.id.user_profile_image);
@@ -110,9 +111,11 @@ public class UserProfileFragment extends Fragment
         fab_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                user.bio = user_profile_bio.getText().toString();
                 user.first_name = user_profile_first_name.getText().toString();
                 user.last_name = user_profile_last_name.getText().toString();
                 user.sex = user_profile_sex.getText().toString();
+                user.phone = user_profile_phone.getText().toString();
                 user.facebook_link = user_profile_facebook_link.getText().toString();
 
                 // TODO upload image from user_profile_image if image_changed == true
@@ -193,10 +196,11 @@ public class UserProfileFragment extends Fragment
                     user = new User(firstElement);
 
                     user_profile_name.setText(user.username);
-                    user_profile_email.setText(user.email);
+                    user_profile_bio.setText(user.bio);
                     user_profile_first_name.setText(user.first_name);
                     user_profile_last_name.setText(user.last_name);
                     user_profile_sex.setText(user.sex);
+                    user_profile_phone.setText(user.phone);
                     user_profile_facebook_link.setText(user.facebook_link);
 
                     // TODO load image from server and load it to bitmap

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="tranport_mode_array">
+        <item>Cab</item>
+        <item>Bus</item>
+        <item>AC1 Train</item>
+        <item>AC2 Train</item>
+        <item>AC3 Train</item>
+        <item>Sleeper Train</item>
+        <item>Flight</item>
+    </string-array>
+</resources>
