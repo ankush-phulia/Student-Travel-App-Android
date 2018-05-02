@@ -14,6 +14,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +40,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -118,10 +120,21 @@ public class UserProfileFragment extends Fragment
                 user.phone = user_profile_phone.getText().toString();
                 user.facebook_link = user_profile_facebook_link.getText().toString();
 
-                // TODO upload image from user_profile_image if image_changed == true
                 try {
-                    postDatatoServer("update_user_info", user.toJSON());
-                } catch (JSONException e) {
+                    JSONObject userJSON = user.toJSON();
+                    // upload image from user_profile_image if image_changed == true
+                    if (image_changed) {
+                        user_profile_image.buildDrawingCache();
+                        Bitmap bmp = user_profile_image.getDrawingCache();
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        bmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                        byte[] imageBytes = baos.toByteArray();
+                        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+                        userJSON.put("photo", encodedImage);
+                    }
+                    postDatatoServer("update_user_info", userJSON);
+                }
+                catch (JSONException e) {
                     e.printStackTrace();
                 }
                 image_changed = false;
@@ -203,8 +216,9 @@ public class UserProfileFragment extends Fragment
                     user_profile_phone.setText(user.phone);
                     user_profile_facebook_link.setText(user.facebook_link);
 
-                    // TODO load image from server and load it to bitmap
-                    Bitmap bitmap = null;
+                    // load image from server and load it to bitmap
+                    byte[] decodedString = Base64.decode(user.phone, Base64.DEFAULT);
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
                     if(bitmap != null)
                         user_profile_image.setImageBitmap(bitmap);
