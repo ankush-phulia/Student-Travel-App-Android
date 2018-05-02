@@ -15,19 +15,42 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/create_trip_name"
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/create_trip_name_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
-                android:hint="Name of the trip" />
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/create_trip_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:hint="Name of the trip" />
+
+                <EditText
+                    android:id="@+id/create_trip_duration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="1"
+                    android:layout_marginRight="5dp"
+                    android:inputType="number" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="days"
+                    android:textStyle="bold"/>
+
+            </LinearLayout>
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/create_trip_button_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/create_trip_name"
+                android:layout_below="@id/create_trip_name_layout"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal">
@@ -59,18 +82,68 @@
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal">
 
-                <Spinner
-                    android:id="@+id/create_trip_source_spinner"
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/create_trip_source_spinner_layout"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Source"
+                        android:textSize="20dp"
+                        android:textStyle="bold" />
+
+                    <Spinner
+                        android:id="@+id/create_trip_source_spinner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/create_trip_destination_spinner_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Destination"
+                        android:textSize="20dp"
+                        android:textStyle="bold" />
+
+                    <Spinner
+                        android:id="@+id/create_trip_destination_spinner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/create_trip_mode_spinner_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/create_trip_spinner_layout"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"
+                    android:text="Via"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
 
                 <Spinner
                     android:id="@+id/create_trip_mode_spinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-                <Spinner
-                    android:id="@+id/create_trip_destination_spinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
@@ -80,7 +153,7 @@
                 android:id="@+id/create_trip_add_checkpoint_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/create_trip_spinner_layout"
+                android:layout_below="@id/create_trip_mode_spinner_layout"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
                 android:text="Add Checkpoint" />
@@ -101,10 +174,10 @@
         </RelativeLayout>
 
         <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/create_trip_checkpoints_recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical"
-            android:id="@+id/create_trip_checkpoints_recyclerview"/>
+            android:scrollbars="vertical" />
 
     </LinearLayout>
 
@@ -150,3 +223,4 @@
     </com.github.clans.fab.FloatingActionMenu>
 
 </FrameLayout>
+

@@ -67,7 +67,7 @@ public class CreateTripFragment extends Fragment
     private Context mContext;
     protected RecyclerView mRecyclerView;
     protected RecyclerView.LayoutManager mLayoutManager;
-    private EditText create_trip_name;
+    private EditText create_trip_name,create_trip_duration;
     private Button create_trip_date_button, create_trip_time_button;
     private Spinner create_trip_source_spinner, create_trip_mode_spinner, create_trip_destination_spinner;
     private Calendar calendar;
@@ -95,6 +95,7 @@ public class CreateTripFragment extends Fragment
         mLayoutManager = new LinearLayoutManager(mContext);
 
         create_trip_name = (EditText) CreateTripFragmentView.findViewById(R.id.create_trip_name);
+        create_trip_duration = (EditText) CreateTripFragmentView.findViewById(R.id.create_trip_duration);
 
         create_trip_date_button = (Button) CreateTripFragmentView.findViewById(R.id.create_trip_date_button);
         create_trip_date_button.setOnClickListener(this);
@@ -298,6 +299,12 @@ public class CreateTripFragment extends Fragment
         trip.trip_id = create_trip_name.getText().toString();
         if(trip.trip_id == null || trip.trip_id == ""){
             Toast.makeText(getActivity(), "Enter a name for the trip", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        trip.duration = create_trip_duration.getText().toString();
+        if(trip.duration == null || trip.duration == ""){
+            Toast.makeText(getActivity(), "Enter duration for the trip", Toast.LENGTH_SHORT).show();
             return false;
         }
 
