@@ -75,11 +75,11 @@ public class SearchTripFragment extends Fragment
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         mContext = this.getActivity();
-        if(tripAdapter == null)
-            tripAdapter = new TripAdapter(mContext,tripList);
+        if (tripAdapter == null)
+            tripAdapter = new TripAdapter(mContext, tripList);
         tripAdapter.notifyDataSetChanged();
         mRecyclerView.setAdapter(tripAdapter);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -109,7 +109,7 @@ public class SearchTripFragment extends Fragment
         mListener = null;
     }
 
-    public void fetchDatafromServer(String type){
+    public void fetchDatafromServer(String type) {
         // assumes that the base activity is home
         final Home baseHomeActivity = (Home) getActivity();
 
@@ -117,7 +117,7 @@ public class SearchTripFragment extends Fragment
                 (Request.Method.GET,
                         serverURL + "/" + type + "/",
                         null,
-                        this, this){
+                        this, this) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
@@ -141,8 +141,7 @@ public class SearchTripFragment extends Fragment
         for (int i = 0; i < response.length(); i++) {
             try {
                 tripList.add(new Trip(response.getJSONObject(i)));
-            }
-            catch (JSONException e) {
+            } catch (JSONException e) {
                 continue;
             } catch (ParseException e) {
                 continue;
@@ -183,7 +182,7 @@ public class SearchTripFragment extends Fragment
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             // Declare Views objects present inside the card
-            TextView name,src_dest,start_date,duration,participants;
+            TextView name, src_dest, start_date, duration, participants;
             Button send_join_request_button;
 
             public MyViewHolder(View view) {
@@ -220,16 +219,15 @@ public class SearchTripFragment extends Fragment
             holder.name.setText(trip.trip_id);
             holder.src_dest.setText("From " + trip.source);
             holder.duration.setText("for " + trip.duration + " days");
-            if(trip.date.compareTo(new Date())<0) {
+            if (trip.date.compareTo(new Date()) < 0) {
                 holder.start_date.setText("Started on " + trip.display_time);
-                if(trip.participants.size() == 1)
+                if (trip.participants.size() == 1)
                     holder.participants.setText("Only you went");
                 else
                     holder.participants.setText(trip.participants.size() + " persons went");
-            }
-            else {
+            } else {
                 holder.start_date.setText("Starting on " + trip.display_time);
-                if(trip.participants.size() == 1)
+                if (trip.participants.size() == 1)
                     holder.participants.setText("Only you are going");
                 else
                     holder.participants.setText(trip.participants.size() + " persons going");

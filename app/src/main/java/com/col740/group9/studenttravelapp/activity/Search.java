@@ -13,7 +13,7 @@ import com.col740.group9.studenttravelapp.fragment.SearchTripFragment;
 
 import static com.col740.group9.studenttravelapp.classes.Constants.JOURNEY_TRAVEL_TYPE;
 
-public class Search extends AppCompatActivity implements SearchJourneyFragment.OnSearchJourneyFragmentInteractionListener,SearchTripFragment.OnSearchTripFragmentInteractionListener{
+public class Search extends AppCompatActivity implements SearchJourneyFragment.OnSearchJourneyFragmentInteractionListener, SearchTripFragment.OnSearchTripFragmentInteractionListener {
 
     private int traveltype;
     public RequestQueue mQueue;
@@ -23,13 +23,13 @@ public class Search extends AppCompatActivity implements SearchJourneyFragment.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        traveltype = getIntent().getIntExtra("type",0);
+        traveltype = getIntent().getIntExtra("type", 0);
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         Fragment SearchFragment = null;
-        if(traveltype == JOURNEY_TRAVEL_TYPE){
+        if (traveltype == JOURNEY_TRAVEL_TYPE) {
             SearchFragment = new SearchJourneyFragment();
         } else {
             SearchFragment = new SearchTripFragment();

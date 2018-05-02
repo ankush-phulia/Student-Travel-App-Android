@@ -29,6 +29,7 @@ import com.col740.group9.studenttravelapp.fragment.DashboardJourneyFragment;
 import com.col740.group9.studenttravelapp.fragment.DashboardTripFragment;
 import com.col740.group9.studenttravelapp.fragment.NotificationsFragment;
 import com.col740.group9.studenttravelapp.fragment.UserProfileFragment;
+
 import static com.col740.group9.studenttravelapp.classes.Constants.*;
 
 import org.json.JSONArray;
@@ -46,7 +47,7 @@ public class Home extends AppCompatActivity
         UserProfileFragment.OnUserProfileFragmentInteractionListener,
         NotificationsFragment.OnNotificationsFragmentInteractionListener,
         Response.Listener<JSONArray>,
-        Response.ErrorListener{
+        Response.ErrorListener {
 
     public RequestQueue mQueue;
     public String mToken = "";
@@ -82,7 +83,7 @@ public class Home extends AppCompatActivity
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
 
         mQueue = GlobalRequestQueue
                 .getInstance(this.getApplicationContext())
@@ -96,14 +97,11 @@ public class Home extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        }
-        else if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+        } else if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
             getSupportFragmentManager().popBackStack();
-        }
-        else if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
+        } else if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
 
-        }
-        else {
+        } else {
 //            super.onBackPressed();
         }
     }
@@ -125,8 +123,7 @@ public class Home extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
-        }
-        else if (id == R.id.action_logout){
+        } else if (id == R.id.action_logout) {
             logout();
         }
 
@@ -179,8 +176,7 @@ public class Home extends AppCompatActivity
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setTitle("Logging out")
                 .setMessage("Are you sure you want to logout?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
-                {
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent gotoHome = new Intent(Home.this, Login.class);
@@ -194,12 +190,12 @@ public class Home extends AppCompatActivity
 
     }
 
-    public void fetchDatafromServer(String type){
+    public void fetchDatafromServer(String type) {
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
                 (Request.Method.GET,
                         serverURL + "/" + type + "/",
                         null,
-                        Home.this, Home.this){
+                        Home.this, Home.this) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
@@ -218,14 +214,11 @@ public class Home extends AppCompatActivity
                 JSONObject firstElement = (JSONObject) response.get(0);
                 if (firstElement.has("journey_id")) {
                     type = "journeys";
-                }
-                else if (firstElement.has("trip_id")) {
+                } else if (firstElement.has("trip_id")) {
                     type = "trips";
-                }
-                else if (firstElement.has("user_from")) {
+                } else if (firstElement.has("user_from")) {
                     type = "notifications";
-                }
-                else if (firstElement.has("username")) {
+                } else if (firstElement.has("username")) {
                     type = "user_info";
                 }
             }
@@ -246,8 +239,7 @@ public class Home extends AppCompatActivity
                 default:
                     Log.w("Default Home Response", response.toString());
             }
-        }
-        catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }

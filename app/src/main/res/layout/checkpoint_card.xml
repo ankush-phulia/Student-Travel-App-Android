@@ -13,15 +13,15 @@
         android:layout_margin="@dimen/card_margin"
         android:elevation="3dp">
 
-            <TextView
-                android:id="@+id/checkpoint_card_content"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="5dp"
-                android:padding="5dp"
-                android:text="From ________ to ________ via ______"
-                android:textSize="16dp" />
+        <TextView
+            android:id="@+id/checkpoint_card_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="5dp"
+            android:padding="5dp"
+            android:text="From ________ to ________ via ______"
+            android:textSize="16dp" />
 
     </android.support.v7.widget.CardView>
 

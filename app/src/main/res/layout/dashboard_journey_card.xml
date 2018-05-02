@@ -20,12 +20,12 @@
 
             <TextView
                 android:id="@+id/dashboard_journey_card_name"
-                android:text="Journey Name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:padding="5dp"
-                android:textSize="20dp"/>
+                android:text="Journey Name"
+                android:textSize="20dp" />
 
             <TextView
                 android:id="@+id/dashboard_journey_card_src_dest"

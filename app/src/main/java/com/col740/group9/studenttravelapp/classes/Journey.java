@@ -10,15 +10,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Journey extends Travel{
+public class Journey extends Travel {
     public String journey_id;
     public String destination;
 
-    public Journey(){
+    public Journey() {
 
     }
 
-    public Journey(JSONObject journey_object) throws JSONException,ParseException {
+    public Journey(JSONObject journey_object) throws JSONException, ParseException {
         this.journey_id = journey_object.getString("journey_id");
 
         String datestring = journey_object.getString("start_time");
@@ -66,7 +66,7 @@ public class Journey extends Travel{
         }
         json.put("checkpoints", checkpoints);
 
-        JSONArray participants =  new JSONArray();
+        JSONArray participants = new JSONArray();
         for (User user : this.participants) {
             JSONObject userJSON = user.toJSON().getJSONObject("user");
             userJSON.put("username", user.username);

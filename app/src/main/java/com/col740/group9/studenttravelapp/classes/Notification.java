@@ -17,7 +17,7 @@ public class Notification {
     public String date;
     public String resolved;
 
-    public Notification(JSONObject notification_json) throws JSONException,ParseException {
+    public Notification(JSONObject notification_json) throws JSONException, ParseException {
         this.id = notification_json.getString("id");
         this.title = notification_json.getString("title");
         this.description = notification_json.getString("description");

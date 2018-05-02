@@ -22,7 +22,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.col740.group9.studenttravelapp.R;
 import com.col740.group9.studenttravelapp.activity.Home;
 import com.col740.group9.studenttravelapp.classes.Notification;
+
 import static com.col740.group9.studenttravelapp.classes.Constants.*;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -71,11 +73,11 @@ public class NotificationsFragment extends Fragment
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         mContext = this.getActivity();
-        if(notificationAdapter == null)
-            notificationAdapter = new NotificationAdapter(mContext,notificationList);
+        if (notificationAdapter == null)
+            notificationAdapter = new NotificationAdapter(mContext, notificationList);
         notificationAdapter.notifyDataSetChanged();
         mRecyclerView.setAdapter(notificationAdapter);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -103,7 +105,7 @@ public class NotificationsFragment extends Fragment
         mListener = null;
     }
 
-    public void fetchDatafromServer(String type){
+    public void fetchDatafromServer(String type) {
         // assumes that the base activity is home
         final Home baseHomeActivity = (Home) getActivity();
 
@@ -111,7 +113,7 @@ public class NotificationsFragment extends Fragment
                 (Request.Method.GET,
                         serverURL + "/" + type + "/",
                         null,
-                        this, this){
+                        this, this) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
@@ -122,7 +124,7 @@ public class NotificationsFragment extends Fragment
         baseHomeActivity.mQueue.add(jsonArrayRequest);
     }
 
-    public void postDatatoServer(String type, JSONObject data){
+    public void postDatatoServer(String type, JSONObject data) {
         // assumes that the base activity is home
         Log.w("Note", data.toString());
         final Home baseHomeActivity = (Home) getActivity();
@@ -131,7 +133,7 @@ public class NotificationsFragment extends Fragment
                 (Request.Method.POST,
                         serverURL + "/" + type + "/",
                         data,
-                        this, this){
+                        this, this) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
@@ -147,8 +149,8 @@ public class NotificationsFragment extends Fragment
         try {
             if (response.getClass() == JSONArray.class) {
                 Log.w("Notifications", response.toString());
-                for (int i = 0; i < ((JSONArray)response).length(); i++) {
-                    Notification notification = new Notification(((JSONArray)response).getJSONObject(i));
+                for (int i = 0; i < ((JSONArray) response).length(); i++) {
+                    Notification notification = new Notification(((JSONArray) response).getJSONObject(i));
                     if (notification.resolved.equals("No")) {
                         notificationList.add(notification);
                     }
@@ -158,8 +160,7 @@ public class NotificationsFragment extends Fragment
                 mRecyclerView.setAdapter(notificationAdapter);
                 mRecyclerView.setLayoutManager(mLayoutManager);
             }
-        }
-        catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         } catch (ParseException e) {
             e.printStackTrace();
@@ -192,8 +193,8 @@ public class NotificationsFragment extends Fragment
 
         public class NotificationCardTravelViewHolder extends RecyclerView.ViewHolder {
             // Declare Views objects present inside the card
-            TextView title,description,date;
-            Button accept_button,reject_button;
+            TextView title, description, date;
+            Button accept_button, reject_button;
 
             public NotificationCardTravelViewHolder(View view) {
                 super(view);
@@ -208,7 +209,7 @@ public class NotificationsFragment extends Fragment
 
         public class NotificationCardLogisticsViewHolder extends RecyclerView.ViewHolder {
             // Declare Views objects present inside the card
-            TextView title,description,date;
+            TextView title, description, date;
 
             public NotificationCardLogisticsViewHolder(View view) {
                 super(view);

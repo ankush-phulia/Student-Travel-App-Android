@@ -12,7 +12,7 @@ public class Travel {
     public String display_time;
     public Date date;
     public String source;
-    public int cotravel_number=10;
+    public int cotravel_number = 10;
     public Boolean posted;
     public Boolean closed;
     public ArrayList<JourneyPoint> checkpoints = new ArrayList<JourneyPoint>();

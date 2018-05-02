@@ -27,8 +27,7 @@ public class User {
             if (user_json.has("password")) {
                 this.password = user_info_json.getString("password");
             }
-        }
-        else {
+        } else {
             this.id = user_info_json.getInt("id");
             this.username = user_info_json.getString("username");
             this.first_name = user_info_json.getString("first_name");

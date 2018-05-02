@@ -10,7 +10,7 @@ public class JourneyPoint {
     public LocationPoint location;
     public String transport;
 
-    public JourneyPoint(){
+    public JourneyPoint() {
 
     }
 

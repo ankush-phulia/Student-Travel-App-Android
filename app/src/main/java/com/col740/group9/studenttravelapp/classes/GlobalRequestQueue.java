@@ -9,7 +9,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 
-public class GlobalRequestQueue{
+public class GlobalRequestQueue {
 
     private static GlobalRequestQueue mInstance;
     private RequestQueue mRequestQueue;

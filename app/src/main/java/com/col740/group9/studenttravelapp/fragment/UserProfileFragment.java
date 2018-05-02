@@ -57,7 +57,7 @@ import static com.col740.group9.studenttravelapp.classes.Constants.*;
  */
 
 public class UserProfileFragment extends Fragment
-        implements Response.Listener, Response.ErrorListener{
+        implements Response.Listener, Response.ErrorListener {
 
     private OnUserProfileFragmentInteractionListener mListener;
 
@@ -66,7 +66,7 @@ public class UserProfileFragment extends Fragment
     private User user; // To be used between server and app
     private View UserProfileFragmentView;
     private TextView user_profile_name;
-    private EditText user_profile_bio,user_profile_first_name,user_profile_last_name,user_profile_sex,user_profile_phone,user_profile_facebook_link;
+    private EditText user_profile_bio, user_profile_first_name, user_profile_last_name, user_profile_sex, user_profile_phone, user_profile_facebook_link;
     private CircleImageView user_profile_image;
 
     public UserProfileFragment() {
@@ -99,7 +99,7 @@ public class UserProfileFragment extends Fragment
             public void onClick(View v) {
                 if (MY_BUILD_VERSION > Build.VERSION_CODES.LOLLIPOP_MR1) {
                     if (!checkIfAlreadyhavePermission()) {
-                        ActivityCompat.requestPermissions(getActivity(),new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},1);
+                        ActivityCompat.requestPermissions(getActivity(), new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
                     } else {
                         Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                         startActivityForResult(i, REQUEST_LOAD_IMAGE);
@@ -134,8 +134,7 @@ public class UserProfileFragment extends Fragment
                         Log.w("Profile", "Image");
                     }
                     postDatatoServer("update_user_info", userJSON);
-                }
-                catch (JSONException e) {
+                } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 image_changed = false;
@@ -162,7 +161,7 @@ public class UserProfileFragment extends Fragment
         mListener = null;
     }
 
-    public void fetchDatafromServer(String type){
+    public void fetchDatafromServer(String type) {
         // assumes that the base activity is home
         final Home baseHomeActivity = (Home) getActivity();
 
@@ -170,7 +169,7 @@ public class UserProfileFragment extends Fragment
                 (Request.Method.GET,
                         serverURL + "/" + type + "/",
                         null,
-                        this, this){
+                        this, this) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
@@ -181,7 +180,7 @@ public class UserProfileFragment extends Fragment
         baseHomeActivity.mQueue.add(jsonArrayRequest);
     }
 
-    public void postDatatoServer(String type, JSONObject data){
+    public void postDatatoServer(String type, JSONObject data) {
         // assumes that the base activity is home
         final Home baseHomeActivity = (Home) getActivity();
 
@@ -189,7 +188,7 @@ public class UserProfileFragment extends Fragment
                 (Request.Method.POST,
                         serverURL + "/" + type + "/",
                         data,
-                        this, this){
+                        this, this) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
@@ -204,8 +203,8 @@ public class UserProfileFragment extends Fragment
     public void onResponse(Object response) {
         try {
             if (response.getClass() == JSONArray.class) {
-                if (((JSONArray)response).length() > 0) {
-                    JSONObject firstElement = (JSONObject) ((JSONArray)response).get(0);
+                if (((JSONArray) response).length() > 0) {
+                    JSONObject firstElement = (JSONObject) ((JSONArray) response).get(0);
                     Log.w("User", response.toString());
                     user = new User(firstElement);
 
@@ -221,13 +220,12 @@ public class UserProfileFragment extends Fragment
                     byte[] decodedString = Base64.decode(user.photo, Base64.DEFAULT);
                     Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
-                    if(bitmap != null)
+                    if (bitmap != null)
                         user_profile_image.setImageBitmap(bitmap);
                 }
             }
             Log.w("User Info", response.toString());
-        }
-        catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }
@@ -254,7 +252,7 @@ public class UserProfileFragment extends Fragment
 
 
             Uri selectedImage = data.getData();
-            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
             Cursor cursor = getActivity().getContentResolver().query(selectedImage,
                     filePathColumn, null, null, null);
@@ -285,6 +283,7 @@ public class UserProfileFragment extends Fragment
             }
         }
     }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated

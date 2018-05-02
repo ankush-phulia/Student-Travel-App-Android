@@ -25,7 +25,7 @@ import java.util.Map;
 import static com.col740.group9.studenttravelapp.classes.Constants.JOURNEY_TRAVEL_TYPE;
 import static com.col740.group9.studenttravelapp.classes.Constants.serverURL;
 
-public class Create extends AppCompatActivity implements CreateJourneyFragment.OnCreateJourneyFragmentInteractionListener,CreateTripFragment.OnCreateTripFragmentInteractionListener{
+public class Create extends AppCompatActivity implements CreateJourneyFragment.OnCreateJourneyFragmentInteractionListener, CreateTripFragment.OnCreateTripFragmentInteractionListener {
 
     private int traveltype;
     public RequestQueue mQueue;
@@ -39,9 +39,9 @@ public class Create extends AppCompatActivity implements CreateJourneyFragment.O
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         Fragment CreateFragment = null;
-        if(traveltype == JOURNEY_TRAVEL_TYPE){
+        if (traveltype == JOURNEY_TRAVEL_TYPE) {
             CreateFragment = new CreateJourneyFragment();
         } else {
             CreateFragment = new CreateTripFragment();

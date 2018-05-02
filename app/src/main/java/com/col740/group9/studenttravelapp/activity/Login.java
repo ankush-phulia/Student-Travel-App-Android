@@ -19,7 +19,9 @@ import com.col740.group9.studenttravelapp.R;
 import com.col740.group9.studenttravelapp.classes.GlobalRequestQueue;
 import com.col740.group9.studenttravelapp.fragment.LoginEmailFragment;
 import com.col740.group9.studenttravelapp.fragment.LoginOTPFragment;
+
 import static com.col740.group9.studenttravelapp.classes.Constants.*;
+
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -39,7 +41,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
         LoginEmailFragment.OnLoginEmailFragmentInteractionListener,
         LoginOTPFragment.OnLoginOTPFragmentInteractionListener,
         Response.Listener<JSONObject>,
-        Response.ErrorListener{
+        Response.ErrorListener {
 
     String mUser;
     String mPass;
@@ -91,13 +93,13 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
         // Check for existing Google Sign In account, if the user is already signed in
         // the GoogleSignInAccount will be non-null.
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        if(account != null)
+        if (account != null)
             loginViaGoogle(account);
         // [END on_start_sign_in]
     }
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         Fragment LoginFragment = null;
         if (screen_state == EMAIL)
             LoginFragment = new LoginEmailFragment();
@@ -149,7 +151,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
     // [END signIn]
-	
+
     private void loginViaGoogle(@Nullable GoogleSignInAccount account) {
         if (account != null) {
             // Take the Google account details and call login
@@ -191,14 +193,14 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
 
     @Override
     public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() > 1 ){
+        if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
             getSupportFragmentManager().popBackStack();
         } else {
 //            super.onBackPressed();
         }
     }
 
-    public void onLoginEmailFragmentInteraction(CharSequence emailID){
+    public void onLoginEmailFragmentInteraction(CharSequence emailID) {
         // TODO : send a six digit otp to the Email ID
         mUser = emailID.toString();
 
@@ -224,7 +226,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
         screen_state = OTP;
     }
 
-    public void onLoginOTPFragmentInteraction(CharSequence otp){
+    public void onLoginOTPFragmentInteraction(CharSequence otp) {
         // Take the authentication detail and call login
         mPass = mUser.charAt(0) + otp.toString();
         login(mUser, mPass);
@@ -241,13 +243,12 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
                 startActivity(gotoHome);
                 finish();
             }
-        }
-        catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    private void login(String email, String pass){
+    private void login(String email, String pass) {
         // TODO : create new user account or open Dashboard if account present already
         try {
             final JSONObject jsonBody = new JSONObject();
@@ -259,8 +260,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
                     jsonBody, this, this);
             GlobalRequestQueue.getInstance(this.getApplicationContext())
                     .getRequestQueue().add(jsonObjectRequest);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

@@ -68,13 +68,12 @@ public class LoginEmailFragment extends Fragment {
         mListener = null;
     }
 
-    private void sendEmailDetails(){
+    private void sendEmailDetails() {
         EditText emailEditText = (EditText) getActivity().findViewById(R.id.Email_EditText);
         CharSequence emailID = emailEditText.getText();
-        if(TextUtils.isEmpty(emailID) || !Patterns.EMAIL_ADDRESS.matcher(emailID).matches()){
+        if (TextUtils.isEmpty(emailID) || !Patterns.EMAIL_ADDRESS.matcher(emailID).matches()) {
             Toast.makeText(getActivity(), "Enter a valid email address and then press Go", Toast.LENGTH_SHORT).show();
-        }
-        else if (mListener != null) {
+        } else if (mListener != null) {
             mListener.onLoginEmailFragmentInteraction(emailID);
         }
     }

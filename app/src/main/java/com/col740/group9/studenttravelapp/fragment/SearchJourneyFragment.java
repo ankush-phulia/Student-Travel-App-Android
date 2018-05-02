@@ -74,11 +74,11 @@ public class SearchJourneyFragment extends Fragment
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         mContext = this.getActivity();
-        if(journeyAdapter == null)
-            journeyAdapter = new JourneyAdapter(mContext,journeyList);
+        if (journeyAdapter == null)
+            journeyAdapter = new JourneyAdapter(mContext, journeyList);
         journeyAdapter.notifyDataSetChanged();
         mRecyclerView.setAdapter(journeyAdapter);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -108,7 +108,7 @@ public class SearchJourneyFragment extends Fragment
         mListener = null;
     }
 
-    public void fetchDatafromServer(String type){
+    public void fetchDatafromServer(String type) {
         // assumes that the base activity is home
         final Home baseHomeActivity = (Home) getActivity();
 
@@ -116,7 +116,7 @@ public class SearchJourneyFragment extends Fragment
                 (Request.Method.GET,
                         serverURL + "/" + type + "/",
                         null,
-                        this, this){
+                        this, this) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
@@ -140,8 +140,7 @@ public class SearchJourneyFragment extends Fragment
         for (int i = 0; i < response.length(); i++) {
             try {
                 journeyList.add(new Journey(response.getJSONObject(i)));
-            }
-            catch (JSONException e) {
+            } catch (JSONException e) {
                 continue;
             } catch (ParseException e) {
                 continue;
@@ -182,7 +181,7 @@ public class SearchJourneyFragment extends Fragment
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             // Declare Views objects present inside the card
-            TextView name,src_dest,start_date,participants;
+            TextView name, src_dest, start_date, participants;
             Button send_join_request_button;
 
             public MyViewHolder(View view) {
@@ -217,16 +216,15 @@ public class SearchJourneyFragment extends Fragment
             // Set values of views from Journey object
             holder.name.setText(journey.journey_id);
             holder.src_dest.setText("From " + journey.source + " to " + journey.destination);
-            if(journey.date.compareTo(new Date())<0) {
+            if (journey.date.compareTo(new Date()) < 0) {
                 holder.start_date.setText("Started on " + journey.display_time);
-                if(journey.participants.size() == 1)
+                if (journey.participants.size() == 1)
                     holder.participants.setText("Only you went");
                 else
                     holder.participants.setText(journey.participants.size() + " persons went");
-            }
-            else {
+            } else {
                 holder.start_date.setText("Starting on " + journey.display_time);
-                if(journey.participants.size() == 1)
+                if (journey.participants.size() == 1)
                     holder.participants.setText("Only you are going");
                 else
                     holder.participants.setText(journey.participants.size() + " persons going");

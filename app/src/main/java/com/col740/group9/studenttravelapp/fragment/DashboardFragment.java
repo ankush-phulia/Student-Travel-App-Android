@@ -30,7 +30,7 @@ import static com.col740.group9.studenttravelapp.classes.Constants.*;
  */
 public class DashboardFragment extends Fragment
         implements DashboardJourneyFragment.OnDashboardJourneyFragmentInteractionListener,
-        DashboardTripFragment.OnDashboardTripFragmentInteractionListener{
+        DashboardTripFragment.OnDashboardTripFragmentInteractionListener {
 
     private OnDashboardFragmentInteractionListener mListener;
     private SectionsPagerAdapter mSectionsPagerAdapter;
@@ -63,10 +63,10 @@ public class DashboardFragment extends Fragment
             @Override
             public void onClick(View view) {
                 final Home baseHomeActivity = (Home) getActivity();
-                Intent intent = new Intent(mContext,Create.class);
-                intent.putExtra("type",mViewPager.getCurrentItem());
-                intent.putExtra("token",baseHomeActivity.mToken);
-                startActivityForResult(intent,REQUEST_CREATE_TRAVEL);
+                Intent intent = new Intent(mContext, Create.class);
+                intent.putExtra("type", mViewPager.getCurrentItem());
+                intent.putExtra("token", baseHomeActivity.mToken);
+                startActivityForResult(intent, REQUEST_CREATE_TRAVEL);
             }
         });
 
@@ -74,7 +74,7 @@ public class DashboardFragment extends Fragment
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getChildFragmentManager());
         mViewPager = (ViewPager) DashboardFragmentView.findViewById(R.id.dashboard_viewpager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -84,7 +84,7 @@ public class DashboardFragment extends Fragment
 
     @Override
     public void onAttach(Context context) {
-        mContext=(FragmentActivity) context;
+        mContext = (FragmentActivity) context;
         super.onAttach(context);
         if (context instanceof OnDashboardFragmentInteractionListener) {
             mListener = (OnDashboardFragmentInteractionListener) context;
@@ -103,12 +103,11 @@ public class DashboardFragment extends Fragment
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_CREATE_TRAVEL && requestCode == RESULT_OK){
-            if(CurrentChildFragment != null){
-                if(CurrentChildFragment instanceof DashboardJourneyFragment){
+        if (requestCode == REQUEST_CREATE_TRAVEL && requestCode == RESULT_OK) {
+            if (CurrentChildFragment != null) {
+                if (CurrentChildFragment instanceof DashboardJourneyFragment) {
                     ((DashboardJourneyFragment) CurrentChildFragment).fetchDatafromServer("journeys");
-                }
-                else if(CurrentChildFragment instanceof DashboardTripFragment){
+                } else if (CurrentChildFragment instanceof DashboardTripFragment) {
                     ((DashboardTripFragment) CurrentChildFragment).fetchDatafromServer("trips");
                 }
             }
@@ -142,9 +141,11 @@ public class DashboardFragment extends Fragment
             // below) with the page number as its lone argument.
             CurrentChildFragment = null;
             switch (position) {
-                case 0: CurrentChildFragment = new DashboardJourneyFragment();
+                case 0:
+                    CurrentChildFragment = new DashboardJourneyFragment();
                     break;
-                case 1: CurrentChildFragment = new DashboardTripFragment();
+                case 1:
+                    CurrentChildFragment = new DashboardTripFragment();
                     break;
             }
 

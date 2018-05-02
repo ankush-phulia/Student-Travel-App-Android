@@ -38,26 +38,27 @@
 
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:orientation="horizontal" android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/search_trip_card_start_date"
-                    android:text="Starting on ______"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:padding="5dp"
-                    android:textSize="15dp"/>
+                    android:text="Starting on ______"
+                    android:textSize="15dp" />
 
                 <TextView
                     android:id="@+id/search_trip_card_duration"
-                    android:text="_ days"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:padding="5dp"
-                    android:textSize="15dp"/>
+                    android:text="_ days"
+                    android:textSize="15dp" />
 
 
             </LinearLayout>
@@ -71,8 +72,8 @@
                     android:id="@+id/search_trip_card_participants"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
                     android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="5dp"
                     android:padding="5dp"
                     android:text="_ people going"
                     android:textSize="15dp" />

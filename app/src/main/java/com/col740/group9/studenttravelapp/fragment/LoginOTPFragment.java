@@ -54,7 +54,7 @@ public class LoginOTPFragment extends Fragment {
 
         // set limit on otp length
         EditText otp_field = LoginOTPFragmentView.findViewById(R.id.OTP_EditText);
-        otp_field.setFilters(new InputFilter[] {new InputFilter.LengthFilter(OTP_LENGTH)});
+        otp_field.setFilters(new InputFilter[]{new InputFilter.LengthFilter(OTP_LENGTH)});
 
         return LoginOTPFragmentView;
     }
@@ -76,13 +76,12 @@ public class LoginOTPFragment extends Fragment {
         mListener = null;
     }
 
-    private void sendOTPDetails(){
+    private void sendOTPDetails() {
         EditText otpEditText = (EditText) getActivity().findViewById(R.id.OTP_EditText);
         CharSequence otp = otpEditText.getText();
-        if(TextUtils.isEmpty(otp) || otp.length() != OTP_LENGTH || !TextUtils.isDigitsOnly(otp)){
+        if (TextUtils.isEmpty(otp) || otp.length() != OTP_LENGTH || !TextUtils.isDigitsOnly(otp)) {
             Toast.makeText(getActivity(), "Enter a valid otp and then press Go", Toast.LENGTH_SHORT).show();
-        }
-        else if (mListener != null) {
+        } else if (mListener != null) {
             mListener.onLoginOTPFragmentInteraction(otp);
         }
     }

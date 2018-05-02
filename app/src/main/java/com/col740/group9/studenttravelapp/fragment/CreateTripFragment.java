@@ -67,7 +67,7 @@ public class CreateTripFragment extends Fragment
     private Context mContext;
     protected RecyclerView mRecyclerView;
     protected RecyclerView.LayoutManager mLayoutManager;
-    private EditText create_trip_name,create_trip_duration;
+    private EditText create_trip_name, create_trip_duration;
     private Button create_trip_date_button, create_trip_time_button;
     private Spinner create_trip_source_spinner, create_trip_mode_spinner, create_trip_destination_spinner;
     private Calendar calendar;
@@ -235,7 +235,7 @@ public class CreateTripFragment extends Fragment
                         create_trip_date_button.setText(dayOfMonthString + "-" + monthOfYearString + "-" + year);
                     }
                 }, calendar);
-                datePickerDialog.show(getChildFragmentManager(),"Date Picker");
+                datePickerDialog.show(getChildFragmentManager(), "Date Picker");
                 break;
 
             case R.id.create_trip_time_button:
@@ -253,7 +253,7 @@ public class CreateTripFragment extends Fragment
                         create_trip_time_button.setText(hourString + ":" + minuteString + ":" + secondString);
                     }
                 }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
-                timePickerDialog.show(getChildFragmentManager(),"Time Picker");
+                timePickerDialog.show(getChildFragmentManager(), "Time Picker");
                 break;
 
             case R.id.create_trip_add_checkpoint_button:
@@ -270,7 +270,7 @@ public class CreateTripFragment extends Fragment
                 break;
 
             case R.id.fab_create_trip_post:
-                if(!setTripObject())
+                if (!setTripObject())
                     break;
 
                 // TODO send trip object to server for post
@@ -282,37 +282,37 @@ public class CreateTripFragment extends Fragment
                 break;
 
             case R.id.fab_create_trip_search:
-                if(!setTripObject())
+                if (!setTripObject())
                     break;
 
                 final Create baseCreateActivitySearch = (Create) getActivity();
-                Intent intent = new Intent(mContext,Create.class);
-                intent.putExtra("type",TRIP_TRAVEL_TYPE);
-                intent.putExtra("token",baseCreateActivitySearch.mToken);
-                intent.putExtra("trip",trip.trip_id);
-                startActivityForResult(intent,REQUEST_SEARCH_TRAVEL);
+                Intent intent = new Intent(mContext, Create.class);
+                intent.putExtra("type", TRIP_TRAVEL_TYPE);
+                intent.putExtra("token", baseCreateActivitySearch.mToken);
+                intent.putExtra("trip", trip.trip_id);
+                startActivityForResult(intent, REQUEST_SEARCH_TRAVEL);
                 break;
         }
     }
 
-    private boolean setTripObject(){
+    private boolean setTripObject() {
         trip.trip_id = create_trip_name.getText().toString();
-        if(trip.trip_id == null || trip.trip_id == ""){
+        if (trip.trip_id == null || trip.trip_id == "") {
             Toast.makeText(getActivity(), "Enter a name for the trip", Toast.LENGTH_SHORT).show();
             return false;
         }
 
         trip.duration = create_trip_duration.getText().toString();
-        if(trip.duration == null || trip.duration == ""){
+        if (trip.duration == null || trip.duration == "") {
             Toast.makeText(getActivity(), "Enter duration for the trip", Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        if(create_trip_date_button.getText().toString().equals("SELECT DATE")){
+        if (create_trip_date_button.getText().toString().equals("SELECT DATE")) {
             Toast.makeText(getActivity(), "Enter a date for the trip", Toast.LENGTH_SHORT).show();
             return false;
         }
-        if(create_trip_time_button.getText().toString().equals("SELECT TIME")){
+        if (create_trip_time_button.getText().toString().equals("SELECT TIME")) {
             Toast.makeText(getActivity(), "Enter a time for the trip", Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -320,15 +320,15 @@ public class CreateTripFragment extends Fragment
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         trip.start_time = df.format(trip.date);
 
-        if(checkpointList.isEmpty()){
+        if (checkpointList.isEmpty()) {
             Toast.makeText(getActivity(), "Enter atleast on checkpoint for the trip", Toast.LENGTH_SHORT).show();
             return false;
         }
-        if(trip.checkpoints == null)
+        if (trip.checkpoints == null)
             trip.checkpoints = new ArrayList<JourneyPoint>();
         String destination = "";
-        int i=0;
-        for(Checkpoint checkpoint: checkpointList){
+        int i = 0;
+        for (Checkpoint checkpoint : checkpointList) {
             JourneyPoint journeyPoint = new JourneyPoint();
             journeyPoint.point_id = Integer.toString(i);
 //            journeyPoint.location = checkpoint.source;

@@ -10,17 +10,17 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class Trip extends Travel{
+public class Trip extends Travel {
     public String trip_id;
     public String trip_info;
     public String duration;
     public String expected_budget;
 
-    public Trip(){
+    public Trip() {
 
     }
 
-    public Trip(JSONObject trip_object) throws JSONException,ParseException {
+    public Trip(JSONObject trip_object) throws JSONException, ParseException {
         this.start_time = trip_object.getString("start_time");
         this.source = trip_object.getString("source");
         this.duration = trip_object.getString("duration");

@@ -34,15 +34,15 @@
                     android:id="@+id/create_trip_duration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="1"
                     android:layout_marginRight="5dp"
+                    android:hint="1"
                     android:inputType="number" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="days"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
