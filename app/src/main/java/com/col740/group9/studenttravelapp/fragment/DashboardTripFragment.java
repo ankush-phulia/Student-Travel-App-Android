@@ -67,7 +67,7 @@ public class DashboardTripFragment extends Fragment
         // Inflate the layout for this fragment
         DashboardTripFragmentView = inflater.inflate(R.layout.fragment_dashboard_trip, container, false);
 
-        mRecyclerView = (RecyclerView) DashboardTripFragmentView.findViewById(R.id.trip_card_recycler_view);
+        mRecyclerView = (RecyclerView) DashboardTripFragmentView.findViewById(R.id.dashboard_trip_card_recycler_view);
         mLayoutManager = new LinearLayoutManager(mContext);
 
         return DashboardTripFragmentView;
@@ -183,11 +183,11 @@ public class DashboardTripFragment extends Fragment
             public MyViewHolder(View view) {
                 super(view);
                 // Populate View objects from layout
-                name = view.findViewById(R.id.trip_card_name);
-                src_dest = view.findViewById(R.id.trip_card_src_dest);
-                start_date = view.findViewById(R.id.trip_card_start_date);
-                duration = view.findViewById(R.id.trip_card_duration);
-                participants = view.findViewById(R.id.trip_card_participants);
+                name = view.findViewById(R.id.dashboard_trip_card_name);
+                src_dest = view.findViewById(R.id.dashboard_trip_card_src_dest);
+                start_date = view.findViewById(R.id.dashboard_trip_card_start_date);
+                duration = view.findViewById(R.id.dashboard_trip_card_duration);
+                participants = view.findViewById(R.id.dashboard_trip_card_participants);
             }
         }
 
@@ -200,7 +200,7 @@ public class DashboardTripFragment extends Fragment
         @Override
         public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.trip_card, parent, false);
+                    .inflate(R.layout.dashboard_trip_card, parent, false);
 
             return new MyViewHolder(itemView);
         }
@@ -212,9 +212,9 @@ public class DashboardTripFragment extends Fragment
             // Set values of views from Trip object
             holder.name.setText(trip.trip_id);
             holder.src_dest.setText("From " + trip.source);
+            holder.duration.setText("for " + trip.duration + " days");
             if(trip.date.compareTo(new Date())<0) {
                 holder.start_date.setText("Started on " + trip.display_time);
-                holder.duration.setText("for " + trip.duration + " days");
                 if(trip.participants.size() == 1)
                     holder.participants.setText("Only you went");
                 else
@@ -222,7 +222,6 @@ public class DashboardTripFragment extends Fragment
             }
             else {
                 holder.start_date.setText("Starting on " + trip.display_time);
-                holder.duration.setText("for " + trip.duration + " days");
                 if(trip.participants.size() == 1)
                     holder.participants.setText("Only you are going");
                 else

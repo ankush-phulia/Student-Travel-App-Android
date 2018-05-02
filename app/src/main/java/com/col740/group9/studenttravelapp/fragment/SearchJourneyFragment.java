@@ -4,11 +4,36 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.col740.group9.studenttravelapp.R;
+import com.col740.group9.studenttravelapp.activity.Home;
+import com.col740.group9.studenttravelapp.activity.Search;
+import com.col740.group9.studenttravelapp.classes.Journey;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import static android.app.Activity.RESULT_OK;
+import static com.col740.group9.studenttravelapp.classes.Constants.*;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,15 +41,20 @@ import com.col740.group9.studenttravelapp.R;
  * {@link SearchJourneyFragment.OnSearchJourneyFragmentInteractionListener} interface
  * to handle interaction events.
  */
-public class SearchJourneyFragment extends Fragment {
+public class SearchJourneyFragment extends Fragment
+        implements Response.Listener<JSONArray>, Response.ErrorListener {
 
     private OnSearchJourneyFragmentInteractionListener mListener;
+    private ArrayList<Journey> journeyList;
+    private JourneyAdapter journeyAdapter;
+    private View SearchJourneyFragmentView;
+    private Context mContext;
+    protected RecyclerView mRecyclerView;
+    protected RecyclerView.LayoutManager mLayoutManager;
 
     public SearchJourneyFragment() {
         // Required empty public constructor
     }
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,19 +65,35 @@ public class SearchJourneyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search_journey, container, false);
+        SearchJourneyFragmentView = inflater.inflate(R.layout.fragment_search_journey, container, false);
+
+        mRecyclerView = (RecyclerView) SearchJourneyFragmentView.findViewById(R.id.search_journey_card_recycler_view);
+        mLayoutManager = new LinearLayoutManager(mContext);
+
+        return SearchJourneyFragmentView;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.OnSearchJourneyFragmentInteraction(uri);
-        }
+    @Override
+    public void onResume(){
+        super.onResume();
+        mContext = this.getActivity();
+        if(journeyAdapter == null)
+            journeyAdapter = new JourneyAdapter(mContext,journeyList);
+        journeyAdapter.notifyDataSetChanged();
+        mRecyclerView.setAdapter(journeyAdapter);
+        mRecyclerView.setLayoutManager(mLayoutManager);
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        mContext = context;
+
+        // TODO populate this list from overlap search result for journey_id
+        journeyList = new ArrayList<Journey>();
+        String journey_id = (String) getActivity().getIntent().getExtras().get("journey");
+//        fetchDatafromServer("journeys");
+
         if (context instanceof OnSearchJourneyFragmentInteractionListener) {
             mListener = (OnSearchJourneyFragmentInteractionListener) context;
         } else {
@@ -62,6 +108,57 @@ public class SearchJourneyFragment extends Fragment {
         mListener = null;
     }
 
+    public void fetchDatafromServer(String type){
+        // assumes that the base activity is home
+        final Home baseHomeActivity = (Home) getActivity();
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
+                (Request.Method.GET,
+                        serverURL + "/" + type + "/",
+                        null,
+                        this, this){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization", "Token " + baseHomeActivity.mToken);
+                return headers;
+            }
+        };
+        baseHomeActivity.mQueue.add(jsonArrayRequest);
+    }
+
+    @Override
+    public void onResponse(JSONArray response) {
+        //            String type = "";
+        //            if (response.length() > 0) {
+        //                JSONObject firstElement = (JSONObject) response.get(0);
+        //                if (firstElement.has("journey_id")) {
+        //                    type = "journeys";
+        //                }
+        //            }
+        Log.w("Journeys", response.toString());
+        for (int i = 0; i < response.length(); i++) {
+            try {
+                journeyList.add(new Journey(response.getJSONObject(i)));
+            }
+            catch (JSONException e) {
+                continue;
+            } catch (ParseException e) {
+                continue;
+            }
+        }
+        journeyAdapter = new JourneyAdapter(mContext, journeyList);
+        journeyAdapter.notifyDataSetChanged();
+        mRecyclerView.setAdapter(journeyAdapter);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        error.printStackTrace();
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -73,6 +170,83 @@ public class SearchJourneyFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnSearchJourneyFragmentInteractionListener {
+
         void OnSearchJourneyFragmentInteraction(Uri uri);
+
+    }
+
+    public class JourneyAdapter extends RecyclerView.Adapter<JourneyAdapter.MyViewHolder> {
+
+        private Context mContext;
+        private ArrayList<Journey> journeyList;
+
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+            // Declare Views objects present inside the card
+            TextView name,src_dest,start_date,participants;
+            Button send_join_request_button;
+
+            public MyViewHolder(View view) {
+                super(view);
+                // Populate View objects from layout
+                name = view.findViewById(R.id.search_journey_card_name);
+                src_dest = view.findViewById(R.id.search_journey_card_src_dest);
+                start_date = view.findViewById(R.id.search_journey_card_start_date);
+                participants = view.findViewById(R.id.search_journey_card_participants);
+                send_join_request_button = view.findViewById(R.id.search_journey_card_send_join_request_button);
+            }
+        }
+
+
+        public JourneyAdapter(Context mContext, ArrayList<Journey> journeyList) {
+            this.mContext = mContext;
+            this.journeyList = journeyList;
+        }
+
+        @Override
+        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.search_journey_card, parent, false);
+
+            return new MyViewHolder(itemView);
+        }
+
+        @Override
+        public void onBindViewHolder(final MyViewHolder holder, int position) {
+            Journey journey = journeyList.get(position);
+
+            // Set values of views from Journey object
+            holder.name.setText(journey.journey_id);
+            holder.src_dest.setText("From " + journey.source + " to " + journey.destination);
+            if(journey.date.compareTo(new Date())<0) {
+                holder.start_date.setText("Started on " + journey.display_time);
+                if(journey.participants.size() == 1)
+                    holder.participants.setText("Only you went");
+                else
+                    holder.participants.setText(journey.participants.size() + " persons went");
+            }
+            else {
+                holder.start_date.setText("Starting on " + journey.display_time);
+                if(journey.participants.size() == 1)
+                    holder.participants.setText("Only you are going");
+                else
+                    holder.participants.setText(journey.participants.size() + " persons going");
+            }
+            holder.send_join_request_button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // TODO send request to join journey
+
+                    // TODO move this code to successful response to join request
+                    Search baseSearchActivity = (Search) getActivity();
+                    baseSearchActivity.setResult(RESULT_OK);
+                    baseSearchActivity.finish();
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return journeyList.size();
+        }
     }
 }

@@ -46,6 +46,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.app.Activity.RESULT_OK;
 import static com.col740.group9.studenttravelapp.classes.Constants.*;
 
 /**
@@ -198,8 +199,7 @@ public class CreateJourneyFragment extends Fragment
                     JSONObject firstElement = (JSONObject) ((JSONArray) response).get(0);
                     if (firstElement.has("user")) { // user object
                         originalPoster = new User(firstElement);
-                    }
-                    else { // list of locations
+                    } else { // list of locations
                         for (int i = 0; i < ((JSONArray) response).length(); i++) {
                             LocationPoint locationPoint = new LocationPoint(((JSONArray) response).getJSONObject(i));
                             locationPointList.add(locationPoint);
@@ -244,7 +244,7 @@ public class CreateJourneyFragment extends Fragment
                         create_journey_date_button.setText(dayOfMonthString + "-" + monthOfYearString + "-" + year);
                     }
                 }, calendar);
-                datePickerDialog.show(getChildFragmentManager(),"Date Picker");
+                datePickerDialog.show(getChildFragmentManager(), "Date Picker");
                 break;
 
             case R.id.create_journey_time_button:
@@ -262,7 +262,7 @@ public class CreateJourneyFragment extends Fragment
                         create_journey_time_button.setText(hourString + ":" + minuteString + ":" + secondString);
                     }
                 }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
-                timePickerDialog.show(getChildFragmentManager(),"Time Picker");
+                timePickerDialog.show(getChildFragmentManager(), "Time Picker");
                 break;
 
             case R.id.create_journey_add_checkpoint_button:
@@ -279,7 +279,7 @@ public class CreateJourneyFragment extends Fragment
                 break;
 
             case R.id.fab_create_journey_post:
-                if(!setJourneyObject())
+                if (!setJourneyObject())
                     break;
                 // send journey object to server for post
                 // send journey object to server for creation
@@ -290,18 +290,23 @@ public class CreateJourneyFragment extends Fragment
                     e.printStackTrace();
                 }
 
+
+                // TODO move this code to successful response to post request
+                Create baseCreateActivityPost = (Create) getActivity();
+                baseCreateActivityPost.setResult(RESULT_OK);
+                baseCreateActivityPost.finish();
                 break;
 
             case R.id.fab_create_journey_search:
-                if(!setJourneyObject())
+                if (!setJourneyObject())
                     break;
 
-                final Create baseCreateActivity = (Create) getActivity();
-                Intent intent = new Intent(mContext,Create.class);
-                intent.putExtra("type",JOURNEY_TRAVEL_TYPE);
-                intent.putExtra("token",baseCreateActivity.mToken);
-                intent.putExtra("journey",journey.journey_id);
-                startActivityForResult(intent,REQUEST_SEARCH_TRAVEL);
+                Create baseCreateActivitySearch = (Create) getActivity();
+                Intent intent = new Intent(mContext, Create.class);
+                intent.putExtra("type", JOURNEY_TRAVEL_TYPE);
+                intent.putExtra("token", baseCreateActivitySearch.mToken);
+                intent.putExtra("journey", journey.journey_id);
+                startActivityForResult(intent, REQUEST_SEARCH_TRAVEL);
                 break;
         }
     }
@@ -315,18 +320,18 @@ public class CreateJourneyFragment extends Fragment
         return null;
     }
 
-    private boolean setJourneyObject(){
+    private boolean setJourneyObject() {
         journey.journey_id = create_journey_name.getText().toString();
-        if(journey.journey_id == null || journey.journey_id == ""){
+        if (journey.journey_id == null || journey.journey_id == "") {
             Toast.makeText(getActivity(), "Enter a name for the journey", Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        if(create_journey_date_button.getText().toString().equals("SELECT DATE")){
+        if (create_journey_date_button.getText().toString().equals("SELECT DATE")) {
             Toast.makeText(getActivity(), "Enter a date for the journey", Toast.LENGTH_SHORT).show();
             return false;
         }
-        if(create_journey_time_button.getText().toString().equals("SELECT TIME")){
+        if (create_journey_time_button.getText().toString().equals("SELECT TIME")) {
             Toast.makeText(getActivity(), "Enter a time for the journey", Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -334,16 +339,16 @@ public class CreateJourneyFragment extends Fragment
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         journey.start_time = df.format(journey.date);
 
-        if(checkpointList.isEmpty()){
+        if (checkpointList.isEmpty()) {
             Toast.makeText(getActivity(), "Enter atleast on checkpoint for the journey", Toast.LENGTH_SHORT).show();
             return false;
         }
 
-        if(journey.checkpoints == null)
+        if (journey.checkpoints == null)
             journey.checkpoints = new ArrayList<JourneyPoint>();
         String destination = "";
-        int i=0;
-        for(Checkpoint checkpoint: checkpointList){
+        int i = 0;
+        for (Checkpoint checkpoint : checkpointList) {
             JourneyPoint journeyPoint = new JourneyPoint();
             journeyPoint.point_id = Integer.toString(i);
             journeyPoint.location = searchLocationPointinArray(checkpoint.source, locationPointList);
@@ -364,6 +369,16 @@ public class CreateJourneyFragment extends Fragment
         journey.participants.add(originalPoster);
 
         return true;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_SEARCH_TRAVEL && resultCode == RESULT_OK) {
+            Create baseCreateActivitySearch = (Create) getActivity();
+            baseCreateActivitySearch.setResult(RESULT_OK);
+            baseCreateActivitySearch.finish();
+        }
     }
 
     public interface OnCreateJourneyFragmentInteractionListener {

@@ -8,7 +8,7 @@
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/trip_card_recycler_view"
+        android:id="@+id/dashboard_trip_card_recycler_view"
         android:clipToPadding="false"
         android:scrollbars="vertical" />
 

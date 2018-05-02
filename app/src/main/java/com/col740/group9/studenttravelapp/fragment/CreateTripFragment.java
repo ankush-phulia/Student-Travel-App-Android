@@ -45,6 +45,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.app.Activity.RESULT_OK;
 import static com.col740.group9.studenttravelapp.classes.Constants.*;
 
 /**
@@ -272,16 +273,21 @@ public class CreateTripFragment extends Fragment
                     break;
 
                 // TODO send trip object to server for post
+
+                // TODO move this code to successful response to post request
+                Create baseCreateActivityPost = (Create) getActivity();
+                baseCreateActivityPost.setResult(RESULT_OK);
+                baseCreateActivityPost.finish();
                 break;
 
             case R.id.fab_create_trip_search:
                 if(!setTripObject())
                     break;
 
-                final Create baseCreateActivity = (Create) getActivity();
+                final Create baseCreateActivitySearch = (Create) getActivity();
                 Intent intent = new Intent(mContext,Create.class);
                 intent.putExtra("type",TRIP_TRAVEL_TYPE);
-                intent.putExtra("token",baseCreateActivity.mToken);
+                intent.putExtra("token",baseCreateActivitySearch.mToken);
                 intent.putExtra("trip",trip.trip_id);
                 startActivityForResult(intent,REQUEST_SEARCH_TRAVEL);
                 break;
@@ -333,6 +339,16 @@ public class CreateTripFragment extends Fragment
         // TODO send trip object to server for creation
 
         return true;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_SEARCH_TRAVEL && resultCode == RESULT_OK) {
+            Create baseCreateActivitySearch = (Create) getActivity();
+            baseCreateActivitySearch.setResult(RESULT_OK);
+            baseCreateActivitySearch.finish();
+        }
     }
 
     public interface OnCreateTripFragmentInteractionListener {

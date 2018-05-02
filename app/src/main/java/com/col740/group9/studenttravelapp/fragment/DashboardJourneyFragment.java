@@ -20,7 +20,6 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.col740.group9.studenttravelapp.R;
 import com.col740.group9.studenttravelapp.activity.Home;
 import com.col740.group9.studenttravelapp.classes.Journey;
-import com.github.clans.fab.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -65,7 +64,7 @@ public class DashboardJourneyFragment extends Fragment
         // Inflate the layout for this fragment
         DashboardJourneyFragmentView = inflater.inflate(R.layout.fragment_dashboard_journey, container, false);
 
-        mRecyclerView = (RecyclerView) DashboardJourneyFragmentView.findViewById(R.id.journey_card_recycler_view);
+        mRecyclerView = (RecyclerView) DashboardJourneyFragmentView.findViewById(R.id.dashboard_journey_card_recycler_view);
         mLayoutManager = new LinearLayoutManager(mContext);
 
         return DashboardJourneyFragmentView;
@@ -183,10 +182,10 @@ public class DashboardJourneyFragment extends Fragment
             public MyViewHolder(View view) {
                 super(view);
                 // Populate View objects from layout
-                name = view.findViewById(R.id.journey_card_name);
-                src_dest = view.findViewById(R.id.journey_card_src_dest);
-                start_date = view.findViewById(R.id.journey_card_start_date);
-                participants = view.findViewById(R.id.journey_card_participants);
+                name = view.findViewById(R.id.dashboard_journey_card_name);
+                src_dest = view.findViewById(R.id.dashboard_journey_card_src_dest);
+                start_date = view.findViewById(R.id.dashboard_journey_card_start_date);
+                participants = view.findViewById(R.id.dashboard_journey_card_participants);
             }
         }
 
@@ -199,7 +198,7 @@ public class DashboardJourneyFragment extends Fragment
         @Override
         public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.journey_card, parent, false);
+                    .inflate(R.layout.dashboard_journey_card, parent, false);
 
             return new MyViewHolder(itemView);
         }

@@ -38,6 +38,7 @@ public class DashboardFragment extends Fragment
     private View DashboardFragmentView;
     private FragmentActivity mContext;
     private Bundle bundle;
+    private Fragment CurrentChildFragment;
 
     public DashboardFragment() {
         // Required empty public constructor
@@ -103,7 +104,14 @@ public class DashboardFragment extends Fragment
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == REQUEST_CREATE_TRAVEL && requestCode == RESULT_OK){
-
+            if(CurrentChildFragment != null){
+                if(CurrentChildFragment instanceof DashboardJourneyFragment){
+                    ((DashboardJourneyFragment) CurrentChildFragment).fetchDatafromServer("journeys");
+                }
+                else if(CurrentChildFragment instanceof DashboardTripFragment){
+                    ((DashboardTripFragment) CurrentChildFragment).fetchDatafromServer("trips");
+                }
+            }
         }
     }
 
@@ -132,16 +140,16 @@ public class DashboardFragment extends Fragment
             // getItem is called to instantiate the fragment for the given page.
             // Return a DummySectionFragment (defined as a static inner class
             // below) with the page number as its lone argument.
-            Fragment fragment = null;
+            CurrentChildFragment = null;
             switch (position) {
-                case 0: fragment = new DashboardJourneyFragment();
+                case 0: CurrentChildFragment = new DashboardJourneyFragment();
                     break;
-                case 1: fragment = new DashboardTripFragment();
+                case 1: CurrentChildFragment = new DashboardTripFragment();
                     break;
             }
 
-            fragment.setArguments(bundle);
-            return fragment;
+            CurrentChildFragment.setArguments(bundle);
+            return CurrentChildFragment;
         }
 
         @Override

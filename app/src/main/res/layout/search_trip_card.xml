@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <android.support.v7.widget.CardView
-        android:id="@+id/trip_card_view"
+        android:id="@+id/search_trip_card_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_margin="@dimen/card_margin"
-        android:elevation="3dp"
-        card_view:cardCornerRadius="@dimen/card_corner_radius">
+        android:elevation="3dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -20,29 +19,30 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/trip_card_name"
-                android:text="Trip Name"
+                android:id="@+id/search_trip_card_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:padding="5dp"
-                android:textSize="20dp"/>
+                android:text="Journey Name"
+                android:textSize="20dp" />
 
             <TextView
-                android:id="@+id/trip_card_src_dest"
-                android:text="From ________ to ___________"
+                android:id="@+id/search_trip_card_src_dest"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:padding="5dp"
-                android:textSize="20dp"/>
+                android:text="From ________ to ___________"
+                android:textSize="20dp" />
+
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:orientation="horizontal" android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/trip_card_start_date"
+                    android:id="@+id/search_trip_card_start_date"
                     android:text="Starting on ______"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -51,7 +51,7 @@
                     android:textSize="15dp"/>
 
                 <TextView
-                    android:id="@+id/trip_card_duration"
+                    android:id="@+id/search_trip_card_duration"
                     android:text="_ days"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -62,17 +62,37 @@
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/trip_card_participants"
-                android:text="_ people going"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:padding="5dp"
-                android:textSize="15dp"/>
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/search_trip_card_participants"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_alignParentLeft="true"
+                    android:padding="5dp"
+                    android:text="_ people going"
+                    android:textSize="15dp" />
+
+                <Button
+                    android:id="@+id/search_trip_card_send_join_request_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:background="@null"
+                    android:elevation="2dp"
+                    android:padding="5dp"
+                    android:text="Send Join Request"
+                    android:textColor="@color/colorPrimary" />
+
+            </RelativeLayout>
 
 
         </LinearLayout>
 
     </android.support.v7.widget.CardView>
+
 </LinearLayout>
