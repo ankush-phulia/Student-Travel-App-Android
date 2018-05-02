@@ -131,6 +131,7 @@ public class UserProfileFragment extends Fragment
                         byte[] imageBytes = baos.toByteArray();
                         String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
                         userJSON.put("photo", encodedImage);
+                        Log.w("Profile", "Image");
                     }
                     postDatatoServer("update_user_info", userJSON);
                 }
@@ -217,7 +218,7 @@ public class UserProfileFragment extends Fragment
                     user_profile_facebook_link.setText(user.facebook_link);
 
                     // load image from server and load it to bitmap
-                    byte[] decodedString = Base64.decode(user.phone, Base64.DEFAULT);
+                    byte[] decodedString = Base64.decode(user.photo, Base64.DEFAULT);
                     Bitmap bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
                     if(bitmap != null)

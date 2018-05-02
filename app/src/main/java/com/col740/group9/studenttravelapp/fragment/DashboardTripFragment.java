@@ -89,7 +89,7 @@ public class DashboardTripFragment extends Fragment
         super.onAttach(context);
         mContext = context;
 
-        // TODO : populate this list from server
+        // populate this list from server
         tripList = new ArrayList<Trip>();
         fetchDatafromServer("trips");
 
@@ -108,7 +108,7 @@ public class DashboardTripFragment extends Fragment
     }
 
     public void fetchDatafromServer(String type){
-        // TODO - assumes that the base activity is home
+        //  assumes that the base activity is home
         final Home baseHomeActivity = (Home) getActivity();
 
         JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
@@ -211,7 +211,7 @@ public class DashboardTripFragment extends Fragment
 
             // Set values of views from Trip object
             holder.name.setText(trip.trip_id);
-            holder.src_dest.setText("From " + trip.source + " to " + trip.destination);
+            holder.src_dest.setText("From " + trip.source);
             if(trip.date.compareTo(new Date())<0) {
                 holder.start_date.setText("Started on " + trip.display_time);
                 holder.duration.setText("for " + trip.duration + " days");

@@ -30,6 +30,7 @@ import com.col740.group9.studenttravelapp.classes.Checkpoint;
 import com.col740.group9.studenttravelapp.classes.Journey;
 import com.col740.group9.studenttravelapp.classes.JourneyPoint;
 import com.col740.group9.studenttravelapp.classes.LocationPoint;
+import com.col740.group9.studenttravelapp.classes.User;
 import com.github.clans.fab.FloatingActionButton;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -56,6 +57,7 @@ import static com.col740.group9.studenttravelapp.classes.Constants.*;
 public class CreateJourneyFragment extends Fragment
         implements Response.Listener, Response.ErrorListener, View.OnClickListener {
 
+    private User originalPoster;
     private OnCreateJourneyFragmentInteractionListener mListener;
     private Journey journey;
     private ArrayList<LocationPoint> locationPointList;
@@ -137,7 +139,9 @@ public class CreateJourneyFragment extends Fragment
         // populate this list with journey points
         locationPointList = new ArrayList<LocationPoint>();
         locationPointNameList = new ArrayList<CharSequence>();
+
         fetchDatafromServer("journey_points");
+        fetchDatafromServer("user_info");
 
         if (mContext instanceof OnCreateJourneyFragmentInteractionListener) {
             mListener = (OnCreateJourneyFragmentInteractionListener) mContext;
@@ -190,16 +194,23 @@ public class CreateJourneyFragment extends Fragment
     public void onResponse(Object response) {
         try {
             if (response.getClass() == JSONArray.class) {
-                Log.w("Create Journey", response.toString());
-                for (int i = 0; i < ((JSONArray) response).length(); i++) {
-                    LocationPoint locationPoint = new LocationPoint(((JSONArray) response).getJSONObject(i));
-                    locationPointList.add(locationPoint);
-                    locationPointNameList.add(locationPoint.location_name);
+                if (((JSONArray) response).length() > 0) {
+                    JSONObject firstElement = (JSONObject) ((JSONArray) response).get(0);
+                    if (firstElement.has("user")) { // user object
+                        originalPoster = new User(firstElement);
+                    }
+                    else { // list of locations
+                        for (int i = 0; i < ((JSONArray) response).length(); i++) {
+                            LocationPoint locationPoint = new LocationPoint(((JSONArray) response).getJSONObject(i));
+                            locationPointList.add(locationPoint);
+                            locationPointNameList.add(locationPoint.location_name);
+                        }
+                        ArrayAdapter<CharSequence> locationAdapter = new ArrayAdapter<CharSequence>(mContext, android.R.layout.simple_spinner_item, locationPointNameList);
+                        locationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        create_journey_source_spinner.setAdapter(locationAdapter);
+                        create_journey_destination_spinner.setAdapter(locationAdapter);
+                    }
                 }
-                ArrayAdapter<CharSequence> locationAdapter = new ArrayAdapter<CharSequence>(mContext, android.R.layout.simple_spinner_item, locationPointNameList);
-                locationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                create_journey_source_spinner.setAdapter(locationAdapter);
-                create_journey_destination_spinner.setAdapter(locationAdapter);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -270,8 +281,15 @@ public class CreateJourneyFragment extends Fragment
             case R.id.fab_create_journey_post:
                 if(!setJourneyObject())
                     break;
+                // send journey object to server for post
+                // send journey object to server for creation
+                try {
+                    Log.w("Journey", journey.toJSON().toString());
+                    postDatatoServer("create_journey", journey.toJSON());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
-                // TODO send journey object to server for post
                 break;
 
             case R.id.fab_create_journey_search:
@@ -286,6 +304,15 @@ public class CreateJourneyFragment extends Fragment
                 startActivityForResult(intent,REQUEST_SEARCH_TRAVEL);
                 break;
         }
+    }
+
+    public LocationPoint searchLocationPointinArray(String key, ArrayList<LocationPoint> locationPointList) {
+        for (LocationPoint l : locationPointList) {
+            if (l.location_name.equals(key)) {
+                return l;
+            }
+        }
+        return null;
     }
 
     private boolean setJourneyObject(){
@@ -311,26 +338,30 @@ public class CreateJourneyFragment extends Fragment
             Toast.makeText(getActivity(), "Enter atleast on checkpoint for the journey", Toast.LENGTH_SHORT).show();
             return false;
         }
+
         if(journey.checkpoints == null)
             journey.checkpoints = new ArrayList<JourneyPoint>();
         String destination = "";
         int i=0;
         for(Checkpoint checkpoint: checkpointList){
             JourneyPoint journeyPoint = new JourneyPoint();
-            journeyPoint.point_id = i;
-            journeyPoint.location = checkpoint.source;
+            journeyPoint.point_id = Integer.toString(i);
+            journeyPoint.location = searchLocationPointinArray(checkpoint.source, locationPointList);
             journeyPoint.transport = checkpoint.transport;
             journey.checkpoints.add(journeyPoint);
             destination = checkpoint.destination;
             i++;
         }
         JourneyPoint journeyPoint = new JourneyPoint();
-        journeyPoint.point_id = i;
-        journeyPoint.location = destination;
+        journeyPoint.point_id = Integer.toString(i);
+        journeyPoint.location = searchLocationPointinArray(destination, locationPointList);
         journeyPoint.transport = "BUS";
         journey.checkpoints.add(journeyPoint);
 
-        // TODO send journey object to server for creation
+        journey.source = journey.checkpoints.get(0).location.location_name;
+        journey.destination = destination;
+
+        journey.participants.add(originalPoster);
 
         return true;
     }

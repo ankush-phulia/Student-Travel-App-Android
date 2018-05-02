@@ -317,16 +317,16 @@ public class CreateTripFragment extends Fragment
         int i=0;
         for(Checkpoint checkpoint: checkpointList){
             JourneyPoint journeyPoint = new JourneyPoint();
-            journeyPoint.point_id = i;
-            journeyPoint.location = checkpoint.source;
+            journeyPoint.point_id = Integer.toString(i);
+//            journeyPoint.location = checkpoint.source;
             journeyPoint.transport = checkpoint.transport;
             trip.checkpoints.add(journeyPoint);
             destination = checkpoint.destination;
             i++;
         }
         JourneyPoint journeyPoint = new JourneyPoint();
-        journeyPoint.point_id = i;
-        journeyPoint.location = destination;
+//        journeyPoint.point_id = i;
+//        journeyPoint.location = destination;
         journeyPoint.transport = "BUS";
         trip.checkpoints.add(journeyPoint);
 

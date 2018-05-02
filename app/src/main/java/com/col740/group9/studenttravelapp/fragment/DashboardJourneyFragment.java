@@ -125,7 +125,6 @@ public class DashboardJourneyFragment extends Fragment
 
     @Override
     public void onResponse(JSONArray response) {
-        try {
     //            String type = "";
     //            if (response.length() > 0) {
     //                JSONObject firstElement = (JSONObject) response.get(0);
@@ -135,18 +134,20 @@ public class DashboardJourneyFragment extends Fragment
     //            }
             Log.w("Journeys", response.toString());
             for (int i = 0; i < response.length(); i++) {
-                journeyList.add(new Journey(response.getJSONObject(i)));
+                try {
+                    journeyList.add(new Journey(response.getJSONObject(i)));
+                }
+                catch (JSONException e) {
+                    continue;
+                } catch (ParseException e) {
+                    continue;
+                }
             }
             journeyAdapter = new JourneyAdapter(mContext, journeyList);
             journeyAdapter.notifyDataSetChanged();
             mRecyclerView.setAdapter(journeyAdapter);
             mRecyclerView.setLayoutManager(mLayoutManager);
-        }
-        catch (JSONException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+
     }
 
     @Override
