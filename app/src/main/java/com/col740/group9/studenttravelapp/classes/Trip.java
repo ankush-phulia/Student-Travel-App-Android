@@ -16,6 +16,10 @@ public class Trip extends Travel{
     public String budget;
     public String admin;
 
+    public Trip(){
+
+    }
+
     public Trip(JSONObject trip_object) throws JSONException,ParseException {
         this.trip_id = trip_object.getString("trip_id");
         this.start_time = trip_object.getString("start_time");
@@ -45,6 +49,8 @@ public class Trip extends Travel{
     public JSONObject toJSON() throws JSONException {
         JSONObject json = new JSONObject();
         json.put("trip_id", this.trip_id);
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        this.start_time = df.format(this.date);
         json.put("start_time", this.start_time);
         json.put("duration", this.duration);
         json.put("source", this.source);

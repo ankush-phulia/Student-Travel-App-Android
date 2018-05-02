@@ -15,8 +15,12 @@ import android.view.ViewGroup;
 
 import com.col740.group9.studenttravelapp.R;
 import com.col740.group9.studenttravelapp.activity.Create;
+import com.col740.group9.studenttravelapp.activity.Home;
 import com.col740.group9.studenttravelapp.activity.Search;
 import com.github.clans.fab.FloatingActionButton;
+
+import static android.app.Activity.*;
+import static com.col740.group9.studenttravelapp.classes.Constants.*;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,7 +36,7 @@ public class DashboardFragment extends Fragment
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
     private View DashboardFragmentView;
-    private FragmentActivity myContext;
+    private FragmentActivity mContext;
     private Bundle bundle;
 
     public DashboardFragment() {
@@ -51,15 +55,17 @@ public class DashboardFragment extends Fragment
         // Inflate the layout for this fragment
         DashboardFragmentView = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
-        myContext = getActivity();
+        mContext = getActivity();
 
         FloatingActionButton fab_create = (FloatingActionButton) DashboardFragmentView.findViewById(R.id.fab_create);
         fab_create.setOnClickListener(new View.OnClickListener() { // click listener for start button
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(myContext,Create.class);
+                final Home baseHomeActivity = (Home) getActivity();
+                Intent intent = new Intent(mContext,Create.class);
                 intent.putExtra("type",mViewPager.getCurrentItem());
-                startActivity(intent);
+                intent.putExtra("token",baseHomeActivity.mToken);
+                startActivityForResult(intent,REQUEST_CREATE_TRAVEL);
             }
         });
 
@@ -77,7 +83,7 @@ public class DashboardFragment extends Fragment
 
     @Override
     public void onAttach(Context context) {
-        myContext=(FragmentActivity) context;
+        mContext=(FragmentActivity) context;
         super.onAttach(context);
         if (context instanceof OnDashboardFragmentInteractionListener) {
             mListener = (OnDashboardFragmentInteractionListener) context;
@@ -91,6 +97,14 @@ public class DashboardFragment extends Fragment
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_CREATE_TRAVEL && requestCode == RESULT_OK){
+
+        }
     }
 
     @Override

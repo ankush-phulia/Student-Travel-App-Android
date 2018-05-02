@@ -100,7 +100,7 @@ public class UserProfileFragment extends Fragment
                         ActivityCompat.requestPermissions(getActivity(),new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},1);
                     } else {
                         Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                        startActivityForResult(i, RESULT_LOAD_IMAGE);
+                        startActivityForResult(i, REQUEST_LOAD_IMAGE);
                     }
                 }
 
@@ -235,7 +235,7 @@ public class UserProfileFragment extends Fragment
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+        if (requestCode == REQUEST_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
 
 
             Uri selectedImage = data.getData();
@@ -262,7 +262,7 @@ public class UserProfileFragment extends Fragment
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(i, RESULT_LOAD_IMAGE);
+                    startActivityForResult(i, REQUEST_LOAD_IMAGE);
                 } else {
                     Toast.makeText(getActivity(), "Please give your permission.", Toast.LENGTH_LONG).show();
                 }

@@ -221,6 +221,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
         transaction.replace(R.id.login_relativeLayout, loginOTPFragment);
         transaction.addToBackStack(null);
         transaction.commit();
+        screen_state = OTP;
     }
 
     public void onLoginOTPFragmentInteraction(CharSequence otp){

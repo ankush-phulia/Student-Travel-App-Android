@@ -1,5 +1,7 @@
 package com.col740.group9.studenttravelapp.activity;
 
+import android.support.v4.app.Fragment;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -12,15 +14,18 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.col740.group9.studenttravelapp.R;
 import com.col740.group9.studenttravelapp.classes.GlobalRequestQueue;
+import com.col740.group9.studenttravelapp.fragment.CreateJourneyFragment;
+import com.col740.group9.studenttravelapp.fragment.CreateTripFragment;
 
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.col740.group9.studenttravelapp.classes.Constants.JOURNEY_TRAVEL_TYPE;
 import static com.col740.group9.studenttravelapp.classes.Constants.serverURL;
 
-public class Create extends AppCompatActivity {
+public class Create extends AppCompatActivity implements CreateJourneyFragment.OnCreateJourneyFragmentInteractionListener,CreateTripFragment.OnCreateTripFragmentInteractionListener{
 
     private int traveltype;
     public RequestQueue mQueue;
@@ -35,6 +40,17 @@ public class Create extends AppCompatActivity {
 
     @Override
     protected void onResume(){
+        Fragment CreateFragment = null;
+        if(traveltype == JOURNEY_TRAVEL_TYPE){
+            CreateFragment = new CreateJourneyFragment();
+        } else {
+            CreateFragment = new CreateTripFragment();
+        }
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.create_contraintlayout, CreateFragment)
+                .addToBackStack(null)
+                .commit();
 
         mQueue = GlobalRequestQueue
                 .getInstance(this.getApplicationContext())
@@ -43,4 +59,13 @@ public class Create extends AppCompatActivity {
         super.onResume();
     }
 
+    @Override
+    public void OnCreateJourneyFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void OnCreateTripFragmentInteraction(Uri uri) {
+
+    }
 }

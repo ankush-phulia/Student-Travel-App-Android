@@ -44,6 +44,8 @@ public class Journey extends Travel{
     public JSONObject toJSON() throws JSONException {
         JSONObject json = new JSONObject();
         json.put("journey_id", this.journey_id);
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        this.start_time = df.format(this.date);
         json.put("start_time", this.start_time);
         json.put("source", this.source);
         json.put("destination", this.destination);
