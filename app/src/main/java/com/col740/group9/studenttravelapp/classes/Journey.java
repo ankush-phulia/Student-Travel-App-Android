@@ -14,6 +14,10 @@ public class Journey extends Travel{
     public String journey_id;
     public int cotrael_number;
 
+    public Journey(){
+
+    }
+
     public Journey(JSONObject journey_object) throws JSONException,ParseException {
         this.journey_id = journey_object.getString("journey_id");
         this.start_time = journey_object.getString("start_time");
