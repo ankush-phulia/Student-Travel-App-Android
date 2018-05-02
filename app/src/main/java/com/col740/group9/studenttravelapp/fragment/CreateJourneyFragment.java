@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -137,7 +137,7 @@ public class CreateJourneyFragment extends Fragment
         // populate this list with journey points
         locationPointList = new ArrayList<LocationPoint>();
         locationPointNameList = new ArrayList<CharSequence>();
-        fetchDatafromServer("/journey_points/");
+        fetchDatafromServer("journey_points");
 
         if (mContext instanceof OnCreateJourneyFragmentInteractionListener) {
             mListener = (OnCreateJourneyFragmentInteractionListener) mContext;
@@ -233,6 +233,7 @@ public class CreateJourneyFragment extends Fragment
                         create_journey_date_button.setText(dayOfMonthString + "-" + monthOfYearString + "-" + year);
                     }
                 }, calendar);
+                datePickerDialog.show(getChildFragmentManager(),"Date Picker");
                 break;
 
             case R.id.create_journey_time_button:
@@ -250,6 +251,7 @@ public class CreateJourneyFragment extends Fragment
                         create_journey_time_button.setText(hourString + ":" + minuteString + ":" + secondString);
                     }
                 }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true);
+                timePickerDialog.show(getChildFragmentManager(),"Time Picker");
                 break;
 
             case R.id.create_journey_add_checkpoint_button:
