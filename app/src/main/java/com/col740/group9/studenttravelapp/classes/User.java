@@ -14,6 +14,7 @@ public class User {
     public String facebook_link;
     public String phone;
     public String bio;
+    public String photo;
 
     public User(JSONObject user_info_json) throws JSONException {
         if (user_info_json.has("user")) {
@@ -48,6 +49,9 @@ public class User {
         }
         if (user_info_json.has("bio")) {
             this.bio = user_info_json.getString("bio");
+        }
+        if (user_info_json.has("photo")) {
+            this.photo = user_info_json.getString("photo");
         }
     }
 

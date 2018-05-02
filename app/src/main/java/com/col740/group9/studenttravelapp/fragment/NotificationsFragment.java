@@ -148,7 +148,10 @@ public class NotificationsFragment extends Fragment
             if (response.getClass() == JSONArray.class) {
                 Log.w("Notifications", response.toString());
                 for (int i = 0; i < ((JSONArray)response).length(); i++) {
-                    notificationList.add(new Notification(((JSONArray)response).getJSONObject(i)));
+                    Notification notification = new Notification(((JSONArray)response).getJSONObject(i));
+                    if (notification.resolved.equals("No")) {
+                        notificationList.add(notification);
+                    }
                 }
                 notificationAdapter = new NotificationAdapter(mContext, notificationList);
                 notificationAdapter.notifyDataSetChanged();
