@@ -212,8 +212,7 @@ public class CreateJourneyFragment extends Fragment
                         create_journey_destination_spinner.setAdapter(locationAdapter);
                     }
                 }
-            }
-            else {
+            } else {
                 // successful response to post request
                 Create baseCreateActivityPost = (Create) getActivity();
                 baseCreateActivityPost.setResult(RESULT_OK);
@@ -291,7 +290,6 @@ public class CreateJourneyFragment extends Fragment
                 // send journey object to server for post
                 // send journey object to server for creation
                 try {
-                    Log.w("Journey", journey.toJSON().toString());
                     postDatatoServer("create_journey", journey.toJSON());
                 } catch (JSONException e) {
                     e.printStackTrace();
