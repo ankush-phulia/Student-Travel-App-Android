@@ -26,6 +26,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.col740.group9.studenttravelapp.R;
 import com.col740.group9.studenttravelapp.activity.Create;
+import com.col740.group9.studenttravelapp.activity.Search;
 import com.col740.group9.studenttravelapp.classes.Checkpoint;
 import com.col740.group9.studenttravelapp.classes.Journey;
 import com.col740.group9.studenttravelapp.classes.JourneyPoint;
@@ -212,6 +213,12 @@ public class CreateJourneyFragment extends Fragment
                     }
                 }
             }
+            else {
+                // successful response to post request
+                Create baseCreateActivityPost = (Create) getActivity();
+                baseCreateActivityPost.setResult(RESULT_OK);
+                baseCreateActivityPost.finish();
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -289,12 +296,6 @@ public class CreateJourneyFragment extends Fragment
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
-                // TODO move this code to successful response to post request
-                Create baseCreateActivityPost = (Create) getActivity();
-                baseCreateActivityPost.setResult(RESULT_OK);
-                baseCreateActivityPost.finish();
                 break;
 
             case R.id.fab_create_journey_search:
@@ -302,7 +303,7 @@ public class CreateJourneyFragment extends Fragment
                     break;
 
                 Create baseCreateActivitySearch = (Create) getActivity();
-                Intent intent = new Intent(mContext, Create.class);
+                Intent intent = new Intent(mContext, Search.class);
                 intent.putExtra("type", JOURNEY_TRAVEL_TYPE);
                 intent.putExtra("token", baseCreateActivitySearch.mToken);
                 intent.putExtra("journey", journey.journey_id);

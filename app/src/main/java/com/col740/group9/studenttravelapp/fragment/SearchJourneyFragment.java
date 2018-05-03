@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -18,13 +19,18 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.col740.group9.studenttravelapp.R;
+import com.col740.group9.studenttravelapp.activity.Search;
 import com.col740.group9.studenttravelapp.activity.Home;
 import com.col740.group9.studenttravelapp.activity.Search;
 import com.col740.group9.studenttravelapp.classes.Journey;
+import com.col740.group9.studenttravelapp.classes.LocationPoint;
+import com.col740.group9.studenttravelapp.classes.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -42,7 +48,7 @@ import static com.col740.group9.studenttravelapp.classes.Constants.*;
  * to handle interaction events.
  */
 public class SearchJourneyFragment extends Fragment
-        implements Response.Listener<JSONArray>, Response.ErrorListener {
+        implements Response.Listener, Response.ErrorListener {
 
     private OnSearchJourneyFragmentInteractionListener mListener;
     private ArrayList<Journey> journeyList;
@@ -89,10 +95,16 @@ public class SearchJourneyFragment extends Fragment
         super.onAttach(context);
         mContext = context;
 
-        // TODO populate this list from overlap search result for journey_id
+        // populate this list from overlap search result for journey_id
         journeyList = new ArrayList<Journey>();
         String journey_id = (String) getActivity().getIntent().getExtras().get("journey");
-//        fetchDatafromServer("journeys");
+        JSONObject json = new JSONObject();
+        try {
+            json.put("journey_id", journey_id);
+            postDatatoServer("search_journey", json);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         if (context instanceof OnSearchJourneyFragmentInteractionListener) {
             mListener = (OnSearchJourneyFragmentInteractionListener) context;
@@ -108,43 +120,44 @@ public class SearchJourneyFragment extends Fragment
         mListener = null;
     }
 
-    public void fetchDatafromServer(String type) {
+    public void postDatatoServer(String type, JSONObject data) {
         // assumes that the base activity is home
-        final Home baseHomeActivity = (Home) getActivity();
+        final Search baseSearchActivity = (Search) getActivity();
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
-                (Request.Method.GET,
+        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest
+                (Request.Method.POST,
                         serverURL + "/" + type + "/",
-                        null,
+                        data,
                         this, this) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization", "Token " + baseHomeActivity.mToken);
+                headers.put("Authorization", "Token " + baseSearchActivity.mToken);
                 return headers;
             }
         };
-        baseHomeActivity.mQueue.add(jsonArrayRequest);
+        baseSearchActivity.mQueue.add(jsonArrayRequest);
     }
 
     @Override
-    public void onResponse(JSONArray response) {
-        //            String type = "";
-        //            if (response.length() > 0) {
-        //                JSONObject firstElement = (JSONObject) response.get(0);
-        //                if (firstElement.has("journey_id")) {
-        //                    type = "journeys";
-        //                }
-        //            }
-        Log.w("Journeys", response.toString());
-        for (int i = 0; i < response.length(); i++) {
-            try {
-                journeyList.add(new Journey(response.getJSONObject(i)));
-            } catch (JSONException e) {
-                continue;
-            } catch (ParseException e) {
-                continue;
+    public void onResponse(Object response) {
+        try {
+            Log.e("RESPONSE", response.toString());
+            if (response.getClass() == JSONArray.class) {
+                for (int i = 0; i < ((JSONArray) response).length(); i++) {
+                    journeyList.add(new Journey(((JSONArray) response).getJSONObject(i)));
+                }
             }
+            else {
+                Search baseSearchActivity = (Search) getActivity();
+                baseSearchActivity.setResult(RESULT_OK);
+                baseSearchActivity.finish();
+            }
+        } catch (JSONException e) {
+            Log.e("JSON Error", response.toString());
+        }
+        catch (ParseException e) {
+            Log.e("Parse Error", response.toString());
         }
         journeyAdapter = new JourneyAdapter(mContext, journeyList);
         journeyAdapter.notifyDataSetChanged();
@@ -211,7 +224,7 @@ public class SearchJourneyFragment extends Fragment
 
         @Override
         public void onBindViewHolder(final MyViewHolder holder, int position) {
-            Journey journey = journeyList.get(position);
+            final Journey journey = journeyList.get(position);
 
             // Set values of views from Journey object
             holder.name.setText(journey.journey_id);
@@ -232,12 +245,14 @@ public class SearchJourneyFragment extends Fragment
             holder.send_join_request_button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // TODO send request to join journey
-
-                    // TODO move this code to successful response to join request
-                    Search baseSearchActivity = (Search) getActivity();
-                    baseSearchActivity.setResult(RESULT_OK);
-                    baseSearchActivity.finish();
+                    // send request to join journey
+                    JSONObject json = new JSONObject();
+                    try {
+                        json.put("journey_id", journey.journey_id);
+                        postDatatoServer("make_request", json);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         }

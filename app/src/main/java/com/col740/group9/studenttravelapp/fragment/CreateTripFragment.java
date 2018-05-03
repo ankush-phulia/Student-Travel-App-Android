@@ -26,10 +26,12 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.col740.group9.studenttravelapp.R;
 import com.col740.group9.studenttravelapp.activity.Create;
+import com.col740.group9.studenttravelapp.activity.Search;
 import com.col740.group9.studenttravelapp.classes.Checkpoint;
 import com.col740.group9.studenttravelapp.classes.Trip;
 import com.col740.group9.studenttravelapp.classes.JourneyPoint;
 import com.col740.group9.studenttravelapp.classes.LocationPoint;
+import com.col740.group9.studenttravelapp.classes.User;
 import com.github.clans.fab.FloatingActionButton;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -57,6 +59,7 @@ import static com.col740.group9.studenttravelapp.classes.Constants.*;
 public class CreateTripFragment extends Fragment
         implements Response.Listener, Response.ErrorListener, View.OnClickListener {
 
+    private User originalPoster;
     private OnCreateTripFragmentInteractionListener mListener;
     private Trip trip;
     private ArrayList<LocationPoint> locationPointList;
@@ -192,16 +195,28 @@ public class CreateTripFragment extends Fragment
     public void onResponse(Object response) {
         try {
             if (response.getClass() == JSONArray.class) {
-                Log.w("Create Trip", response.toString());
-                for (int i = 0; i < ((JSONArray) response).length(); i++) {
-                    LocationPoint locationPoint = new LocationPoint(((JSONArray) response).getJSONObject(i));
-                    locationPointList.add(locationPoint);
-                    locationPointNameList.add(locationPoint.location_name);
+                if (((JSONArray) response).length() > 0) {
+                    JSONObject firstElement = (JSONObject) ((JSONArray) response).get(0);
+                    if (firstElement.has("user")) { // user object
+                        originalPoster = new User(firstElement);
+                    } else { // list of locations
+                        for (int i = 0; i < ((JSONArray) response).length(); i++) {
+                            LocationPoint locationPoint = new LocationPoint(((JSONArray) response).getJSONObject(i));
+                            locationPointList.add(locationPoint);
+                            locationPointNameList.add(locationPoint.location_name);
+                        }
+                        ArrayAdapter<CharSequence> locationAdapter = new ArrayAdapter<CharSequence>(mContext, android.R.layout.simple_spinner_item, locationPointNameList);
+                        locationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        create_trip_source_spinner.setAdapter(locationAdapter);
+                        create_trip_destination_spinner.setAdapter(locationAdapter);
+                    }
                 }
-                ArrayAdapter<CharSequence> locationAdapter = new ArrayAdapter<CharSequence>(mContext, android.R.layout.simple_spinner_item, locationPointNameList);
-                locationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                create_trip_source_spinner.setAdapter(locationAdapter);
-                create_trip_destination_spinner.setAdapter(locationAdapter);
+            }
+            else {
+                // successful response to post request
+                Create baseCreateActivityPost = (Create) getActivity();
+                baseCreateActivityPost.setResult(RESULT_OK);
+                baseCreateActivityPost.finish();
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -273,12 +288,14 @@ public class CreateTripFragment extends Fragment
                 if (!setTripObject())
                     break;
 
-                // TODO send trip object to server for post
+                // send trip object to server for post
+                try {
+                    Log.w("Journey", trip.toJSON().toString());
+                    postDatatoServer("create_trip", trip.toJSON());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
-                // TODO move this code to successful response to post request
-                Create baseCreateActivityPost = (Create) getActivity();
-                baseCreateActivityPost.setResult(RESULT_OK);
-                baseCreateActivityPost.finish();
                 break;
 
             case R.id.fab_create_trip_search:
@@ -286,7 +303,7 @@ public class CreateTripFragment extends Fragment
                     break;
 
                 final Create baseCreateActivitySearch = (Create) getActivity();
-                Intent intent = new Intent(mContext, Create.class);
+                Intent intent = new Intent(mContext, Search.class);
                 intent.putExtra("type", TRIP_TRAVEL_TYPE);
                 intent.putExtra("token", baseCreateActivitySearch.mToken);
                 intent.putExtra("trip", trip.trip_id);
@@ -331,21 +348,30 @@ public class CreateTripFragment extends Fragment
         for (Checkpoint checkpoint : checkpointList) {
             JourneyPoint journeyPoint = new JourneyPoint();
             journeyPoint.point_id = Integer.toString(i);
-//            journeyPoint.location = checkpoint.source;
+            journeyPoint.location = searchLocationPointinArray(checkpoint.source, locationPointList);;
             journeyPoint.transport = checkpoint.transport;
             trip.checkpoints.add(journeyPoint);
             destination = checkpoint.destination;
             i++;
         }
         JourneyPoint journeyPoint = new JourneyPoint();
-//        journeyPoint.point_id = i;
-//        journeyPoint.location = destination;
+        journeyPoint.point_id = Integer.toString(i);
+        journeyPoint.location = searchLocationPointinArray(destination, locationPointList);;
         journeyPoint.transport = "BUS";
         trip.checkpoints.add(journeyPoint);
 
-        // TODO send trip object to server for creation
+        trip.participants.add(originalPoster);
 
         return true;
+    }
+
+    public LocationPoint searchLocationPointinArray(String key, ArrayList<LocationPoint> locationPointList) {
+        for (LocationPoint l : locationPointList) {
+            if (l.location_name.equals(key)) {
+                return l;
+            }
+        }
+        return null;
     }
 
     @Override
