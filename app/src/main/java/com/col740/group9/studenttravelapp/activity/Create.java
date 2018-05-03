@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -43,8 +44,10 @@ public class Create extends AppCompatActivity implements CreateJourneyFragment.O
         Fragment CreateFragment = null;
         if (traveltype == JOURNEY_TRAVEL_TYPE) {
             CreateFragment = new CreateJourneyFragment();
+            getSupportActionBar().setTitle("Create Journey");
         } else {
             CreateFragment = new CreateTripFragment();
+            getSupportActionBar().setTitle("Create Trip");
         }
 
         getFragmentManager().beginTransaction()
@@ -57,6 +60,12 @@ public class Create extends AppCompatActivity implements CreateJourneyFragment.O
                 .getRequestQueue();
         mToken = (String) getIntent().getExtras().get("token");
         super.onResume();
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_CANCELED);
+        finish();
     }
 
     @Override

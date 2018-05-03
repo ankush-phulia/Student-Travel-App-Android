@@ -31,8 +31,10 @@ public class Search extends AppCompatActivity implements SearchJourneyFragment.O
         Fragment SearchFragment = null;
         if (traveltype == JOURNEY_TRAVEL_TYPE) {
             SearchFragment = new SearchJourneyFragment();
+            getSupportActionBar().setTitle("Search Journey");
         } else {
             SearchFragment = new SearchTripFragment();
+            getSupportActionBar().setTitle("Search Trip");
         }
 
         getSupportFragmentManager().beginTransaction()
@@ -45,6 +47,12 @@ public class Search extends AppCompatActivity implements SearchJourneyFragment.O
                 .getRequestQueue();
         mToken = (String) getIntent().getExtras().get("token");
         super.onResume();
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_CANCELED);
+        finish();
     }
 
     @Override

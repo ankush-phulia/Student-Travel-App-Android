@@ -47,6 +47,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static com.col740.group9.studenttravelapp.classes.Constants.*;
 
@@ -375,10 +376,13 @@ public class CreateJourneyFragment extends Fragment
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Create baseCreateActivitySearch = (Create) getActivity();
         if (requestCode == REQUEST_SEARCH_TRAVEL && resultCode == RESULT_OK) {
-            Create baseCreateActivitySearch = (Create) getActivity();
             baseCreateActivitySearch.setResult(RESULT_OK);
             baseCreateActivitySearch.finish();
+        }
+        else if(requestCode == REQUEST_SEARCH_TRAVEL && resultCode == RESULT_CANCELED) {
+            baseCreateActivitySearch.onBackPressed();
         }
     }
 
