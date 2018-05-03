@@ -100,8 +100,9 @@ public class Home extends AppCompatActivity
         } else if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
             getSupportFragmentManager().popBackStack();
         } else if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
-
+            android.os.Process.killProcess(android.os.Process.myPid());
         } else {
+            android.os.Process.killProcess(android.os.Process.myPid());
 //            super.onBackPressed();
         }
     }

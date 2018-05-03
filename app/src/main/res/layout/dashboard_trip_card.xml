@@ -35,7 +35,7 @@
                 android:layout_marginLeft="5dp"
                 android:padding="5dp"
                 android:text="From ________ to ___________"
-                android:textSize="20dp" />
+                android:textSize="15dp" />
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
