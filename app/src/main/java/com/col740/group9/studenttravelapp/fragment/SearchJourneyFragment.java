@@ -48,7 +48,7 @@ import static com.col740.group9.studenttravelapp.classes.Constants.*;
  * to handle interaction events.
  */
 public class SearchJourneyFragment extends Fragment
-        implements Response.Listener, Response.ErrorListener {
+        implements Response.Listener<JSONObject>, Response.ErrorListener {
 
     private OnSearchJourneyFragmentInteractionListener mListener;
     private ArrayList<Journey> journeyList;
@@ -98,12 +98,12 @@ public class SearchJourneyFragment extends Fragment
         // populate this list from overlap search result for journey_id
         journeyList = new ArrayList<Journey>();
         String journey_id = (String) getActivity().getIntent().getExtras().get("journey");
-        JSONObject json = new JSONObject();
         try {
+            JSONObject json = new JSONObject();
             json.put("journey_id", journey_id);
             postDatatoServer("search_journey", json);
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e("JSON ERROR", "   ");
         }
 
         if (context instanceof OnSearchJourneyFragmentInteractionListener) {
@@ -140,13 +140,14 @@ public class SearchJourneyFragment extends Fragment
     }
 
     @Override
-    public void onResponse(Object response) {
+    public void onResponse(JSONObject response) {
         try {
-            Log.e("RESPONSE", response.toString());
-            if (response.getClass() == JSONArray.class) {
-                for (int i = 0; i < ((JSONArray) response).length(); i++) {
-                    journeyList.add(new Journey(((JSONArray) response).getJSONObject(i)));
-                }
+            if (response.has("checkpoints")) {
+//                JSONArray jsons = (JSONArray) ((JSONObject) response).getJSONArray("");
+//                for (int i = 0; i < jsons.length(); i++) {
+//                    journeyList.add(new Journey(jsons.getJSONObject(i)));
+//                }
+                journeyList.add(new Journey(response));
             }
             else {
                 Search baseSearchActivity = (Search) getActivity();
