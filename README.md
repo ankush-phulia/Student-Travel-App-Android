@@ -1,8 +1,8 @@
 Student Travel App
 =============================
 
-The code for the android version of Student Travel App, works with KitKat and above.
+The code for the android application of Student Travel App, works with KitKat and above.
 
 
 
-Course Project for COL 740 - Software Engineering, 2018
+Part of the course project for COL 740 - Software Engineering, 2018
