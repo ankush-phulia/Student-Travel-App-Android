@@ -1,5 +1,7 @@
 package com.col740.group9.studenttravelapp.activity;
 
+import static com.col740.group9.studenttravelapp.classes.Constants.*;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,7 +17,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -29,25 +30,21 @@ import com.col740.group9.studenttravelapp.fragment.DashboardJourneyFragment;
 import com.col740.group9.studenttravelapp.fragment.DashboardTripFragment;
 import com.col740.group9.studenttravelapp.fragment.NotificationsFragment;
 import com.col740.group9.studenttravelapp.fragment.UserProfileFragment;
-
-import static com.col740.group9.studenttravelapp.classes.Constants.*;
-
+import java.util.HashMap;
+import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        DashboardFragment.OnDashboardFragmentInteractionListener,
-        DashboardJourneyFragment.OnDashboardJourneyFragmentInteractionListener,
-        DashboardTripFragment.OnDashboardTripFragmentInteractionListener,
-        UserProfileFragment.OnUserProfileFragmentInteractionListener,
-        NotificationsFragment.OnNotificationsFragmentInteractionListener,
-        Response.Listener<JSONArray>,
-        Response.ErrorListener {
+                DashboardFragment.OnDashboardFragmentInteractionListener,
+                DashboardJourneyFragment.OnDashboardJourneyFragmentInteractionListener,
+                DashboardTripFragment.OnDashboardTripFragmentInteractionListener,
+                UserProfileFragment.OnUserProfileFragmentInteractionListener,
+                NotificationsFragment.OnNotificationsFragmentInteractionListener,
+                Response.Listener<JSONArray>,
+                Response.ErrorListener {
 
     public RequestQueue mQueue;
     public String mToken = "";
@@ -61,8 +58,13 @@ public class Home extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle =
+                new ActionBarDrawerToggle(
+                        this,
+                        drawer,
+                        toolbar,
+                        R.string.navigation_drawer_open,
+                        R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -76,18 +78,18 @@ public class Home extends AppCompatActivity
         DefaultFragment = new DashboardFragment();
         tag = "DASHBOARD";
 
-        getSupportFragmentManager().beginTransaction()
+        getSupportFragmentManager()
+                .beginTransaction()
                 .replace(R.id.home_fragment_container, DefaultFragment)
-                .addToBackStack(tag).commit();
+                .addToBackStack(tag)
+                .commit();
         toolbar.setTitle("Dashboard");
     }
 
     @Override
     protected void onResume() {
 
-        mQueue = GlobalRequestQueue
-                .getInstance(this.getApplicationContext())
-                .getRequestQueue();
+        mQueue = GlobalRequestQueue.getInstance(this.getApplicationContext()).getRequestQueue();
         mToken = (String) getIntent().getExtras().get("token");
         super.onResume();
     }
@@ -97,13 +99,15 @@ public class Home extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+        } 
+        else if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
             getSupportFragmentManager().popBackStack();
-        } else if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
+        } 
+        else if (getSupportFragmentManager().getBackStackEntryCount() == 1) {
             android.os.Process.killProcess(android.os.Process.myPid());
-        } else {
+        } 
+        else {
             android.os.Process.killProcess(android.os.Process.myPid());
-//            super.onBackPressed();
         }
     }
 
@@ -124,7 +128,8 @@ public class Home extends AppCompatActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
-        } else if (id == R.id.action_logout) {
+        } 
+        else if (id == R.id.action_logout) {
             logout();
         }
 
@@ -143,21 +148,25 @@ public class Home extends AppCompatActivity
             tag = "DASHBOARD";
             fragment = new DashboardFragment();
             toolbar.setTitle("Dashboard");
-        } else if (id == R.id.nav_user_profile) {
+        } 
+        else if (id == R.id.nav_user_profile) {
             tag = "PROFILE";
             fragment = new UserProfileFragment();
             toolbar.setTitle("User Profile");
-        } else if (id == R.id.nav_notifications) {
+        } 
+        else if (id == R.id.nav_notifications) {
             tag = "NOTIFICATIONS";
             fragment = new NotificationsFragment();
             toolbar.setTitle("Notifications");
-        } else if (id == R.id.nav_logout) {
+        } 
+        else if (id == R.id.nav_logout) {
             logout();
             return true;
         }
 
         if (!findFragmentinStack(tag)) {
-            getSupportFragmentManager().beginTransaction()
+            getSupportFragmentManager()
+                    .beginTransaction()
                     .replace(R.id.home_fragment_container, fragment)
                     .addToBackStack(tag)
                     .commit();
@@ -177,33 +186,35 @@ public class Home extends AppCompatActivity
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setTitle("Logging out")
                 .setMessage("Are you sure you want to logout?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Intent gotoHome = new Intent(Home.this, Login.class);
-                        startActivity(gotoHome);
-                        finish();
-                    }
-
-                })
+                .setPositiveButton(
+                        "Yes",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent gotoHome = new Intent(Home.this, Login.class);
+                                startActivity(gotoHome);
+                                finish();
+                            }
+                        })
                 .setNegativeButton("No", null)
                 .show();
-
     }
 
     public void fetchDatafromServer(String type) {
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
-                (Request.Method.GET,
+        JsonArrayRequest jsonArrayRequest =
+                new JsonArrayRequest(
+                        Request.Method.GET,
                         serverURL + "/" + type + "/",
                         null,
-                        Home.this, Home.this) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization", "Token " + mToken);
-                return headers;
-            }
-        };
+                        Home.this,
+                        Home.this) {
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        HashMap<String, String> headers = new HashMap<String, String>();
+                        headers.put("Authorization", "Token " + mToken);
+                        return headers;
+                    }
+                };
         mQueue.add(jsonArrayRequest);
     }
 
@@ -215,11 +226,14 @@ public class Home extends AppCompatActivity
                 JSONObject firstElement = (JSONObject) response.get(0);
                 if (firstElement.has("journey_id")) {
                     type = "journeys";
-                } else if (firstElement.has("trip_id")) {
+                } 
+                else if (firstElement.has("trip_id")) {
                     type = "trips";
-                } else if (firstElement.has("user_from")) {
+                } 
+                else if (firstElement.has("user_from")) {
                     type = "notifications";
-                } else if (firstElement.has("username")) {
+                } 
+                else if (firstElement.has("username")) {
                     type = "user_info";
                 }
             }
@@ -240,7 +254,8 @@ public class Home extends AppCompatActivity
                 default:
                     Log.w("Default Home Response", response.toString());
             }
-        } catch (JSONException e) {
+        } 
+        catch (JSONException e) {
             e.printStackTrace();
         }
     }
@@ -251,27 +266,17 @@ public class Home extends AppCompatActivity
     }
 
     @Override
-    public void onDashboardFragmentInteraction(Uri uri) {
-
-    }
+    public void onDashboardFragmentInteraction(Uri uri) {}
 
     @Override
-    public void onNotificationsFragmentInteraction(Uri uri) {
-
-    }
+    public void onNotificationsFragmentInteraction(Uri uri) {}
 
     @Override
-    public void onUserProfileFragmentInteraction(Uri uri) {
-
-    }
+    public void onUserProfileFragmentInteraction(Uri uri) {}
 
     @Override
-    public void onDashboardJourneyFragmentInteraction(Uri uri) {
-
-    }
+    public void onDashboardJourneyFragmentInteraction(Uri uri) {}
 
     @Override
-    public void onDashboardTripFragmentInteraction(Uri uri) {
-
-    }
+    public void onDashboardTripFragmentInteraction(Uri uri) {}
 }

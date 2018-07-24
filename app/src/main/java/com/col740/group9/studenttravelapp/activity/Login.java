@@ -1,5 +1,7 @@
 package com.col740.group9.studenttravelapp.activity;
 
+import static com.col740.group9.studenttravelapp.classes.Constants.*;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -19,9 +20,6 @@ import com.col740.group9.studenttravelapp.R;
 import com.col740.group9.studenttravelapp.classes.GlobalRequestQueue;
 import com.col740.group9.studenttravelapp.fragment.LoginEmailFragment;
 import com.col740.group9.studenttravelapp.fragment.LoginOTPFragment;
-
-import static com.col740.group9.studenttravelapp.classes.Constants.*;
-
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -29,7 +27,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,11 +34,12 @@ import org.json.JSONObject;
  * Activity to demonstrate basic retrieval of the Google user's ID, email address, and basic
  * profile.
  */
-public class Login extends AppCompatActivity implements View.OnClickListener,
-        LoginEmailFragment.OnLoginEmailFragmentInteractionListener,
-        LoginOTPFragment.OnLoginOTPFragmentInteractionListener,
-        Response.Listener<JSONObject>,
-        Response.ErrorListener {
+public class Login extends AppCompatActivity
+        implements View.OnClickListener,
+                LoginEmailFragment.OnLoginEmailFragmentInteractionListener,
+                LoginOTPFragment.OnLoginOTPFragmentInteractionListener,
+                Response.Listener<JSONObject>,
+                Response.ErrorListener {
 
     String mUser;
     String mPass;
@@ -65,9 +63,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
         // [START configure_signin]
         // Configure sign-in to request the user's ID, email address, and basic
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
+        GoogleSignInOptions gso =
+                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestEmail()
+                        .build();
         // [END configure_signin]
 
         // [START build_client]
@@ -93,20 +92,20 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
         // Check for existing Google Sign In account, if the user is already signed in
         // the GoogleSignInAccount will be non-null.
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        if (account != null)
-            loginViaGoogle(account);
+        if (account != null) loginViaGoogle(account);
         // [END on_start_sign_in]
     }
 
     @Override
     protected void onResume() {
         Fragment LoginFragment = null;
-        if (screen_state == EMAIL)
+        if (screen_state == EMAIL) 
             LoginFragment = new LoginEmailFragment();
-        else
+        else 
             LoginFragment = new LoginOTPFragment();
 
-        getSupportFragmentManager().beginTransaction()
+        getSupportFragmentManager()
+                .beginTransaction()
                 .replace(R.id.login_relativeLayout, LoginFragment)
                 .addToBackStack(null)
                 .commit();
@@ -136,7 +135,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
 
             // Signed in successfully, show authenticated UI.
             loginViaGoogle(account);
-        } catch (ApiException e) {
+        } 
+        catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w(TAG, "signInResult:failed code =" + e.getStatusCode());
@@ -158,8 +158,13 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
             mUser = account.getEmail();
             mPass = mUser.charAt(0) + "000000";
             login(mUser, mPass);
-        } else {
-            Toast.makeText(this, "Unable to login to Google Account. Try Again !", Toast.LENGTH_SHORT).show();
+        } 
+        else {
+            Toast.makeText(
+                            this,
+                            "Unable to login to Google Account. Try Again !",
+                            Toast.LENGTH_SHORT)
+                    .show();
         }
     }
 
@@ -169,7 +174,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
             case R.id.sign_in_button:
                 try {
                     dummySignIn();
-                } catch (JSONException e) {
+                } 
+                catch (JSONException e) {
                     e.printStackTrace();
                 }
                 break;
@@ -178,16 +184,15 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
 
     public void dummySignIn() throws JSONException {
 
-        RequestQueue queue = GlobalRequestQueue.getInstance(this.getApplicationContext()).
-                getRequestQueue();
+        RequestQueue queue =
+                GlobalRequestQueue.getInstance(this.getApplicationContext()).getRequestQueue();
 
         final JSONObject jsonBody = new JSONObject();
         jsonBody.put("username", "ankush@gmail.com").put("password", "a1234567");
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                Request.Method.POST,
-                serverURL + "/api-token-auth/",
-                jsonBody, this, this);
+        JsonObjectRequest jsonObjectRequest =
+                new JsonObjectRequest(
+                        Request.Method.POST, serverURL + "/api-token-auth/", jsonBody, this, this);
         queue.add(jsonObjectRequest);
     }
 
@@ -195,8 +200,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
     public void onBackPressed() {
         if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
             getSupportFragmentManager().popBackStack();
-        } else {
-//            super.onBackPressed();
+        } 
+        else {
+            // super.onBackPressed();
         }
     }
 
@@ -204,20 +210,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
         // TODO : send a six digit otp to the Email ID
         mUser = emailID.toString();
 
-//        try {
-//            final JSONObject jsonBody = new JSONObject();
-//            jsonBody.put("username", mUser);
-//
-//            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-//                    Request.Method.POST,
-//                    serverURL + "/gen-otp/",
-//                    jsonBody, this, this);
-//            GlobalRequestQueue.getInstance(this.getApplicationContext())
-//                    .getRequestQueue().add(jsonObjectRequest);
-//        }
-//        catch (Exception e) {
-//            e.printStackTrace();
-//        }
         Fragment loginOTPFragment = new LoginOTPFragment();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.login_relativeLayout, loginOTPFragment);
@@ -243,24 +235,30 @@ public class Login extends AppCompatActivity implements View.OnClickListener,
                 startActivity(gotoHome);
                 finish();
             }
-        } catch (JSONException e) {
+        } 
+        catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
     private void login(String email, String pass) {
-        // TODO : create new user account or open Dashboard if account present already
+        // Create new user account or open Dashboard if account present already
         try {
             final JSONObject jsonBody = new JSONObject();
             jsonBody.put("username", email).put("password", pass);
 
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
-                    Request.Method.POST,
-                    serverURL + "/api-token-auth/",
-                    jsonBody, this, this);
+            JsonObjectRequest jsonObjectRequest =
+                    new JsonObjectRequest(
+                            Request.Method.POST,
+                            serverURL + "/api-token-auth/",
+                            jsonBody,
+                            this,
+                            this);
             GlobalRequestQueue.getInstance(this.getApplicationContext())
-                    .getRequestQueue().add(jsonObjectRequest);
-        } catch (Exception e) {
+                    .getRequestQueue()
+                    .add(jsonObjectRequest);
+        } 
+        catch (Exception e) {
             e.printStackTrace();
         }
     }
