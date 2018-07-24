@@ -1,5 +1,7 @@
 package com.col740.group9.studenttravelapp.fragment;
 
+import static com.col740.group9.studenttravelapp.classes.Constants.*;
+
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -20,23 +21,18 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.col740.group9.studenttravelapp.R;
 import com.col740.group9.studenttravelapp.activity.Home;
 import com.col740.group9.studenttravelapp.classes.Journey;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.col740.group9.studenttravelapp.classes.Constants.*;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link DashboardJourneyFragment.OnDashboardJourneyFragmentInteractionListener} interface
- * to handle interaction events.
+ * A simple {@link Fragment} subclass. Activities that contain this fragment must implement the
+ * {@link DashboardJourneyFragment.OnDashboardJourneyFragmentInteractionListener} interface to
+ * handle interaction events.
  */
 public class DashboardJourneyFragment extends Fragment
         implements Response.Listener<JSONArray>, Response.ErrorListener {
@@ -59,12 +55,16 @@ public class DashboardJourneyFragment extends Fragment
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(
+            LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        DashboardJourneyFragmentView = inflater.inflate(R.layout.fragment_dashboard_journey, container, false);
+        DashboardJourneyFragmentView =
+                inflater.inflate(R.layout.fragment_dashboard_journey, container, false);
 
-        mRecyclerView = (RecyclerView) DashboardJourneyFragmentView.findViewById(R.id.dashboard_journey_card_recycler_view);
+        mRecyclerView =
+                (RecyclerView)
+                        DashboardJourneyFragmentView.findViewById(
+                                R.id.dashboard_journey_card_recycler_view);
         mLayoutManager = new LinearLayoutManager(mContext);
 
         return DashboardJourneyFragmentView;
@@ -74,8 +74,7 @@ public class DashboardJourneyFragment extends Fragment
     public void onResume() {
         super.onResume();
         mContext = this.getActivity();
-        if (journeyAdapter == null)
-            journeyAdapter = new JourneyAdapter(mContext, journeyList);
+        if (journeyAdapter == null) journeyAdapter = new JourneyAdapter(mContext, journeyList);
         journeyAdapter.notifyDataSetChanged();
         mRecyclerView.setAdapter(journeyAdapter);
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -91,9 +90,11 @@ public class DashboardJourneyFragment extends Fragment
 
         if (context instanceof OnDashboardJourneyFragmentInteractionListener) {
             mListener = (OnDashboardJourneyFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnDashboardJourneyFragmentInteractionListener");
+        } 
+        else {
+            throw new RuntimeException(
+                    context.toString()
+                            + " must implement OnDashboardJourneyFragmentInteractionListener");
         }
     }
 
@@ -107,37 +108,30 @@ public class DashboardJourneyFragment extends Fragment
         // assumes that the base activity is home
         final Home baseHomeActivity = (Home) getActivity();
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
-                (Request.Method.GET,
-                        serverURL + "/" + type + "/",
-                        null,
-                        this, this) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization", "Token " + baseHomeActivity.mToken);
-                return headers;
-            }
-        };
+        JsonArrayRequest jsonArrayRequest =
+                new JsonArrayRequest(
+                        Request.Method.GET, serverURL + "/" + type + "/", null, this, this) {
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        HashMap<String, String> headers = new HashMap<String, String>();
+                        headers.put("Authorization", "Token " + baseHomeActivity.mToken);
+                        return headers;
+                    }
+                };
         baseHomeActivity.mQueue.add(jsonArrayRequest);
     }
 
     @Override
     public void onResponse(JSONArray response) {
-        //            String type = "";
-        //            if (response.length() > 0) {
-        //                JSONObject firstElement = (JSONObject) response.get(0);
-        //                if (firstElement.has("journey_id")) {
-        //                    type = "journeys";
-        //                }
-        //            }
         Log.w("Journeys", response.toString());
         for (int i = 0; i < response.length(); i++) {
             try {
                 journeyList.add(new Journey(response.getJSONObject(i)));
-            } catch (JSONException e) {
+            } 
+            catch (JSONException e) {
                 continue;
-            } catch (ParseException e) {
+            } 
+            catch (ParseException e) {
                 continue;
             }
         }
@@ -145,7 +139,6 @@ public class DashboardJourneyFragment extends Fragment
         journeyAdapter.notifyDataSetChanged();
         mRecyclerView.setAdapter(journeyAdapter);
         mRecyclerView.setLayoutManager(mLayoutManager);
-
     }
 
     @Override
@@ -154,19 +147,17 @@ public class DashboardJourneyFragment extends Fragment
     }
 
     /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
+     * This interface must be implemented by activities that contain this fragment to allow an
+     * interaction in this fragment to be communicated to the activity and potentially other
+     * fragments contained in that activity.
+     *
+     * <p>See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html" >Communicating
+     * with Other Fragments</a> for more information.
      */
     public interface OnDashboardJourneyFragmentInteractionListener {
 
         void onDashboardJourneyFragmentInteraction(Uri uri);
-
     }
 
     public class JourneyAdapter extends RecyclerView.Adapter<JourneyAdapter.MyViewHolder> {
@@ -188,7 +179,6 @@ public class DashboardJourneyFragment extends Fragment
             }
         }
 
-
         public JourneyAdapter(Context mContext, ArrayList<Journey> journeyList) {
             this.mContext = mContext;
             this.journeyList = journeyList;
@@ -196,8 +186,9 @@ public class DashboardJourneyFragment extends Fragment
 
         @Override
         public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View itemView = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.dashboard_journey_card, parent, false);
+            View itemView =
+                    LayoutInflater.from(parent.getContext())
+                            .inflate(R.layout.dashboard_journey_card, parent, false);
 
             return new MyViewHolder(itemView);
         }
@@ -211,15 +202,16 @@ public class DashboardJourneyFragment extends Fragment
             holder.src_dest.setText("From " + journey.source + " to " + journey.destination);
             if (journey.date.compareTo(new Date()) < 0) {
                 holder.start_date.setText("Started on " + journey.display_time);
-                if (journey.participants.size() == 1)
+                if (journey.participants.size() == 1) 
                     holder.participants.setText("Only you went");
-                else
+                else 
                     holder.participants.setText(journey.participants.size() + " persons went");
-            } else {
+            } 
+            else {
                 holder.start_date.setText("Starting on " + journey.display_time);
                 if (journey.participants.size() == 1)
                     holder.participants.setText("Only you are going");
-                else
+                else 
                     holder.participants.setText(journey.participants.size() + " persons going");
             }
         }

@@ -1,5 +1,7 @@
 package com.col740.group9.studenttravelapp.fragment;
 
+import static com.col740.group9.studenttravelapp.classes.Constants.*;
+
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -22,23 +23,18 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.col740.group9.studenttravelapp.R;
 import com.col740.group9.studenttravelapp.activity.Home;
 import com.col740.group9.studenttravelapp.classes.Notification;
-
-import static com.col740.group9.studenttravelapp.classes.Constants.*;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link NotificationsFragment.OnNotificationsFragmentInteractionListener} interface
- * to handle interaction events.
+ * A simple {@link Fragment} subclass. Activities that contain this fragment must implement the
+ * {@link NotificationsFragment.OnNotificationsFragmentInteractionListener} interface to handle
+ * interaction events.
  */
 public class NotificationsFragment extends Fragment
         implements Response.Listener, Response.ErrorListener {
@@ -61,12 +57,16 @@ public class NotificationsFragment extends Fragment
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(
+            LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        NotificationsFragmentView = inflater.inflate(R.layout.fragment_notifications, container, false);
+        NotificationsFragmentView =
+                inflater.inflate(R.layout.fragment_notifications, container, false);
 
-        mRecyclerView = (RecyclerView) NotificationsFragmentView.findViewById(R.id.notification_card_recycler_view);
+        mRecyclerView =
+                (RecyclerView)
+                        NotificationsFragmentView.findViewById(
+                                R.id.notification_card_recycler_view);
         mLayoutManager = new LinearLayoutManager(mContext);
 
         return NotificationsFragmentView;
@@ -93,9 +93,11 @@ public class NotificationsFragment extends Fragment
 
         if (context instanceof OnNotificationsFragmentInteractionListener) {
             mListener = (OnNotificationsFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnNotificationsFragmentInteractionListener");
+        } 
+        else {
+            throw new RuntimeException(
+                    context.toString()
+                            + " must implement OnNotificationsFragmentInteractionListener");
         }
     }
 
@@ -109,18 +111,16 @@ public class NotificationsFragment extends Fragment
         // assumes that the base activity is home
         final Home baseHomeActivity = (Home) getActivity();
 
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
-                (Request.Method.GET,
-                        serverURL + "/" + type + "/",
-                        null,
-                        this, this) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization", "Token " + baseHomeActivity.mToken);
-                return headers;
-            }
-        };
+        JsonArrayRequest jsonArrayRequest =
+                new JsonArrayRequest(
+                        Request.Method.GET, serverURL + "/" + type + "/", null, this, this) {
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        HashMap<String, String> headers = new HashMap<String, String>();
+                        headers.put("Authorization", "Token " + baseHomeActivity.mToken);
+                        return headers;
+                    }
+                };
         baseHomeActivity.mQueue.add(jsonArrayRequest);
     }
 
@@ -129,18 +129,16 @@ public class NotificationsFragment extends Fragment
         Log.w("Note", data.toString());
         final Home baseHomeActivity = (Home) getActivity();
 
-        JsonObjectRequest jsonArrayRequest = new JsonObjectRequest
-                (Request.Method.POST,
-                        serverURL + "/" + type + "/",
-                        data,
-                        this, this) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                headers.put("Authorization", "Token " + baseHomeActivity.mToken);
-                return headers;
-            }
-        };
+        JsonObjectRequest jsonArrayRequest =
+                new JsonObjectRequest(
+                        Request.Method.POST, serverURL + "/" + type + "/", data, this, this) {
+                    @Override
+                    public Map<String, String> getHeaders() throws AuthFailureError {
+                        HashMap<String, String> headers = new HashMap<String, String>();
+                        headers.put("Authorization", "Token " + baseHomeActivity.mToken);
+                        return headers;
+                    }
+                };
         baseHomeActivity.mQueue.add(jsonArrayRequest);
     }
 
@@ -150,7 +148,8 @@ public class NotificationsFragment extends Fragment
             if (response.getClass() == JSONArray.class) {
                 Log.w("Notifications", response.toString());
                 for (int i = 0; i < ((JSONArray) response).length(); i++) {
-                    Notification notification = new Notification(((JSONArray) response).getJSONObject(i));
+                    Notification notification =
+                            new Notification(((JSONArray) response).getJSONObject(i));
                     if (notification.resolved.equals("No")) {
                         notificationList.add(notification);
                     }
@@ -160,9 +159,11 @@ public class NotificationsFragment extends Fragment
                 mRecyclerView.setAdapter(notificationAdapter);
                 mRecyclerView.setLayoutManager(mLayoutManager);
             }
-        } catch (JSONException e) {
+        } 
+        catch (JSONException e) {
             e.printStackTrace();
-        } catch (ParseException e) {
+        } 
+        catch (ParseException e) {
             e.printStackTrace();
         }
     }
@@ -173,14 +174,13 @@ public class NotificationsFragment extends Fragment
     }
 
     /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
+     * This interface must be implemented by activities that contain this fragment to allow an
+     * interaction in this fragment to be communicated to the activity and potentially other
+     * fragments contained in that activity.
+     *
+     * <p>See the Android Training lesson <a href=
+     * "http://developer.android.com/training/basics/fragments/communicating.html" >Communicating
+     * with Other Fragments</a> for more information.
      */
     public interface OnNotificationsFragmentInteractionListener {
         void onNotificationsFragmentInteraction(Uri uri);
@@ -220,12 +220,10 @@ public class NotificationsFragment extends Fragment
             }
         }
 
-
         public NotificationAdapter(Context mContext, ArrayList<Notification> notificationList) {
             this.mContext = mContext;
             this.notificationList = notificationList;
         }
-
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -233,11 +231,17 @@ public class NotificationsFragment extends Fragment
             RecyclerView.ViewHolder viewHolder = null;
             switch (viewType) {
                 case 0:
-                    view = View.inflate(parent.getContext(), R.layout.notification_card_travel, null);
+                    view =
+                            View.inflate(
+                                    parent.getContext(), R.layout.notification_card_travel, null);
                     viewHolder = new NotificationCardTravelViewHolder(view);
                     break;
                 case 1:
-                    view = View.inflate(parent.getContext(), R.layout.notification_card_logistics, null);
+                    view =
+                            View.inflate(
+                                    parent.getContext(),
+                                    R.layout.notification_card_logistics,
+                                    null);
                     viewHolder = new NotificationCardLogisticsViewHolder(view);
                     break;
             }
@@ -250,41 +254,48 @@ public class NotificationsFragment extends Fragment
             final Notification notification = notificationList.get(position);
             switch (viewType) {
                 case 0:
-                    NotificationCardTravelViewHolder notificationCardTravelViewHolder = (NotificationCardTravelViewHolder) holder;
+                    NotificationCardTravelViewHolder notificationCardTravelViewHolder =
+                            (NotificationCardTravelViewHolder) holder;
                     notificationCardTravelViewHolder.title.setText(notification.title);
                     notificationCardTravelViewHolder.date.setText(notification.date);
                     notificationCardTravelViewHolder.description.setText(notification.description);
 
-                    notificationCardTravelViewHolder.accept_button.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // api call to server to accept the request
-                            try {
-                                postDatatoServer("accept_request", notification.toJSON());
-                                fetchDatafromServer("notifications");
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-                    notificationCardTravelViewHolder.reject_button.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // api call to server to reject the request
-                            try {
-                                postDatatoServer("reject_request", notification.toJSON());
-                                fetchDatafromServer("notifications");
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
+                    notificationCardTravelViewHolder.accept_button.setOnClickListener(
+                            new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    // api call to server to accept the request
+                                    try {
+                                        postDatatoServer("accept_request", notification.toJSON());
+                                        fetchDatafromServer("notifications");
+                                    } 
+                                    catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
+                    notificationCardTravelViewHolder.reject_button.setOnClickListener(
+                            new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    // api call to server to reject the request
+                                    try {
+                                        postDatatoServer("reject_request", notification.toJSON());
+                                        fetchDatafromServer("notifications");
+                                    } 
+                                    catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            });
                     break;
                 case 1:
-                    NotificationCardLogisticsViewHolder notificationCardLogisticsViewHolder = (NotificationCardLogisticsViewHolder) holder;
+                    NotificationCardLogisticsViewHolder notificationCardLogisticsViewHolder =
+                            (NotificationCardLogisticsViewHolder) holder;
                     notificationCardLogisticsViewHolder.title.setText(notification.title);
                     notificationCardLogisticsViewHolder.date.setText(notification.date);
-                    notificationCardLogisticsViewHolder.description.setText(notification.description);
+                    notificationCardLogisticsViewHolder.description.setText(
+                            notification.description);
                     break;
             }
         }
@@ -296,10 +307,9 @@ public class NotificationsFragment extends Fragment
 
         @Override
         public int getItemViewType(int position) {
-            if (notificationList.get(position).type == "Logistics Related")
+            if (notificationList.get(position).type == "Logistics Related") 
                 return 1;
-            else
-                return 0;
+            else return 0;
         }
     }
 }
