@@ -3,7 +3,6 @@ package com.col740.group9.studenttravelapp.classes;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.LruCache;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
@@ -20,21 +19,23 @@ public class GlobalRequestQueue {
         mCtx = context;
         mRequestQueue = getRequestQueue();
 
-        mImageLoader = new ImageLoader(mRequestQueue,
-                new ImageLoader.ImageCache() {
-                    private final LruCache<String, Bitmap>
-                            cache = new LruCache<String, Bitmap>(20);
+        mImageLoader =
+                new ImageLoader(
+                        mRequestQueue,
+                        new ImageLoader.ImageCache() {
+                            private final LruCache<String, Bitmap> cache =
+                                    new LruCache<String, Bitmap>(20);
 
-                    @Override
-                    public Bitmap getBitmap(String url) {
-                        return cache.get(url);
-                    }
+                            @Override
+                            public Bitmap getBitmap(String url) {
+                                return cache.get(url);
+                            }
 
-                    @Override
-                    public void putBitmap(String url, Bitmap bitmap) {
-                        cache.put(url, bitmap);
-                    }
-                });
+                            @Override
+                            public void putBitmap(String url, Bitmap bitmap) {
+                                cache.put(url, bitmap);
+                            }
+                        });
     }
 
     public static synchronized GlobalRequestQueue getInstance(Context context) {
@@ -60,5 +61,4 @@ public class GlobalRequestQueue {
     public ImageLoader getImageLoader() {
         return mImageLoader;
     }
-
 }

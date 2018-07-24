@@ -1,14 +1,11 @@
 package com.col740.group9.studenttravelapp.classes;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class Trip extends Travel {
     public String trip_id;
@@ -16,9 +13,7 @@ public class Trip extends Travel {
     public String duration;
     public String expected_budget;
 
-    public Trip() {
-
-    }
+    public Trip() {}
 
     public Trip(JSONObject trip_object) throws JSONException, ParseException {
         this.start_time = trip_object.getString("start_time");
@@ -34,8 +29,7 @@ public class Trip extends Travel {
 
         JSONArray participants = trip_object.getJSONArray("participants");
         for (int i = 0; i < participants.length(); i++) {
-            this.participants.add(
-                    new User(participants.getJSONObject(i)));
+            this.participants.add(new User(participants.getJSONObject(i)));
         }
     }
 

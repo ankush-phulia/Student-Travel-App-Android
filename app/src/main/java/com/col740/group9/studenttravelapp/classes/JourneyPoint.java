@@ -1,6 +1,5 @@
 package com.col740.group9.studenttravelapp.classes;
 
-import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,9 +9,7 @@ public class JourneyPoint {
     public LocationPoint location;
     public String transport;
 
-    public JourneyPoint() {
-
-    }
+    public JourneyPoint() {}
 
     public JourneyPoint(JSONObject journey_point_json) throws JSONException {
         this.point_id = journey_point_json.getString("point_id");
@@ -27,5 +24,4 @@ public class JourneyPoint {
         json.put("transport", this.transport);
         return json;
     }
-
 }

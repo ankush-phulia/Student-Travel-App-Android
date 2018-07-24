@@ -30,5 +30,4 @@ public class LocationPoint {
         json.put("rating", this.rating);
         return json;
     }
-
 }

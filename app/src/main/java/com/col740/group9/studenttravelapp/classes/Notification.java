@@ -1,13 +1,11 @@
 package com.col740.group9.studenttravelapp.classes;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class Notification {
     public String id;

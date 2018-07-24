@@ -27,7 +27,8 @@ public class User {
             if (user_json.has("password")) {
                 this.password = user_info_json.getString("password");
             }
-        } else {
+        } 
+        else {
             this.id = user_info_json.getInt("id");
             this.username = user_info_json.getString("username");
             this.first_name = user_info_json.getString("first_name");
@@ -56,8 +57,6 @@ public class User {
 
     public void updateUser(JSONObject user_info_json) throws JSONException {
         JSONObject user_json = user_info_json.getJSONObject("user");
-        // this.id = user_json.getInt("id");
-        // this.username = user_json.getString("username");
         this.first_name = user_json.getString("first_name");
         this.last_name = user_json.getString("last_name");
         this.email = user_json.getString("email");
@@ -73,12 +72,9 @@ public class User {
     public JSONObject toJSON() throws JSONException {
         JSONObject json = new JSONObject();
         JSONObject user = new JSONObject();
-        // user.put("id", this.id);
-        // user.put("username", this.username);
         user.put("first_name", this.first_name);
         user.put("last_name", this.last_name);
         user.put("email", this.email);
-        // user.put("password", this.password);
         json.put("user", user);
         json.put("sex", this.sex);
         json.put("facebook_link", this.facebook_link);
